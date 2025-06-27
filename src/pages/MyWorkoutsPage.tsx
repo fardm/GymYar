@@ -16,13 +16,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
 
   const filteredSessions = userData.sessions.filter(session => {
     if (sessionFilter === 'all') return true;
-    if (sessionFilter === 'completed') {
-      return session.exercises.length > 0 && session.exercises.every(ex => ex.completed);
-    }
-    if (sessionFilter === 'incomplete') {
-      return session.exercises.length === 0 || session.exercises.some(ex => !ex.completed);
-    }
-    return true;
+    return session.id === sessionFilter;
   });
 
   const handleCreateSession = () => {
@@ -108,8 +102,11 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
           className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         >
           <option value="all">همه جلسات</option>
-          <option value="incomplete">جلسات ناتمام</option>
-          <option value="completed">جلسات تکمیل شده</option>
+          {userData.sessions.map(session => (
+            <option key={session.id} value={session.id}>
+              {session.name}
+            </option>
+          ))}
         </select>
 
         {/* New Session Button */}
@@ -171,7 +168,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
           <p className="text-gray-500 dark:text-gray-400 text-lg mb-4">
             {sessionFilter === 'all' 
               ? 'هنوز جلسه‌ای ایجاد نکرده‌اید'
-              : 'هیچ جلسه‌ای با این فیلتر یافت نشد'
+              : 'هیچ جلسه‌ای با این نام یافت نشد'
             }
           </p>
           {sessionFilter === 'all' && (

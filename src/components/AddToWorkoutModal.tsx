@@ -6,21 +6,45 @@ interface AddToWorkoutModalProps {
   isOpen: boolean;
   onClose: () => void;
   sessions: WorkoutSession[];
-  onAddToSession: (sessionId: string) => void;
+  onAddToSessions: (sessionIds: string[]) => void;
   onCreateNewSession: (sessionName: string) => void;
+  exerciseId: string;
 }
 
 export function AddToWorkoutModal({
   isOpen,
   onClose,
   sessions,
-  onAddToSession,
-  onCreateNewSession
+  onAddToSessions,
+  onCreateNewSession,
+  exerciseId
 }: AddToWorkoutModalProps) {
   const [newSessionName, setNewSessionName] = useState('');
   const [showNewSessionForm, setShowNewSessionForm] = useState(false);
+  const [selectedSessions, setSelectedSessions] = useState<string[]>([]);
 
   if (!isOpen) return null;
+
+  // Filter out sessions that already contain the exercise
+  const availableSessions = sessions.filter(
+    session => !session.exercises.some(ex => ex.exerciseId === exerciseId)
+  );
+
+  const handleSessionToggle = (sessionId: string) => {
+    setSelectedSessions(prev =>
+      prev.includes(sessionId)
+        ? prev.filter(id => id !== sessionId)
+        : [...prev, sessionId]
+    );
+  };
+
+  const handleAddToSelected = () => {
+    if (selectedSessions.length > 0) {
+      onAddToSessions(selectedSessions);
+      setSelectedSessions([]);
+      onClose();
+    }
+  };
 
   const handleCreateSession = () => {
     if (newSessionName.trim()) {
@@ -29,11 +53,6 @@ export function AddToWorkoutModal({
       setShowNewSessionForm(false);
       onClose();
     }
-  };
-
-  const handleAddToExisting = (sessionId: string) => {
-    onAddToSession(sessionId);
-    onClose();
   };
 
   return (
@@ -52,28 +71,46 @@ export function AddToWorkoutModal({
         </div>
 
         <div className="space-y-3">
-          {sessions.length > 0 && (
+          {availableSessions.length > 0 ? (
             <div>
               <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 جلسات موجود:
               </h4>
               <div className="space-y-2">
-                {sessions.map((session) => (
-                  <button
+                {availableSessions.map((session) => (
+                  <div
                     key={session.id}
-                    onClick={() => handleAddToExisting(session.id)}
-                    className="w-full text-right p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
-                    <div className="font-medium text-gray-900 dark:text-white">
-                      {session.name}
+                    <div className="flex-1 text-right">
+                      <div className="font-medium text-gray-900 dark:text-white">
+                        {session.name}
+                      </div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {session.exercises.length} تمرین
+                      </div>
                     </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {session.exercises.length} تمرین
-                    </div>
-                  </button>
+                    <input
+                      type="checkbox"
+                      checked={selectedSessions.includes(session.id)}
+                      onChange={() => handleSessionToggle(session.id)}
+                      className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
+                    />
+                  </div>
                 ))}
               </div>
+              <button
+                onClick={handleAddToSelected}
+                disabled={selectedSessions.length === 0}
+                className="w-full mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                افزودن به جلسات انتخاب شده
+              </button>
             </div>
+          ) : (
+            <p className="text-gray-500 dark:text-gray-400 text-center">
+              هیچ جلسه‌ای برای افزودن این تمرین در دسترس نیست
+            </p>
           )}
 
           <div className="border-t border-gray-200 dark:border-gray-600 pt-3">

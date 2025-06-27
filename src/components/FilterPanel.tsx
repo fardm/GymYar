@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Filter, X, Plus, Trash2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Filter, X, Plus, Trash2, XCircle } from 'lucide-react';
 import { FilterRule } from '../types';
 import { exercisesData } from '../data/exercises';
 
@@ -10,15 +10,16 @@ interface FilterPanelProps {
 
 export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   // Extract unique values from exercises data
   const equipmentOptions = [...new Set(exercisesData.map(ex => ex.equipment))].filter(Boolean);
   const muscleOptions = [...new Set(exercisesData.flatMap(ex => ex.targetMuscles))].filter(Boolean);
 
-  const addFilter = () => {
+  const addFilter = (field: 'equipment' | 'targetMuscles') => {
     const newFilter: FilterRule = {
       id: Date.now().toString(),
-      field: 'equipment',
+      field,
       values: []
     };
     onFiltersChange([...filters, newFilter]);
@@ -38,16 +39,34 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
     onFiltersChange([]);
   };
 
-  const toggleValue = (filterId: string, value: string) => {
+  const addFilterValue = (filterId: string, value: string) => {
+    const filter = filters.find(f => f.id === filterId);
+    if (!filter || filter.values.includes(value)) return;
+
+    const newValues = [...filter.values, value];
+    updateFilter(filterId, { values: newValues });
+  };
+
+  const removeFilterValue = (filterId: string, value: string) => {
     const filter = filters.find(f => f.id === filterId);
     if (!filter) return;
 
-    const newValues = filter.values.includes(value)
-      ? filter.values.filter(v => v !== value)
-      : [...filter.values, value];
-
+    const newValues = filter.values.filter(v => v !== value);
     updateFilter(filterId, { values: newValues });
   };
+
+  // بستن پنل با کلیک خارج
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="relative">
@@ -69,7 +88,10 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-96 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 z-10">
+        <div
+          ref={panelRef}
+          className="absolute top-full right-0 mt-2 w-96 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 z-10"
+        >
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold text-gray-900 dark:text-white">فیلترها</h3>
             <div className="flex space-x-2 space-x-reverse">
@@ -91,20 +113,46 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
           </div>
 
           <div className="space-y-4">
+            {!filters.some(f => f.field === 'equipment') && (
+              <button
+                onClick={() => addFilter('equipment')}
+                className="w-full flex items-center justify-center space-x-2 space-x-reverse py-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              >
+                <Plus className="h-4 w-4" />
+                <span>افزودن فیلتر تجهیزات</span>
+              </button>
+            )}
+            {!filters.some(f => f.field === 'targetMuscles') && (
+              <button
+                onClick={() => addFilter('targetMuscles')}
+                className="w-full flex items-center justify-center space-x-2 space-x-reverse py-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              >
+                <Plus className="h-4 w-4" />
+                <span>افزودن فیلتر عضله هدف</span>
+              </button>
+            )}
+
             {filters.map((filter) => (
               <div key={filter.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
-                <div className="flex justify-between items-center mb-3">
+                <div className="flex items-center space-x-2 space-x-reverse mb-2">
+                  {filter.field === 'equipment' && <span className="text-sm text-gray-900 dark:text-white">تجهیزات:</span>}
+                  {filter.field === 'targetMuscles' && <span className="text-sm text-gray-900 dark:text-white">عضله هدف:</span>}
+
                   <select
-                    value={filter.field}
-                    onChange={(e) => updateFilter(filter.id, { 
-                      field: e.target.value as 'equipment' | 'targetMuscles',
-                      values: [] // Reset values when field changes
-                    })}
-                    className="text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    onChange={(e) => addFilterValue(filter.id, e.target.value)}
+                    value=""
+                    className="text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-white w-40"
                   >
-                    <option value="equipment">تجهیزات</option>
-                    <option value="targetMuscles">عضله هدف</option>
+                    <option value="" disabled>انتخاب مقدار</option>
+                    {(filter.field === 'equipment' ? equipmentOptions : muscleOptions)
+                      .filter(option => !filter.values.includes(option))
+                      .map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
                   </select>
+
                   <button
                     onClick={() => removeFilter(filter.id)}
                     className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
@@ -113,29 +161,24 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                   </button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
-                  {(filter.field === 'equipment' ? equipmentOptions : muscleOptions).map((option) => (
-                    <label key={option} className="flex items-center space-x-2 space-x-reverse text-sm">
-                      <input
-                        type="checkbox"
-                        checked={filter.values.includes(option)}
-                        onChange={() => toggleValue(filter.id, option)}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="text-gray-700 dark:text-gray-300">{option}</span>
-                    </label>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {filter.values.map((value) => (
+                    <span
+                      key={value}
+                      className="flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm px-2 py-1 rounded-full"
+                    >
+                      {value}
+                      <button
+                        onClick={() => removeFilterValue(filter.id, value)}
+                        className="ml-1 text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100"
+                      >
+                        <XCircle className="h-3 w-3" />
+                      </button>
+                    </span>
                   ))}
                 </div>
               </div>
             ))}
-
-            <button
-              onClick={addFilter}
-              className="w-full flex items-center justify-center space-x-2 space-x-reverse py-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-            >
-              <Plus className="h-4 w-4" />
-              <span>افزودن فیلتر</span>
-            </button>
           </div>
         </div>
       )}

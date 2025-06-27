@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { WorkoutSession, Exercise } from '../types';
 import { Trash2, Edit2, Check, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface SessionCardProps {
   session: WorkoutSession;
@@ -36,6 +37,12 @@ export function SessionCard({
   const handleCancelEdit = () => {
     setEditName(session.name);
     setIsEditing(false);
+  };
+
+  const handleRemoveExerciseWithConfirm = (sessionId: string, exerciseId: string) => {
+    if (confirm('آیا مطمئن هستید که می‌خواهید این تمرین را حذف کنید؟')) {
+      onRemoveExercise(sessionId, exerciseId);
+    }
   };
 
   const defaultImage = 'https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=100';
@@ -112,8 +119,16 @@ export function SessionCard({
           return (
             <div
               key={sessionExercise.exerciseId}
-              className="flex items-center space-x-3 space-x-reverse p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+              className="relative flex items-center space-x-3 space-x-reverse p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
             >
+              {/* Delete Button */}
+              <button
+                onClick={() => handleRemoveExerciseWithConfirm(session.id, exercise.id)}
+                className="right-2 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+              >
+                <X className="h-4 w-4" />
+              </button>
+
               {/* Exercise Image */}
               <img
                 src={exercise.image || defaultImage}
@@ -126,9 +141,12 @@ export function SessionCard({
 
               {/* Exercise Info */}
               <div className="flex-1 min-w-0">
-                <h4 className="font-medium text-gray-900 dark:text-white truncate">
+                <Link
+                  to={`/exercise/${exercise.id}`}
+                  className="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate"
+                >
                   {exercise.name}
-                </h4>
+                </Link>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {exercise.targetMuscles.slice(0, 2).map((muscle, index) => (
                     <span
@@ -146,14 +164,8 @@ export function SessionCard({
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="flex items-center space-x-2 space-x-reverse">
-                <button
-                  onClick={() => onRemoveExercise(session.id, exercise.id)}
-                  className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-                >
-                  <X className="h-4 w-4" />
-                </button>
+              {/* Checkbox */}
+              <div className="flex items-center">
                 <input
                   type="checkbox"
                   checked={sessionExercise.completed}

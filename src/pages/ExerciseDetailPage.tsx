@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowRight, Plus, Check } from 'lucide-react';
+import { ArrowRight, Plus, Check, X } from 'lucide-react';
 import { exercisesData } from '../data/exercises';
 import { AddToWorkoutModal } from '../components/AddToWorkoutModal';
 import { UserData, WorkoutSession, SessionExercise } from '../types';
@@ -35,22 +35,13 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
     );
   }
 
-  const isInWorkout = userData.sessions.some(session =>
+  const sessionsWithExercise = userData.sessions.filter(session =>
     session.exercises.some(ex => ex.exerciseId === exercise.id)
   );
 
-  const getSessionName = (): string | undefined => {
-    for (const session of userData.sessions) {
-      if (session.exercises.some(ex => ex.exerciseId === exercise.id)) {
-        return session.name;
-      }
-    }
-    return undefined;
-  };
-
-  const handleAddToSession = (sessionId: string) => {
+  const handleAddToSessions = (sessionIds: string[]) => {
     const updatedSessions = userData.sessions.map(session => {
-      if (session.id === sessionId) {
+      if (sessionIds.includes(session.id)) {
         const exerciseExists = session.exercises.some(ex => ex.exerciseId === exercise.id);
         if (!exerciseExists) {
           const newExercise: SessionExercise = {
@@ -85,11 +76,16 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
     });
   };
 
-  const handleRemoveFromWorkout = () => {
-    const updatedSessions = userData.sessions.map(session => ({
-      ...session,
-      exercises: session.exercises.filter(ex => ex.exerciseId !== exercise.id)
-    }));
+  const handleRemoveFromSession = (sessionId: string) => {
+    const updatedSessions = userData.sessions.map(session => {
+      if (session.id === sessionId) {
+        return {
+          ...session,
+          exercises: session.exercises.filter(ex => ex.exerciseId !== exercise.id)
+        };
+      }
+      return session;
+    });
 
     onUpdateUserData({ sessions: updatedSessions });
   };
@@ -98,17 +94,15 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Back Button */}
       <Link
         to="/"
         className="inline-flex items-center space-x-2 space-x-reverse text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 mb-6"
       >
         <ArrowRight className="h-4 w-4" />
-        <span>بازگشت به گالری</span>
+        <span>بازگشت به تمرینات</span>
       </Link>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-        {/* Exercise Image */}
         <div className="aspect-video bg-gray-100 dark:bg-gray-700">
           <img
             src={exercise.image || defaultImage}
@@ -120,46 +114,18 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
           />
         </div>
 
-        {/* Exercise Details */}
         <div className="p-8">
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                {exercise.name}
-              </h1>
-              {exercise.otherNames && (
-                <p className="text-gray-600 dark:text-gray-400">
-                  {exercise.otherNames}
-                </p>
-              )}
-            </div>
-
-            {/* Add/Remove Button */}
-            {isInWorkout ? (
-              <div className="text-left">
-                <div className="flex items-center space-x-2 space-x-reverse text-green-600 dark:text-green-400 mb-2">
-                  <Check className="h-5 w-5" />
-                  <span className="text-sm">در برنامه: {getSessionName()}</span>
-                </div>
-                <button
-                  onClick={handleRemoveFromWorkout}
-                  className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
-                >
-                  حذف از برنامه
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setShowAddModal(true)}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 space-x-reverse"
-              >
-                <Plus className="h-4 w-4" />
-                <span>افزودن به برنامه</span>
-              </button>
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              {exercise.name}
+            </h1>
+            {exercise.otherNames && (
+              <p className="text-gray-600 dark:text-gray-400">
+                {exercise.otherNames}
+              </p>
             )}
           </div>
 
-          {/* Exercise Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
@@ -187,7 +153,6 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
             </div>
           </div>
 
-          {/* Description */}
           <div className="mt-8">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
               توضیحات
@@ -196,16 +161,53 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
               {exercise.description || 'توضیحی برای این تمرین ثبت نشده است.'}
             </p>
           </div>
+
+          {sessionsWithExercise.length > 0 && (
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                جلسات شامل این تمرین
+              </h3>
+              <div className="space-y-2">
+                {sessionsWithExercise.map(session => (
+                  <div
+                    key={session.id}
+                    className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-600 rounded-lg"
+                  >
+                    <div className="flex items-center space-x-2 space-x-reverse text-green-600 dark:text-green-400">
+                      <Check className="h-5 w-5" />
+                      <span>{session.name}</span>
+                    </div>
+                    <button
+                      onClick={() => handleRemoveFromSession(session.id)}
+                      className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="mt-8">
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 space-x-reverse"
+            >
+              <Plus className="h-4 w-4" />
+              <span>افزودن به برنامه</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Add to Workout Modal */}
       <AddToWorkoutModal
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
         sessions={userData.sessions}
-        onAddToSession={handleAddToSession}
+        onAddToSessions={handleAddToSessions}
         onCreateNewSession={handleCreateNewSession}
+        exerciseId={exercise.id}
       />
     </div>
   );

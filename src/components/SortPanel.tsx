@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowUpDown, X, Plus, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
 import { SortRule } from '../types';
 
@@ -9,6 +9,7 @@ interface SortPanelProps {
 
 export function SortPanel({ sortRules, onSortRulesChange }: SortPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   const fieldOptions = [
     { value: 'name', label: 'نام تمرین' },
@@ -52,6 +53,24 @@ export function SortPanel({ sortRules, onSortRulesChange }: SortPanelProps) {
     }
   };
 
+  const toggleDirection = (id: string, currentDirection: 'asc' | 'desc') => {
+    const newDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+    updateSortRule(id, { direction: newDirection });
+  };
+
+  // بستن پنل با کلیک خارج
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="relative">
       <button
@@ -72,7 +91,10 @@ export function SortPanel({ sortRules, onSortRulesChange }: SortPanelProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 z-10">
+        <div
+          ref={panelRef}
+          className="absolute top-full right-0 mt-2 w-80 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 z-10"
+        >
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold text-gray-900 dark:text-white">مرتب‌سازی</h3>
             <div className="flex space-x-2 space-x-reverse">
@@ -126,14 +148,20 @@ export function SortPanel({ sortRules, onSortRulesChange }: SortPanelProps) {
                     ))}
                   </select>
 
-                  <select
-                    value={rule.direction}
-                    onChange={(e) => updateSortRule(rule.id, { direction: e.target.value as 'asc' | 'desc' })}
-                    className="text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  >
-                    <option value="asc">صعودی</option>
-                    <option value="desc">نزولی</option>
-                  </select>
+                  <div className="flex space-x-1 space-x-reverse">
+                    <button
+                      onClick={() => toggleDirection(rule.id, rule.direction)}
+                      className={`p-1 rounded-full ${rule.direction === 'asc' ? 'bg-green-200 dark:bg-green-700 text-green-800 dark:text-green-200 hover:bg-green-300 dark:hover:bg-green-600' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
+                    >
+                      <ChevronUp className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => toggleDirection(rule.id, rule.direction)}
+                      className={`p-1 rounded-full ${rule.direction === 'desc' ? 'bg-green-200 dark:bg-green-700 text-green-800 dark:text-green-200 hover:bg-green-300 dark:hover:bg-green-600' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
+                    >
+                      <ChevronDown className="h-4 w-4" />
+                    </button>
+                  </div>
 
                   <button
                     onClick={() => removeSortRule(rule.id)}
