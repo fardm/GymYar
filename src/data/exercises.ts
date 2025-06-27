@@ -7,7 +7,8 @@ export const exercisesData: Exercise[] = [
     image: 'https://liftmanual.com/wp-content/uploads/2023/04/inverted-row.jpg',
     targetMuscles: ['ذوزنقه‌ای'],
     equipment: 'دستگاه',
-    otherNames: 'Inverted Row'
+    otherNames: 'Inverted Row',
+    description: 'این تمرین برای تقویت عضلات ذوزنقه‌ای بسیار موثر است. <a href="https://musclewiki.com/fa-ir/smith-machineexplore/..." target="_blank" rel="noopener noreferrer">اینجا کلیک کنید</a>.' 
   },
   {
     id: '2',

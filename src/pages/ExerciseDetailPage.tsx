@@ -153,14 +153,18 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
             </div>
           </div>
 
-          <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-              توضیحات
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-              {exercise.description || 'توضیحی برای این تمرین ثبت نشده است.'}
-            </p>
-          </div>
+          {exercise.description && (
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                شرح تمرین
+              </h3>
+              <div
+                className="text-gray-600 dark:text-gray-400 leading-relaxed [&_a]:text-blue-600 [&_a]:hover:text-blue-700 dark:[&_a]:text-blue-400 dark:[&_a]:hover:text-blue-300"
+                dangerouslySetInnerHTML={{ __html: exercise.description }}
+              />
+            </div>
+          )}
+          
 
           {sessionsWithExercise.length > 0 && (
             <div className="mt-8">
