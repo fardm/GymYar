@@ -114,7 +114,8 @@ export function Header({ onDataChange }: HeaderProps) {
         <div className="flex justify-between items-center h-16">
           {/* Logo and Title */}
           <Link to="/" className="flex items-center space-x-3 space-x-reverse hover:opacity-80 transition-opacity">
-            <Dumbbell className="p-1 rounded-lg h-9 w-9 bg-blue-600 text-white" />
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="#3B82F6"/><path d="M8 12h4v8H8v-8zm12 0h4v8h-4v-8zm-6-4h4v16h-4V8z" fill="white"/></svg>
+            {/* <Dumbbell className="p-1 rounded-lg h-9 w-9 bg-blue-600 text-white" /> */}
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">جیم‌یار</h1>
           </Link>
 
