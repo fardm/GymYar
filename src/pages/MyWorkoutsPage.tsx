@@ -68,10 +68,8 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
   };
 
   const handleDeleteSession = (sessionId: string) => {
-    if (confirm('آیا مطمئن هستید که می‌خواهید این جلسه را حذف کنید؟')) {
-      const updatedSessions = userData.sessions.filter(session => session.id !== sessionId);
-      onUpdateUserData({ sessions: updatedSessions });
-    }
+    const updatedSessions = userData.sessions.filter(session => session.id !== sessionId);
+    onUpdateUserData({ sessions: updatedSessions });
   };
 
   const handleRenameSession = (sessionId: string, newName: string) => {

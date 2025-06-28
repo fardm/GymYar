@@ -11,22 +11,20 @@ interface FilterPanelProps {
 
 export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const [storedFilters, setStoredFilters] = useLocalStorage<FilterRule[]>('gymyar-filters', []);
 
-  // Sync prop filters with localStorage on mount
   useEffect(() => {
     if (storedFilters.length > 0) {
       onFiltersChange(storedFilters);
     }
   }, []);
 
-  // Update localStorage when filters change
   useEffect(() => {
     setStoredFilters(filters);
   }, [filters, setStoredFilters]);
 
-  // Extract unique values from exercises data
   const equipmentOptions = [...new Set(exercisesData.map(ex => ex.equipment))].filter(Boolean);
   const muscleOptions = [...new Set(exercisesData.flatMap(ex => ex.targetMuscles))].filter(Boolean);
 
@@ -40,7 +38,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
   };
 
   const updateFilter = (id: string, updates: Partial<FilterRule>) => {
-    onFiltersChange(filters.map(filter => 
+    onFiltersChange(filters.map(filter =>
       filter.id === id ? { ...filter, ...updates } : filter
     ));
   };
@@ -56,7 +54,6 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
   const addFilterValue = (filterId: string, value: string) => {
     const filter = filters.find(f => f.id === filterId);
     if (!filter || filter.values.includes(value)) return;
-
     const newValues = [...filter.values, value];
     updateFilter(filterId, { values: newValues });
   };
@@ -64,16 +61,15 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
   const removeFilterValue = (filterId: string, value: string) => {
     const filter = filters.find(f => f.id === filterId);
     if (!filter) return;
-
     const newValues = filter.values.filter(v => v !== value);
     updateFilter(filterId, { values: newValues });
   };
 
-  // Close panel on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
         setIsOpen(false);
+        setOpenDropdownId(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -104,7 +100,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
       {isOpen && (
         <div
           ref={panelRef}
-          className="absolute top-full right-0 mt-2 w-96 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 z-10"
+          className="absolute top-full right-0 mt-2 w-[90vw] max-w-sm bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 z-10"
         >
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold text-gray-900 dark:text-white">فیلترها</h3>
@@ -117,12 +113,6 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                   حذف همه
                 </button>
               )}
-              {/* <button
-                onClick={() => setIsOpen(false)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-              >
-                <X className="h-4 w-4" />
-              </button> */}
             </div>
           </div>
 
@@ -133,7 +123,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                 className="w-full flex items-center justify-center space-x-2 space-x-reverse py-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               >
                 <Plus className="h-4 w-4" />
-                <span>افزودن فیلتر تجهیزات</span>
+                <span>افزودن فیلتر وسایل</span>
               </button>
             )}
             {!filters.some(f => f.field === 'targetMuscles') && (
@@ -142,30 +132,46 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                 className="w-full flex items-center justify-center space-x-2 space-x-reverse py-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               >
                 <Plus className="h-4 w-4" />
-                <span>افزودن فیلتر عضله هدف</span>
+                <span>افزودن فیلتر عضلات</span>
               </button>
             )}
 
             {filters.map((filter) => (
               <div key={filter.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
                 <div className="flex items-center space-x-2 space-x-reverse mb-2">
-                  {filter.field === 'equipment' && <span className="text-sm text-gray-900 dark:text-white">تجهیزات:</span>}
-                  {filter.field === 'targetMuscles' && <span className="text-sm text-gray-900 dark:text-white">عضلات:</span>}
+                  <span className="text-sm text-gray-900 dark:text-white">
+                    {filter.field === 'equipment' ? 'وسایل:' : 'عضلات:'}
+                  </span>
 
-                  <select
-                    onChange={(e) => addFilterValue(filter.id, e.target.value)}
-                    value=""
-                    className="text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-white w-40"
-                  >
-                    <option value="" disabled>انتخاب مقدار</option>
-                    {(filter.field === 'equipment' ? equipmentOptions : muscleOptions)
-                      .filter(option => !filter.values.includes(option))
-                      .map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                  </select>
+                  {/* Custom dropdown */}
+                  <div className="relative w-40">
+                    <button
+                      onClick={() =>
+                        setOpenDropdownId((prev) => (prev === filter.id ? null : filter.id))
+                      }
+                      className="text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-white w-full text-right"
+                    >
+                      انتخاب مقدار
+                    </button>
+                    {openDropdownId === filter.id && (
+                      <div className="absolute z-20 mt-1 w-full max-h-40 overflow-y-auto bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded shadow-lg text-sm">
+                        {(filter.field === 'equipment' ? equipmentOptions : muscleOptions)
+                          .filter(option => !filter.values.includes(option))
+                          .map((option) => (
+                            <div
+                              key={option}
+                              onClick={() => {
+                                addFilterValue(filter.id, option);
+                                setOpenDropdownId(null);
+                              }}
+                              className="px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+                            >
+                              {option}
+                            </div>
+                          ))}
+                      </div>
+                    )}
+                  </div>
 
                   <button
                     onClick={() => removeFilter(filter.id)}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowUpDown, X, Plus, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
+import { ArrowUpDown, X, Plus, Trash2, ChevronUp, ChevronDown, MoveUp, MoveDown } from 'lucide-react';
 import { SortRule } from '../types';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
@@ -27,8 +27,8 @@ export function SortPanel({ sortRules, onSortRulesChange }: SortPanelProps) {
 
   const fieldOptions = [
     { value: 'name', label: 'نام تمرین' },
-    { value: 'equipment', label: 'تجهیزات' },
-    { value: 'targetMuscles', label: 'عضله هدف' }
+    { value: 'equipment', label: 'وسایل' },
+    { value: 'targetMuscles', label: 'عضلات' }
   ];
 
   const addSortRule = () => {
@@ -107,7 +107,8 @@ export function SortPanel({ sortRules, onSortRulesChange }: SortPanelProps) {
       {isOpen && (
         <div
           ref={panelRef}
-          className="absolute top-full right-0 mt-2 w-80 max-w-[90vw] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 z-10"
+          // Changed classes for better mobile responsiveness
+          className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 z-10"
         >
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold text-gray-900 dark:text-white">مرتب‌سازی</h3>
@@ -120,12 +121,6 @@ export function SortPanel({ sortRules, onSortRulesChange }: SortPanelProps) {
                   حذف همه
                 </button>
               )}
-              {/* <button
-                onClick={() => setIsOpen(false)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-              >
-                <X className="h-4 w-4" />
-              </button> */}
             </div>
           </div>
 
@@ -167,13 +162,13 @@ export function SortPanel({ sortRules, onSortRulesChange }: SortPanelProps) {
                       onClick={() => toggleDirection(rule.id, rule.direction)}
                       className={`p-1 rounded-full ${rule.direction === 'asc' ? 'bg-green-200 dark:bg-green-700 text-green-800 dark:text-green-200 hover:bg-green-300 dark:hover:bg-green-600' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
                     >
-                      <ChevronUp className="h-4 w-4" />
+                      <MoveUp className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => toggleDirection(rule.id, rule.direction)}
                       className={`p-1 rounded-full ${rule.direction === 'desc' ? 'bg-green-200 dark:bg-green-700 text-green-800 dark:text-green-200 hover:bg-green-300 dark:hover:bg-green-600' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
                     >
-                      <ChevronDown className="h-4 w-4" />
+                      <MoveDown className="h-4 w-4" />
                     </button>
                   </div>
 

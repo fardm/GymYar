@@ -9,7 +9,7 @@ interface SearchBarProps {
 
 export function SearchBar({ value, onChange, placeholder = "جستجوی تمرینات..." }: SearchBarProps) {
   return (
-    <div className="relative">
+    <div className="relative w-full md:w-auto">
       <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
       <input
         type="text"
