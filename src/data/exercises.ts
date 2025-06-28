@@ -424,7 +424,7 @@ export const exercisesData: Exercise[] = [
     name: 'کراس اور از بالا',
     targetMuscles: ['زیرسینه'],
     equipment: 'دستگاه',
-    image: '/src/assets/images/High-Cable-Crossover.gif'
+    image: 'high-cable-crossover.gif'
   },
   {
     id: '70',

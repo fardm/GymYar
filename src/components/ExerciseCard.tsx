@@ -1,3 +1,4 @@
+// src/components/ExerciseCard.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Exercise } from '../types';
@@ -10,6 +11,20 @@ interface ExerciseCardProps {
 export function ExerciseCard({ exercise, sessionName }: ExerciseCardProps) {
   const defaultImage = 'https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=400';
 
+  // Function to get the correct image URL (local or external)
+  const getImageUrl = (imageName: string | undefined) => {
+    if (imageName && !imageName.startsWith('http')) { // If it's not an external link
+      try {
+        // Construct URL for local images
+        return new URL(`/src/assets/images/${imageName}`, import.meta.url).href;
+      } catch (error) {
+        console.error("Error creating local image URL:", error);
+        return defaultImage; // Fallback to default image on error
+      }
+    }
+    return imageName || defaultImage; // If it's an external link or undefined, return as is
+  };
+
   return (
     <Link
       to={`/exercise/${exercise.id}`}
@@ -17,7 +32,7 @@ export function ExerciseCard({ exercise, sessionName }: ExerciseCardProps) {
     >
       <div className="relative">
         <img
-          src={exercise.image || defaultImage}
+          src={getImageUrl(exercise.image)} // Use the new function to get image URL
           alt={exercise.name}
           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
           onError={(e) => {

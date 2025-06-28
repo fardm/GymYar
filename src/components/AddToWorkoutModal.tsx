@@ -1,3 +1,4 @@
+// src/components/AddToWorkoutModal.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Plus } from 'lucide-react';
 import { WorkoutSession } from '../types';
@@ -6,7 +7,9 @@ interface AddToWorkoutModalProps {
   isOpen: boolean;
   onClose: () => void;
   sessions: WorkoutSession[];
-  onAddToSessions: (sessionIds: string[]) => void;
+  // Updated onAddToSessions to pass selected session IDs along with notes for the exercise
+  onAddToSessions: (selectedSessions: { sessionId: string; notes: string }[]) => void;
+  // onCreateNewSession no longer receives exerciseNotes as the exercise is not added immediately
   onCreateNewSession: (sessionName: string) => void;
   exerciseId: string;
 }
@@ -22,6 +25,7 @@ export function AddToWorkoutModal({
   const [newSessionName, setNewSessionName] = useState('');
   const [showNewSessionForm, setShowNewSessionForm] = useState(false);
   const [selectedSessions, setSelectedSessions] = useState<string[]>([]);
+  const [exerciseNotes, setExerciseNotes] = useState(''); // State for exercise notes
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -51,6 +55,7 @@ export function AddToWorkoutModal({
   if (!isOpen) return null;
 
   // Filter out sessions that already contain the exercise
+  // Also, include newly created sessions that don't yet have the exercise (after handleCreateSession)
   const availableSessions = sessions.filter(
     session => !session.exercises.some(ex => ex.exerciseId === exerciseId)
   );
@@ -65,18 +70,25 @@ export function AddToWorkoutModal({
 
   const handleAddToSelected = () => {
     if (selectedSessions.length > 0) {
-      onAddToSessions(selectedSessions);
+      // Map selected session IDs to objects including the exercise notes
+      const sessionsToAdd = selectedSessions.map(sessionId => ({
+        sessionId,
+        notes: exerciseNotes // Pass notes for each selected session
+      }));
+      onAddToSessions(sessionsToAdd);
       setSelectedSessions([]);
-      onClose();
+      setExerciseNotes(''); // Clear notes after adding
+      onClose(); // Close modal after adding exercise
     }
   };
 
   const handleCreateSession = () => {
     if (newSessionName.trim()) {
-      onCreateNewSession(newSessionName.trim());
+      onCreateNewSession(newSessionName.trim()); // Only create the session, no exercise notes here
       setNewSessionName('');
       setShowNewSessionForm(false);
-      onClose();
+      // Do NOT close the modal here. The new session will appear in the list,
+      // and the user can then select it to add the exercise.
     }
   };
 
@@ -127,6 +139,23 @@ export function AddToWorkoutModal({
                   </div>
                 ))}
               </div>
+
+              {selectedSessions.length > 0 && ( // Show notes field if any session is selected
+                <div className="mt-4">
+                  <label htmlFor="exercise-notes" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    توضیحات تمرین (اختیاری):
+                  </label>
+                  <textarea
+                    id="exercise-notes"
+                    value={exerciseNotes}
+                    onChange={(e) => setExerciseNotes(e.target.value)}
+                    placeholder="مثال: 3 ست 10 تکرار"
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  ></textarea>
+                </div>
+              )}
+
               <button
                 onClick={handleAddToSelected}
                 disabled={selectedSessions.length === 0}
@@ -160,6 +189,7 @@ export function AddToWorkoutModal({
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   autoFocus
                 />
+                {/* Removed the notes textarea from here */}
                 <div className="flex space-x-2 space-x-reverse">
                   <button
                     onClick={handleCreateSession}
@@ -172,6 +202,7 @@ export function AddToWorkoutModal({
                     onClick={() => {
                       setShowNewSessionForm(false);
                       setNewSessionName('');
+                      setExerciseNotes(''); // Clear notes on cancel
                     }}
                     className="flex-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
                   >

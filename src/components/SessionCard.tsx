@@ -1,3 +1,4 @@
+// src/components/SessionCard.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { WorkoutSession, Exercise } from '../types';
 import { Trash2, Edit2, Check, X, SquarePen } from 'lucide-react';
@@ -107,6 +108,20 @@ export function SessionCard({
   }, [isEditing, isDeleteExerciseModalOpen, isDeleteSessionModalOpen]);
 
   const defaultImage = 'https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=100';
+
+  // Function to get the correct image URL (local or external)
+  const getImageUrl = (imageName: string | undefined) => {
+    if (imageName && !imageName.startsWith('http')) { // If it's not an external link
+      try {
+        // Construct URL for local images
+        return new URL(`/src/assets/images/${imageName}`, import.meta.url).href;
+      } catch (error) {
+        console.error("Error creating local image URL:", error);
+        return defaultImage; // Fallback to default image on error
+      }
+    }
+    return imageName || defaultImage; // If it's an external link or undefined, return as is
+  };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
@@ -245,19 +260,19 @@ export function SessionCard({
           return (
             <div
               key={sessionExercise.exerciseId}
-              className="relative flex items-center space-x-3 space-x-reverse p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+              className="relative flex items-center space-x-3 space-x-reverse p-3 bg-gray-50 dark:bg-gray-700 rounded-lg flex-wrap" // Added flex-wrap for small screens
             >
               {/* Delete Button */}
               <button
                 onClick={() => handleOpenDeleteExerciseModal(exercise.id)}
-                className="right-2 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                className="left-2 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
               >
                 <X className="h-4 w-4" />
               </button>
 
               {/* Exercise Image */}
               <img
-                src={exercise.image || defaultImage}
+                src={getImageUrl(exercise.image)} // Use the new function to get image URL
                 alt={exercise.name}
                 className="w-12 h-12 object-cover rounded-lg flex-shrink-0"
                 onError={(e) => {
@@ -266,7 +281,7 @@ export function SessionCard({
               />
 
               {/* Exercise Info */}
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 mt-1 sm:mt-0"> {/* Adjusted margin for responsiveness */}
                 <Link
                   to={`/exercise/${exercise.id}`}
                   className="text-sm text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 break-words"
@@ -288,10 +303,15 @@ export function SessionCard({
                     </span>
                   )}
                 </div>
+                {sessionExercise.notes && ( // Display notes if they exist
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 break-words">
+                    توضیحات: {sessionExercise.notes}
+                  </p>
+                )}
               </div>
 
               {/* Checkbox */}
-              <div className="flex items-center">
+              <div className="flex items-center ml-auto"> {/* Aligned checkbox to the left */}
                 <input
                   type="checkbox"
                   checked={sessionExercise.completed}

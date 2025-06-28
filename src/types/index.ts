@@ -18,6 +18,7 @@ export interface WorkoutSession {
 export interface SessionExercise {
   exerciseId: string;
   completed: boolean;
+  notes?: string; // فیلد اختیاری برای یادداشت‌ها
 }
 
 export interface UserData {
