@@ -90,14 +90,14 @@ export function HomePage({ userData }: HomePageProps) {
       </div>
 
       {/* Search and Filters */}
-      <div className="mb-8 space-y-4">
-        <SearchBar
-          value={searchTerm}
-          onChange={setSearchTerm}
-          placeholder="جستجوی تمرینات..."
-        />
+
         
-        <div className="flex flex-wrap gap-4">
+        <div className="mb-8 flex flex-wrap gap-4">
+          <SearchBar
+            value={searchTerm}
+            onChange={setSearchTerm}
+            placeholder="جستجوی تمرینات..."
+          />
           <FilterPanel
             filters={filters}
             onFiltersChange={setFilters}
@@ -107,7 +107,7 @@ export function HomePage({ userData }: HomePageProps) {
             onSortRulesChange={setSortRules}
           />
         </div>
-      </div>
+      
 
       {/* Exercise Grid */}
       <ExerciseGrid

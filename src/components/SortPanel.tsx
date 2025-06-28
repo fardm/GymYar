@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowUpDown, X, Plus, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
 import { SortRule } from '../types';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface SortPanelProps {
   sortRules: SortRule[];
@@ -10,6 +11,19 @@ interface SortPanelProps {
 export function SortPanel({ sortRules, onSortRulesChange }: SortPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const [storedSortRules, setStoredSortRules] = useLocalStorage<SortRule[]>('gymyar-sort-rules', []);
+
+  // Sync prop sortRules with localStorage on mount
+  useEffect(() => {
+    if (storedSortRules.length > 0) {
+      onSortRulesChange(storedSortRules);
+    }
+  }, []);
+
+  // Update localStorage when sortRules change
+  useEffect(() => {
+    setStoredSortRules(sortRules);
+  }, [sortRules, setStoredSortRules]);
 
   const fieldOptions = [
     { value: 'name', label: 'نام تمرین' },
@@ -58,7 +72,7 @@ export function SortPanel({ sortRules, onSortRulesChange }: SortPanelProps) {
     updateSortRule(id, { direction: newDirection });
   };
 
-  // بستن پنل با کلیک خارج
+  // Close panel on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
@@ -106,12 +120,12 @@ export function SortPanel({ sortRules, onSortRulesChange }: SortPanelProps) {
                   حذف همه
                 </button>
               )}
-              <button
+              {/* <button
                 onClick={() => setIsOpen(false)}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               >
                 <X className="h-4 w-4" />
-              </button>
+              </button> */}
             </div>
           </div>
 

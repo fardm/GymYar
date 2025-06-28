@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Dumbbell, User, Moon, Sun, Download, Upload, Trash2, HelpCircle } from 'lucide-react';
+import { Dumbbell, User, Moon, Sun, Download, Upload, Trash2, HelpCircle, Bookmark } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import { exportUserData, importUserData, clearUserData, saveUserData } from '../utils/storage';
 
@@ -114,13 +114,13 @@ export function Header({ onDataChange }: HeaderProps) {
         <div className="flex justify-between items-center h-16">
           {/* Logo and Title */}
           <Link to="/" className="flex items-center space-x-3 space-x-reverse hover:opacity-80 transition-opacity">
-            <Dumbbell className="h-8 w-8 text-blue-600" />
+            <Dumbbell className="p-1 rounded-lg h-9 w-9 bg-blue-600 text-white" />
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">جیم‌یار</h1>
           </Link>
 
           {/* Navigation and Actions */}
           <div className="flex items-center space-x-4 space-x-reverse">
-            <Link
+            {/* <Link
               to="/my-workouts"
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 location.pathname === '/my-workouts'
@@ -128,12 +128,12 @@ export function Header({ onDataChange }: HeaderProps) {
                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
               }`}
             >
-              برنامه تمرینی من
-            </Link>
+              برنامه من
+            </Link> */}
 
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
+              className="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
               aria-label="تغییر تم"
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -142,7 +142,7 @@ export function Header({ onDataChange }: HeaderProps) {
             <div className="relative">
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
+                className="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
                 aria-label="منوی کاربر"
               >
                 <User className="h-5 w-5" />
@@ -153,26 +153,26 @@ export function Header({ onDataChange }: HeaderProps) {
                   ref={menuRef}
                   className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1"
                 >
-                  <button
-                    onClick={() => setShowHelpModal(true)}
+                  <Link
+                    to="/my-workouts"
                     className="w-full px-4 py-2 text-right text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 space-x-reverse"
                   >
-                    <HelpCircle className="h-4 w-4" />
-                    <span>راهنما</span>
-                  </button>
+                    <Bookmark className="h-4 w-4" />
+                    <span>برنامه من</span>
+                  </Link>
                   <button
                     onClick={handleExport}
                     className="w-full px-4 py-2 text-right text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 space-x-reverse"
                   >
                     <Download className="h-4 w-4" />
-                    <span>خروجی داده‌ها</span>
+                    <span>دانلود داده‌ها</span>
                   </button>
                   <button
                     onClick={handleImport}
                     className="w-full px-4 py-2 text-right text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 space-x-reverse"
                   >
                     <Upload className="h-4 w-4" />
-                    <span>ورودی داده‌ها</span>
+                    <span>وارد کردن داده‌ها</span>
                   </button>
                   <button
                     onClick={() => setShowClearConfirm(true)}
@@ -180,6 +180,13 @@ export function Header({ onDataChange }: HeaderProps) {
                   >
                     <Trash2 className="h-4 w-4" />
                     <span>حذف داده‌ها</span>
+                  </button>
+                  <button
+                    onClick={() => setShowHelpModal(true)}
+                    className="w-full px-4 py-2 text-right text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 space-x-reverse"
+                  >
+                    <HelpCircle className="h-4 w-4" />
+                    <span>راهنما</span>
                   </button>
                 </div>
               )}
@@ -215,8 +222,8 @@ export function Header({ onDataChange }: HeaderProps) {
               این سایت یک سایت استاتیک است و امکان ثبت‌نام یا ذخیره‌سازی دائمی اطلاعات شما را ندارد.
               تمام داده‌های شما فقط در مرورگر شما ذخیره می‌شوند و با پاک‌کردن تاریخچه (History) یا کش (Cache)، این اطلاعات نیز از بین می‌روند.
               <br /><br />
-              برای نگهداری داده‌ها یا انتقال آن‌ها به مرورگر یا دستگاهی دیگر، لطفاً از گزینه «Export» استفاده کنید.
-              با این کار، یک فایل JSON دریافت می‌کنید که می‌توانید آن را از طریق گزینه «Import» دوباره بارگذاری کرده و اطلاعات خود را بازیابی کنید.
+              برای نگهداری داده‌ها یا انتقال آن‌ها به مرورگر یا دستگاهی دیگر، لطفاً از گزینه «دانلود داده‌ها» استفاده کنید.
+              با این کار، یک فایل JSON دریافت می‌کنید که می‌توانید آن را از طریق گزینه «وارد کردن داده‌ها» دوباره بارگذاری کرده و اطلاعات خود را بازیابی کنید.
             </p>
             <div className="flex justify-end">
               <button
@@ -238,7 +245,7 @@ export function Header({ onDataChange }: HeaderProps) {
             className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4"
           >
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              خروجی داده‌ها
+              دانلود داده‌ها
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               آیا می‌خواهید از داده‌های خود خروجی بگیرید؟
@@ -269,7 +276,7 @@ export function Header({ onDataChange }: HeaderProps) {
             className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4"
           >
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              ورودی داده‌ها
+              وارد کردن داده‌ها
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
               لطفاً فقط فایل خروجی گرفته‌شده از همین سایت را انتخاب کنید.
@@ -281,8 +288,8 @@ export function Header({ onDataChange }: HeaderProps) {
               onChange={handleFileChange}
               className="mb-4 w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-700 dark:text-gray-300"
             />
-            <p className="text-sm text-red-500 dark:text-red-400 mb-6">
-              ⚠️ داده‌های فعلی با داده‌های فایل جایگزین می‌شوند. این عملیات قابل بازگشت نیست.
+            <p className="text-sm text-blue-500 dark:text-blue-400 mb-6">
+              ℹ️ داده‌های فعلی با داده‌های فایل جایگزین می‌شوند. این عملیات قابل بازگشت نیست.
             </p>
             <div className="flex space-x-3 space-x-reverse">
               <button

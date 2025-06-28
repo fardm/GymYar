@@ -86,7 +86,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          برنامه تمرینی من
+          برنامه من
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
           {userData.sessions.length} جلسه تمرینی
@@ -94,12 +94,12 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
       </div>
 
       {/* Controls */}
-      <div className="mb-8 flex flex-col sm:flex-row gap-4 justify-between">
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:gap-4">
         {/* Filter */}
         <select
           value={sessionFilter}
           onChange={(e) => setSessionFilter(e.target.value)}
-          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-4 sm:mb-0"
         >
           <option value="all">همه جلسات</option>
           {userData.sessions.map(session => (
@@ -113,37 +113,39 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
         {!showNewSessionForm ? (
           <button
             onClick={() => setShowNewSessionForm(true)}
-            className="flex items-center space-x-2 space-x-reverse bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center justify-center space-x-2 space-x-reverse bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto"
           >
             <Plus className="h-4 w-4" />
             <span>جلسه جدید</span>
           </button>
         ) : (
-          <div className="flex space-x-2 space-x-reverse">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 sm:space-x-reverse w-full sm:w-auto">
             <input
               type="text"
               value={newSessionName}
               onChange={(e) => setNewSessionName(e.target.value)}
               placeholder="نام جلسه جدید..."
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               autoFocus
             />
-            <button
-              onClick={handleCreateSession}
-              disabled={!newSessionName.trim()}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              ایجاد
-            </button>
-            <button
-              onClick={() => {
-                setShowNewSessionForm(false);
-                setNewSessionName('');
-              }}
-              className="bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
-            >
-              لغو
-            </button>
+            <div className="flex space-x-2 space-x-reverse">
+              <button
+                onClick={handleCreateSession}
+                disabled={!newSessionName.trim()}
+                className="w-full sm:w-auto bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                ایجاد
+              </button>
+              <button
+                onClick={() => {
+                  setShowNewSessionForm(false);
+                  setNewSessionName('');
+                }}
+                className="w-full sm:w-auto bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
+              >
+                لغو
+              </button>
+            </div>
           </div>
         )}
       </div>

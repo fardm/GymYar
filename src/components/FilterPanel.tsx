@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Filter, X, Plus, Trash2, XCircle } from 'lucide-react';
 import { FilterRule } from '../types';
 import { exercisesData } from '../data/exercises';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface FilterPanelProps {
   filters: FilterRule[];
@@ -11,6 +12,19 @@ interface FilterPanelProps {
 export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const [storedFilters, setStoredFilters] = useLocalStorage<FilterRule[]>('gymyar-filters', []);
+
+  // Sync prop filters with localStorage on mount
+  useEffect(() => {
+    if (storedFilters.length > 0) {
+      onFiltersChange(storedFilters);
+    }
+  }, []);
+
+  // Update localStorage when filters change
+  useEffect(() => {
+    setStoredFilters(filters);
+  }, [filters, setStoredFilters]);
 
   // Extract unique values from exercises data
   const equipmentOptions = [...new Set(exercisesData.map(ex => ex.equipment))].filter(Boolean);
@@ -55,7 +69,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
     updateFilter(filterId, { values: newValues });
   };
 
-  // بستن پنل با کلیک خارج
+  // Close panel on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
@@ -103,12 +117,12 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                   حذف همه
                 </button>
               )}
-              <button
+              {/* <button
                 onClick={() => setIsOpen(false)}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               >
                 <X className="h-4 w-4" />
-              </button>
+              </button> */}
             </div>
           </div>
 
@@ -136,7 +150,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
               <div key={filter.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-3">
                 <div className="flex items-center space-x-2 space-x-reverse mb-2">
                   {filter.field === 'equipment' && <span className="text-sm text-gray-900 dark:text-white">تجهیزات:</span>}
-                  {filter.field === 'targetMuscles' && <span className="text-sm text-gray-900 dark:text-white">عضله هدف:</span>}
+                  {filter.field === 'targetMuscles' && <span className="text-sm text-gray-900 dark:text-white">عضلات:</span>}
 
                   <select
                     onChange={(e) => addFilterValue(filter.id, e.target.value)}

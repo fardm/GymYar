@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { WorkoutSession, Exercise } from '../types';
-import { Trash2, Edit2, Check, X } from 'lucide-react';
+import { Trash2, Edit2, Check, X, SquarePen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface SessionCardProps {
@@ -22,6 +22,12 @@ export function SessionCard({
 }: SessionCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(session.name);
+  const [isDeleteExerciseModalOpen, setIsDeleteExerciseModalOpen] = useState(false);
+  const [isDeleteSessionModalOpen, setIsDeleteSessionModalOpen] = useState(false);
+  const [exerciseToDelete, setExerciseToDelete] = useState<string | null>(null);
+  const editModalRef = useRef<HTMLDivElement>(null);
+  const deleteExerciseModalRef = useRef<HTMLDivElement>(null);
+  const deleteSessionModalRef = useRef<HTMLDivElement>(null);
 
   const completedCount = session.exercises.filter(ex => ex.completed).length;
   const totalCount = session.exercises.length;
@@ -39,11 +45,66 @@ export function SessionCard({
     setIsEditing(false);
   };
 
-  const handleRemoveExerciseWithConfirm = (sessionId: string, exerciseId: string) => {
-    if (confirm('آیا مطمئن هستید که می‌خواهید این تمرین را حذف کنید؟')) {
-      onRemoveExercise(sessionId, exerciseId);
-    }
+  const handleOpenDeleteExerciseModal = (exerciseId: string) => {
+    setExerciseToDelete(exerciseId);
+    setIsDeleteExerciseModalOpen(true);
   };
+
+  const handleConfirmDeleteExercise = () => {
+    if (exerciseToDelete) {
+      onRemoveExercise(session.id, exerciseToDelete);
+    }
+    setIsDeleteExerciseModalOpen(false);
+    setExerciseToDelete(null);
+  };
+
+  const handleCancelDeleteExercise = () => {
+    setIsDeleteExerciseModalOpen(false);
+    setExerciseToDelete(null);
+  };
+
+  const handleOpenDeleteSessionModal = () => {
+    setIsDeleteSessionModalOpen(true);
+  };
+
+  const handleConfirmDeleteSession = () => {
+    onDeleteSession(session.id);
+    setIsDeleteSessionModalOpen(false);
+  };
+
+  const handleCancelDeleteSession = () => {
+    setIsDeleteSessionModalOpen(false);
+  };
+
+  // Handle Esc key to close modals
+  useEffect(() => {
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        if (isEditing) handleCancelEdit();
+        if (isDeleteExerciseModalOpen) handleCancelDeleteExercise();
+        if (isDeleteSessionModalOpen) handleCancelDeleteSession();
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [isEditing, isDeleteExerciseModalOpen, isDeleteSessionModalOpen]);
+
+  // Handle click outside to close modals
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isEditing && editModalRef.current && !editModalRef.current.contains(event.target as Node)) {
+        handleCancelEdit();
+      }
+      if (isDeleteExerciseModalOpen && deleteExerciseModalRef.current && !deleteExerciseModalRef.current.contains(event.target as Node)) {
+        handleCancelDeleteExercise();
+      }
+      if (isDeleteSessionModalOpen && deleteSessionModalRef.current && !deleteSessionModalRef.current.contains(event.target as Node)) {
+        handleCancelDeleteSession();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isEditing, isDeleteExerciseModalOpen, isDeleteSessionModalOpen]);
 
   const defaultImage = 'https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=100';
 
@@ -51,50 +112,115 @@ export function SessionCard({
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
       {/* Session Header */}
       <div className="flex justify-between items-start mb-4">
-        <div className="flex-1">
-          {isEditing ? (
-            <div className="flex items-center space-x-2 space-x-reverse">
-              <input
-                type="text"
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
-                className="flex-1 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                autoFocus
-              />
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          {session.name}
+        </h3>
+        <div className="flex items-center space-x-2 space-x-reverse">
+          <button
+            onClick={() => setIsEditing(true)}
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+          >
+            <SquarePen className="h-4 w-4" />
+          </button>
+          <button
+            onClick={handleOpenDeleteSessionModal}
+            className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Edit Modal */}
+      {isEditing && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div
+            ref={editModalRef}
+            className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4"
+          >
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              ویرایش نام جلسه
+            </h2>
+            <input
+              type="text"
+              value={editName}
+              onChange={(e) => setEditName(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-4"
+              autoFocus
+            />
+            <div className="flex justify-end space-x-2 space-x-reverse">
               <button
                 onClick={handleSaveEdit}
-                className="text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
+                className="w-full flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
               >
-                <Check className="h-4 w-4" />
+                تأیید
               </button>
               <button
                 onClick={handleCancelEdit}
-                className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                className="w-full flex-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
               >
-                <X className="h-4 w-4" />
+                لغو
               </button>
             </div>
-          ) : (
-            <div className="flex items-center space-x-2 space-x-reverse">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {session.name}
-              </h3>
-              <button
-                onClick={() => setIsEditing(true)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-              >
-                <Edit2 className="h-4 w-4" />
-              </button>
-            </div>
-          )}
+          </div>
         </div>
-        <button
-          onClick={() => onDeleteSession(session.id)}
-          className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-        >
-          <Trash2 className="h-4 w-4" />
-        </button>
-      </div>
+      )}
+
+      {/* Delete Exercise Modal */}
+      {isDeleteExerciseModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div
+            ref={deleteExerciseModalRef}
+            className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4"
+          >
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              این تمرین حذف شود؟
+            </h2>
+            <div className="flex space-x-2 space-x-reverse">
+              <button
+                onClick={handleConfirmDeleteExercise}
+                className="w-full flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              >
+                حذف
+              </button>
+              <button
+                onClick={handleCancelDeleteExercise}
+                className="w-full flex-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
+              >
+                لغو
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Session Modal */}
+      {isDeleteSessionModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div
+            ref={deleteSessionModalRef}
+            className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4"
+          >
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              این جلسه حذف شود؟
+            </h2>
+            <div className="flex space-x-2 space-x-reverse">
+              <button
+                onClick={handleConfirmDeleteSession}
+                className="w-full flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              >
+                حذف
+              </button>
+              <button
+                onClick={handleCancelDeleteSession}
+                className="w-full flex-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
+              >
+                لغو
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Progress Bar */}
       <div className="mb-4">
@@ -123,7 +249,7 @@ export function SessionCard({
             >
               {/* Delete Button */}
               <button
-                onClick={() => handleRemoveExerciseWithConfirm(session.id, exercise.id)}
+                onClick={() => handleOpenDeleteExerciseModal(exercise.id)}
                 className="right-2 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
               >
                 <X className="h-4 w-4" />
@@ -143,7 +269,7 @@ export function SessionCard({
               <div className="flex-1 min-w-0">
                 <Link
                   to={`/exercise/${exercise.id}`}
-                  className="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 truncate"
+                  className="text-sm text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 break-words"
                 >
                   {exercise.name}
                 </Link>
