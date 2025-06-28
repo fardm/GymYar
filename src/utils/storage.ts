@@ -1,6 +1,6 @@
 import { UserData, WorkoutSession } from '../types';
 
-const STORAGE_KEY = 'gymyar-user-data';
+const STORAGE_KEY = 'tamrinsaz-user-data';
 
 export const getUserData = (): UserData => {
   try {
@@ -34,7 +34,7 @@ export const exportUserData = (): void => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `gymyar-backup-${new Date().toISOString().split('T')[0]}.json`;
+  a.download = `tamrinsaz-backup-${new Date().toISOString().split('T')[0]}.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);

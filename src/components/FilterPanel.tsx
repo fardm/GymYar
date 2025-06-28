@@ -21,7 +21,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
   const [isMusclesFilterEnabled, setIsMusclesFilterEnabled] = useState(false);
 
   // Load stored filters on initial render and when modal opens
-  const [storedFilters, setStoredFilters] = useLocalStorage<FilterRule[]>('gymyar-filters', []);
+  const [storedFilters, setStoredFilters] = useLocalStorage<FilterRule[]>('tamrinsaz-filters', []);
 
   useEffect(() => {
     // When component mounts, apply stored filters

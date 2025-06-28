@@ -21,7 +21,7 @@ export function SortPanel({ sortRules, onSortRulesChange }: SortPanelProps) {
   const [isMusclesSortEnabled, setIsMusclesSortEnabled] = useState(false);
 
   // Load stored sort rules on initial render
-  const [storedSortRules, setStoredSortRules] = useLocalStorage<SortRule[]>('gymyar-sort-rules', []);
+  const [storedSortRules, setStoredSortRules] = useLocalStorage<SortRule[]>('tamrinsaz-sort-rules', []);
 
   useEffect(() => {
     // When component mounts, apply stored sort rules
