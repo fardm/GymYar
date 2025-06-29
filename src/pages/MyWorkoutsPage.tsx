@@ -178,7 +178,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
       </div>
 
       {/* Controls */}
-      <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:gap-4">
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-center gap-4">
         {/* Filter Button */}
         <button
           onClick={() => setShowFilterModal(true)}

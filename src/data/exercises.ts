@@ -4,534 +4,786 @@ export const exercisesData: Exercise[] = [
   {
     id: '1',
     name: 'بارفیکس خوابیده',
-    image: 'https://liftmanual.com/wp-content/uploads/2023/04/inverted-row.jpg',
     targetMuscles: ['ذوزنقه‌ای'],
     equipment: 'دستگاه',
+    image: '1.webp',
     otherNames: 'Inverted Row',
-    description: 'این تمرین برای تقویت عضلات ذوزنقه‌ای بسیار موثر است. <a href="https://musclewiki.com/fa-ir/smith-machineexplore/..." target="_blank" rel="noopener noreferrer">اینجا کلیک کنید</a>.' 
+    description: '<a href="https://musclewiki.com/bodyweight/male/traps-middle/inverted-row/" target="_blank" rel="noopener noreferrer">musclewiki</a>'
   },
   {
     id: '2',
     name: 'زیربغل سیمکش دسته وی',
     targetMuscles: ['ذوزنقه‌ای'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '2.webp',
+    otherNames: '',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '3',
-    name: 'پشت بازو دمبل تک خوابیده',
+    name: 'پشت بازو دمبل خوابیده',
     targetMuscles: ['پشت بازو'],
-    equipment: 'دمبل'
+    equipment: 'دمبل',
+    image: '3.webp',
+    otherNames: 'Dumbbell Lying Triceps Extension',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '4',
-    name: 'زیربغل سیمکش دست باز',
-    targetMuscles: ['زیربغل / لت'],
-    equipment: 'دستگاه'
+    name: 'زیربغل دست باز',
+    targetMuscles: ['لت'],
+    equipment: 'دستگاه',
+    image: '4.webp',
+    otherNames: 'Cable Wide Pulldown',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '5',
     name: 'پرس پا دستگاه',
     targetMuscles: ['همسترینگ'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '5.webp',
+    otherNames: 'Machine Leg Press',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '6',
     name: 'نشر جلو دمبل',
-    image: 'https://liftmanual.com/wp-content/uploads/2023/04/dumbbell-seated-front-raise.jpg',
     targetMuscles: ['سرشانه'],
     equipment: 'دمبل',
-    otherNames: 'Dumbbell Front Raise'
+    image: '6.webp',
+    otherNames: 'Dumbbell Front Raise',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '7',
     name: 'نشر جلو صفحه',
     targetMuscles: ['سرشانه'],
     equipment: 'صفحه',
-    otherNames: 'Plate Front Raise'
+    image: '7.webp',
+    otherNames: 'Plate Front Raise',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
-  {
-    id: '8',
-    name: 'Dumbbell Wrist Curl',
-    targetMuscles: ['ساعد'],
-    equipment: 'دمبل'
-  },
+  // {
+  //   id: '8',
+  //   name: 'Dumbbell Wrist Curl',
+  //   targetMuscles: ['ساعد'],
+  //   equipment: 'دمبل'
+  // },
   {
     id: '9',
-    name: 'قایقی',
+    name: 'قایقی دسته وی',
     targetMuscles: ['ذوزنقه‌ای'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '9.webp',
+    otherNames: 'Cable Straight Back Seated Row',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '10',
-    name: 'جلوبازو سیمکش طنابی',
+    name: 'جلو بازو سیمکش طنابی',
     targetMuscles: ['جلو بازو'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '10.webp',
+    otherNames: '',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '11',
     name: 'دستگاه اچ',
-    targetMuscles: ['ذوزنقه‌ای', 'زیربغل / لت'],
-    equipment: 'دستگاه'
+    targetMuscles: ['ذوزنقه‌ای', 'لت'],
+    equipment: 'دستگاه',
+    image: '11.webp',
+    otherNames: 'H machine row',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '12',
-    name: 'ساق پا دستگاه',
+    name: 'ساق پا دستگاه ایستاده',
     targetMuscles: ['ساق'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '12.webp',
+    otherNames: '',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '13',
     name: 'زیربغل خم دمبل جفت',
-    targetMuscles: ['ذوزنقه‌ای', 'زیربغل / لت'],
-    equipment: 'دمبل'
+    targetMuscles: ['ذوزنقه‌ای', 'لت'],
+    equipment: 'دمبل',
+    image: '13.webp',
+    otherNames: 'Dumbbell Bent Over Row',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '14',
     name: 'پول اور طنابی',
-    targetMuscles: ['زیربغل / لت'],
-    equipment: 'دستگاه'
+    targetMuscles: ['لت'],
+    equipment: 'دستگاه',
+    image: '14.webp',
+    otherNames: 'pull over',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '15',
-    name: 'جلوبازو دمبل داخل',
+    name: 'جلو بازو دمبل داخل',
     targetMuscles: ['جلو بازو'],
-    equipment: 'دمبل'
+    equipment: 'دمبل',
+    image: '15.webp',
+    otherNames: 'Dumbbell Cross Body Hammer Curl',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '16',
     name: 'فلای بک',
     targetMuscles: ['سرشانه'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '16.webp',
+    otherNames: 'Lever Seated Reverse Fly',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '17',
-    name: 'جلوبازو هالتر',
+    name: 'جلو بازو هالتر Ez',
     targetMuscles: ['جلو بازو'],
-    equipment: 'هالتر'
+    equipment: 'هالتر',
+    image: '17.webp',
+    otherNames: 'Ez Barbell Curl',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '18',
-    name: 'جلوبازو سیمکش دسته صاف',
+    name: 'جلو بازو سیمکش دسته صاف',
     targetMuscles: ['جلو بازو'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '18.webp',
+    otherNames: 'Cable Close Grip Curl',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '19',
     name: 'زیربغل سیمکش دسته موازی',
-    targetMuscles: ['زیربغل / لت'],
-    equipment: 'دستگاه'
+    targetMuscles: ['لت'],
+    equipment: 'دستگاه',
+    image: '19.webp',
+    otherNames: '',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '20',
-    name: 'پرس بالا سینه دمبل',
-    targetMuscles: ['بالا سینه'],
-    equipment: 'دمبل'
+    name: 'پشت بازو سیمکش دسته',
+    targetMuscles: ['پشت بازو'],
+    equipment: 'دستگاه',
+    image: '20.webp',
+    otherNames: 'Cable Pushdown',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '21',
     name: 'فیس پول طنابی',
     targetMuscles: ['ذوزنقه‌ای', 'سرشانه'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '21.webp',
+    otherNames: 'Face Pull',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '22',
-    name: 'جلوبازو تمرکزی',
+    name: 'جلو بازو تمرکزی',
     targetMuscles: ['جلو بازو'],
-    equipment: 'دمبل'
+    equipment: 'دمبل',
+    image: '22.webp',
+    otherNames: 'Dumbbell Concentration Curl',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '23',
-    name: 'بارفیکس کمکی',
-    targetMuscles: ['زیربغل / لت'],
-    equipment: 'دستگاه'
+    name: 'ساید اسکوات',
+    targetMuscles: ['پا'],
+    equipment: 'وزن بدن',
+    image: '23.webp',
+    otherNames: 'Side Split Squat',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '24',
-    name: 'پرس سر شانه دمبل نشسته',
+    name: 'پرس سرشانه دمبل نشسته',
     targetMuscles: ['سرشانه'],
-    equipment: 'دمبل'
+    equipment: 'دمبل',
+    image: '24.webp',
+    otherNames: 'Dumbbell Seated Shoulder Press',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '25',
     name: 'طناب',
-    targetMuscles: ['ساق'],
-    equipment: 'وزن بدن'
+    targetMuscles: ['ساق', 'پا'],
+    equipment: 'وزن بدن',
+    image: '25.webp',
+    otherNames: 'Jump Rope',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '26',
-    name: 'اسکات پرشی',
+    name: 'اسکوات پرشی',
     targetMuscles: ['باسن'],
-    equipment: 'وزن بدن'
+    equipment: 'وزن بدن',
+    image: '26.webp',
+    otherNames: 'Semi Squat Jump',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '27',
     name: 'اسکات با دیوار',
     targetMuscles: ['جلو ران'],
-    equipment: 'وزن بدن'
+    equipment: 'وزن بدن',
+    image: '27.webp',
+    otherNames: '',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '28',
-    name: 'پشت بازو دمبل خوابیده (روبه داخل)',
-    targetMuscles: ['پشت بازو'],
-    equipment: 'دمبل'
+    name: 'سومو اسکوات',
+    targetMuscles: ['باسن', 'داخل ران'],
+    equipment: 'وزن بدن',
+    image: '28.webp',
+    otherNames: 'Sumo Squat Floor Touch',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '29',
     name: 'نشر جانب دمبل نشسته',
     targetMuscles: ['سرشانه'],
-    equipment: 'دمبل'
+    equipment: 'دمبل',
+    image: '29.webp',
+    otherNames: 'Dumbbell Seated Lateral Raise',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
-  {
-    id: '30',
-    name: 'کول هالتر',
-    targetMuscles: ['سرشانه', 'کول'],
-    equipment: 'هالتر'
-  },
+  // {
+  //   id: '30',
+  //   name: 'کول هالتر',
+  //   targetMuscles: ['سرشانه', 'کول'],
+  //   equipment: 'هالتر'
+  // },
   {
     id: '31',
     name: 'فلای سیمکش خوابیده',
     targetMuscles: ['سینه'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '31.webp',
+    otherNames: 'Cable Lying Fly',
   },
   {
     id: '32',
     name: 'پشت پا دستگاه خوابیده',
     targetMuscles: ['همسترینگ'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '32.webp',
+    otherNames: 'Lever Lying Leg Curl',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '33',
-    name: 'نشر جلو هالتر میز شیب‌دار',
-    image: 'https://www.lyfta.app/_next/image?url=%2Fthumbnails%2F37221201.jpg&w=3840&q=75',
-    targetMuscles: ['سرشانه'],
-    equipment: 'هالتر',
-    otherNames: 'Barbell Incline Lying Rear Delt Raise'
+    name: 'ساق پا',
+    targetMuscles: ['ساق'],
+    equipment: 'وزن بدن',
+    image: '33.webp',
+    otherNames: 'Bodyweight Standing Calf Raise',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '34',
     name: 'دوچرخه ثابت',
     targetMuscles: ['باسن', 'ساق'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '34.webp',
+    otherNames: '',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
-  {
-    id: '35',
-    name: 'سر شونه دستگاه',
-    targetMuscles: ['سرشانه'],
-    equipment: 'دستگاه'
-  },
+  // {
+  //   id: '35',
+  //   name: 'سرشانه دستگاه',
+  //   targetMuscles: ['سرشانه'],
+  //   equipment: 'دستگاه'
+  // },
   {
     id: '36',
     name: 'پشت پا دستگاه نشسته',
     targetMuscles: ['جلو ران'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '36.webp',
+    otherNames: 'Lever Seated Leg Curl',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
-  {
-    id: '37',
-    name: 'سرشونه سیمکش چرخش داخلی',
-    targetMuscles: ['سرشانه'],
-    equipment: 'دستگاه'
-  },
+  // {
+  //   id: '37',
+  //   name: 'سرشانه سیمکش چرخش داخلی',
+  //   targetMuscles: ['سرشانه'],
+  //   equipment: 'دستگاه'
+  // },
   {
     id: '38',
     name: 'لانگ بلغاری',
     targetMuscles: ['باسن', 'جلو ران'],
-    equipment: 'وزن بدن'
+    equipment: 'وزن بدن',
+    image: '38.webp',
   },
-  {
-    id: '39',
-    name: 'نشر جلو هالتر',
-    targetMuscles: ['سرشانه'],
-    equipment: 'دمبل'
-  },
+  // {
+  //   id: '39',
+  //   name: 'نشر جلو هالتر',
+  //   targetMuscles: ['سرشانه'],
+  //   equipment: 'دمبل'
+  // },
   {
     id: '40',
     name: 'پشت بازو بالاسر طنابی',
     targetMuscles: ['پشت بازو'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '40.webp',
+    otherNames: 'Cable High Overhead Tricep',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '41',
     name: 'خیاطه داخل ران',
     targetMuscles: ['داخل ران'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '41.webp',
+    otherNames: 'Lever Seated Hip Adduction',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '42',
     name: 'زیربغل سیمکش تک دست',
-    targetMuscles: ['زیربغل / لت'],
-    equipment: 'دستگاه'
+    targetMuscles: ['لت', 'زیربغل'],
+    equipment: 'دستگاه',
+    image: '42.webp',
   },
   {
     id: '43',
-    name: 'هاگ پا دستگاه',
+    name: 'هک اسکوات',
     targetMuscles: ['جلو ران'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '43.webp',
+    otherNames: 'Hack Squat',
+    description: '<a href="https://musclewiki.com/machine/male/glutes/machine-hack-squat" target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '44',
     name: 'نشر جانب سیمکش',
     targetMuscles: ['سرشانه'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '44.webp',
+    otherNames: 'Cable One Arm Lateral Raise',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
-  {
-    id: '45',
-    name: 'دد باگ',
-    targetMuscles: ['شکم'],
-    equipment: 'وزن بدن',
-    otherNames: 'Dead Bug'
-  },
+  // {
+  //   id: '45',
+  //   name: 'دد باگ',
+  //   targetMuscles: ['شکم'],
+  //   equipment: 'وزن بدن',
+  //   otherNames: 'Dead Bug'
+  // },
   {
     id: '46',
     name: 'پرس سینه هالتر',
     targetMuscles: ['سینه'],
-    equipment: 'هالتر'
+    equipment: 'هالتر',
+    image: '46.webp',
+    otherNames: 'Barbell Bench Press',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '47',
-    name: 'ساعد هالتر',
+    name: 'ساعد هالتر دست برعکس',
     targetMuscles: ['ساعد'],
-    equipment: 'هالتر'
+    equipment: 'هالتر',
+    image: '47.webp',
+    otherNames: '',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
-  {
-    id: '48',
-    name: 'پول‌اور دستگاه',
-    targetMuscles: ['زیربغل / لت'],
-    equipment: 'دستگاه'
-  },
-  {
-    id: '49',
-    name: 'نشر خم دمبل خوابیده',
-    targetMuscles: ['سرشانه'],
-    equipment: 'دمبل'
-  },
+  // {
+  //   id: '48',
+  //   name: 'پول‌اور دستگاه',
+  //   targetMuscles: ['لت'],
+  //   equipment: 'دستگاه'
+  // },
+  // {
+  //   id: '49',
+  //   name: 'نشر خم دمبل خوابیده',
+  //   targetMuscles: ['سرشانه'],
+  //   equipment: 'دمبل'
+  // },
   {
     id: '50',
-    name: 'فلای سیمکش میز شیبدار',
+    name: 'فلای سیمکش شیبدار',
     targetMuscles: ['بالا سینه'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '50.webp',
+    otherNames: 'Cable Incline Fly',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '51',
     name: 'فلای بک سیمکش',
     targetMuscles: ['سرشانه'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '51.webp',
+    otherNames: '',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '52',
     name: 'زیربغل دستگاه قیچی',
-    targetMuscles: ['زیربغل / لت'],
-    equipment: 'دستگاه'
+    targetMuscles: ['لت'],
+    equipment: 'دستگاه',
+    image: '52.webp',
+    otherNames: '',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '53',
-    name: 'دیپ پارالل',
-    targetMuscles: ['سینه', 'پشت بازو'],
-    equipment: 'دستگاه'
+    name: 'دیپ پارالل پشت بازو',
+    targetMuscles: ['پشت بازو'],
+    equipment: 'دستگاه',
+    image: '53.webp',
+    otherNames: 'Triceps Dip',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '54',
     name: 'بارفیکس دست باز',
-    targetMuscles: ['زیربغل / لت'],
+    targetMuscles: ['لت'],
     equipment: 'دستگاه',
-    otherNames: 'پول آپ'
+    image: '54.webp',
+    otherNames: 'Pull Up',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '55',
     name: 'جلوبازی فیگوری سیمکش',
     targetMuscles: ['جلو بازو'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '55.webp',
+    otherNames: 'Cable Overhead Curl',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '56',
     name: 'جلو پا دستگاه',
     targetMuscles: ['جلو ران'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '56.webp',
+    otherNames: '',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
-  {
-    id: '57',
-    name: 'پرس سینه اسمیت',
-    targetMuscles: ['سینه'],
-    equipment: 'دستگاه'
-  },
+  // {
+  //   id: '57',
+  //   name: 'پرس سینه اسمیت',
+  //   targetMuscles: ['سینه'],
+  //   equipment: 'دستگاه'
+  // },
   {
     id: '58',
-    name: 'سرشونه دمبل سه گانه',
+    name: 'سرشانه دمبل سه گانه',
     targetMuscles: ['سرشانه'],
-    equipment: 'دمبل'
+    equipment: 'دمبل',
+    image: '58.webp',
+    otherNames: 'Dumbbell Lateral to Front Raise',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
-  {
-    id: '59',
-    name: 'کرانچ لمس پاشنه',
-    targetMuscles: ['پهلو'],
-    equipment: 'وزن بدن'
-  },
+  // {
+  //   id: '59',
+  //   name: 'کرانچ لمس پاشنه',
+  //   targetMuscles: ['پهلو'],
+  //   equipment: 'وزن بدن'
+  // },
   {
     id: '60',
     name: 'شنا دست جمع',
     targetMuscles: ['سینه'],
-    equipment: 'وزن بدن'
+    equipment: 'وزن بدن',
+    image: '60.webp',
+    otherNames: 'Diamond Push Ups',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '61',
     name: 'بالا سینه هالتر',
     targetMuscles: ['بالا سینه'],
-    equipment: 'هالتر'
+    equipment: 'هالتر',
+    image: '61.webp',
+    otherNames: 'Barbell Incline Press',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '62',
     name: 'بالا سینه دمبل',
     targetMuscles: ['بالا سینه'],
-    equipment: 'دمبل'
+    equipment: 'دمبل',
+    image: '62.webp',
+    otherNames: '',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '63',
     name: 'زیر شکم پارالل',
     targetMuscles: ['شکم'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '63.webp',
+    otherNames: 'Leg Raise',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '64',
-    name: 'اسکات با اسمیت',
+    name: 'اسکوات اسمیت',
     targetMuscles: ['باسن', 'جلو ران'],
-    equipment: 'دمبل'
+    equipment: 'دستگاه',
+    image: '64.webp',
+    otherNames: 'Smith Sumo Squat',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '65',
     name: 'پرس سینه دمبل',
     targetMuscles: ['سینه'],
-    equipment: 'دمبل'
+    equipment: 'دمبل',
+    image: '65.webp',
+    otherNames: 'Dumbbell Bench Press',
+    description: '<a href="https://musclewiki.com/dumbbells/male/triceps/dumbbell-bench-press/" target="_blank" rel="noopener noreferrer">musclewiki</a>',
+
   },
   {
     id: '66',
     name: 'پلانک بالا پایین',
     targetMuscles: ['شکم'],
-    equipment: 'وزن بدن'
+    equipment: 'وزن بدن',
+    image: '66.webp',
+    otherNames: 'Bodyweight Plank Up Down',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '67',
     name: 'کرانچ',
     targetMuscles: ['شکم'],
-    equipment: 'وزن بدن'
+    equipment: 'وزن بدن',
+    image: '67.webp',
+    otherNames: 'Long Arm Crunch',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '68',
     name: 'کراس اور از پایین',
     targetMuscles: ['بالا سینه'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '68.webp',
+    otherNames: 'Cable Low Fly',
   },
   {
     id: '69',
     name: 'کراس اور از بالا',
     targetMuscles: ['زیرسینه'],
     equipment: 'دستگاه',
-    image: 'high-cable-crossover.gif'
+    image: '69.webp',
+    otherNames: 'Cable Standing Fly',
   },
   {
     id: '70',
-    name: 'لانگ بلغاری با اسمیت',
+    name: 'لانگ بلغاری با دمبل',
     targetMuscles: ['باسن', 'جلو ران'],
-    equipment: 'دستگاه'
+    equipment: 'دمبل',
+    image: '70.webp',
+    otherNames: 'Dumbbell Bulgarian Split Squat',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '71',
-    name: 'فلای سینه دستگاه',
+    name: 'فلای دستگاه',
     targetMuscles: ['سینه'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '71.webp',
+    otherNames: 'Lever Seated Fly',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '72',
-    name: 'زیرشکم روی نیمکت',
+    name: 'زیر شکم نیمکت',
     targetMuscles: ['شکم'],
-    equipment: 'وزن بدن'
+    equipment: 'وزن بدن',
+    image: '72.webp',
+    otherNames: 'Seated Leg Raise',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '73',
     name: 'کراس اور متقاطع',
     targetMuscles: ['سینه'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '73.webp',
+    otherNames: '',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '74',
     name: 'پشت بازو سیمکش طنابی',
     targetMuscles: ['پشت بازو'],
-    equipment: 'دستگاه'
+    equipment: 'دستگاه',
+    image: '74.webp',
+    otherNames: '',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '75',
     name: 'لانگ جلو دمبل',
     targetMuscles: ['جلو ران'],
-    equipment: 'دمبل'
+    equipment: 'دمبل',
+    image: '75.webp',
+    otherNames: 'Dumbbell Forward Lunge',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '76',
     name: 'کرانچ دوچرخه',
     targetMuscles: ['پهلو'],
-    equipment: 'وزن بدن'
+    equipment: 'وزن بدن',
+    image: '76.webp',
+    otherNames: 'Bicycle Crunch',
+    description: '<a href="https://musclewiki.com/bodyweight/male/abdominals/bicycle-crunch/" target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '77',
     name: 'پرس سینه دمبل چسبیده',
-    targetMuscles: ['سینه'],
-    equipment: 'دمبل'
+    targetMuscles: ['سینه', 'پشت بازو'],
+    equipment: 'دمبل',
+    image: '77.webp',
+    otherNames: 'Dumbbell Close Grip Press',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '78',
     name: 'شنا سوئدی',
     targetMuscles: ['سینه'],
-    equipment: 'وزن بدن'
+    equipment: 'وزن بدن',
+    image: '78.webp',
+    otherNames: 'Push Up',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '79',
     name: 'دیپ نیمکت',
     targetMuscles: ['پشت بازو'],
-    equipment: 'وزن بدن'
+    equipment: 'وزن بدن',
+    image: '79.webp',
+    otherNames: 'Bench Dip on Floor',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
-  {
-    id: '80',
-    name: 'پلانک چرخشی',
-    targetMuscles: ['شکم'],
-    equipment: 'وزن بدن'
-  },
+  // {
+  //   id: '80',
+  //   name: 'پلانک چرخشی',
+  //   targetMuscles: ['شکم'],
+  //   equipment: 'وزن بدن'
+  // },
   {
     id: '81',
-    name: 'کوهنوردی',
+    name: 'حرکت کوهنورد',
     targetMuscles: ['شکم'],
-    equipment: 'وزن بدن'
+    equipment: 'وزن بدن',
+    image: '81.webp',
+    otherNames: 'Mountain Climber',
+    description: '<a href="https://musclewiki.com/bodyweight/male/abdominals/slow-tempo-mountain-climber" target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '82',
     name: 'جلو بازو دمبل',
     targetMuscles: ['جلو بازو'],
-    equipment: 'دمبل'
+    equipment: 'دمبل',
+    image: '82.webp',
+    otherNames: 'Dumbbell Biceps Curl',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
-  {
-    id: '83',
-    name: 'کرانچ معکوس (قیچی)',
-    targetMuscles: ['شکم'],
-    equipment: 'وزن بدن'
-  },
+  // {
+  //   id: '83',
+  //   name: 'کرانچ معکوس (قیچی)',
+  //   targetMuscles: ['شکم'],
+  //   equipment: 'وزن بدن'
+  // },
   {
     id: '84',
-    name: 'قفسه سینه دمبل',
+    name: 'فلای دمبل',
     targetMuscles: ['سینه'],
-    equipment: 'دمبل'
+    equipment: 'دمبل',
+    image: '84.webp',
+    otherNames: 'Dumbbell Fly',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
-  {
-    id: '85',
-    name: 'پلانک لمس شانه',
-    targetMuscles: ['شکم'],
-    equipment: 'وزن بدن'
-  },
+  // {
+  //   id: '85',
+  //   name: 'پلانک لمس شانه',
+  //   targetMuscles: ['شکم'],
+  //   equipment: 'وزن بدن'
+  // },
   {
     id: '86',
     name: 'پلانک',
     targetMuscles: ['شکم'],
-    equipment: 'وزن بدن'
+    equipment: 'وزن بدن',
+    image: '86.webp',
+    otherNames: 'Plank',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
   {
     id: '87',
     name: 'سگ پرنده',
     targetMuscles: ['باسن', 'شکم', 'همسترینگ'],
-    equipment: 'وزن بدن'
-  }
+    equipment: 'وزن بدن',
+    image: '87.webp',
+    otherNames: 'Bird dog',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+
+  },
+  {
+    id: '88',
+    name: 'سرشانه سیمکش چرخش به داخل',
+    targetMuscles: ['سرشانه'],
+    equipment: 'دستگاه',
+    image: '88.webp',
+    otherNames: 'Cable Shoulder Internal Rotation',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+  },  
+  {
+    id: '89',
+    name: 'سرشانه سیمکش چرخش به خارج',
+    targetMuscles: ['سرشانه'],
+    equipment: 'دستگاه',
+    image: '89.webp',
+    otherNames: 'Cable Standing Shoulder External Rotation',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+  },  
+  {
+    id: '90',
+    name: 'سرشانه دستگاه',
+    targetMuscles: ['سرشانه'],
+    equipment: 'دستگاه',
+    image: '90.webp',
+    otherNames: 'Lever Seated Shoulder Press',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+  },  
+  {
+    id: '91',
+    name: 'یوگا پروانه',
+    targetMuscles: ['داخل ران'],
+    equipment: 'وزن بدن',
+    image: '91.webp',
+    otherNames: 'Butterfly Yoga Pose',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+  },  
+  {
+    id: '92',
+    name: 'دیپ پارالل زیرسینه',
+    targetMuscles: ['زیرسینه'],
+    equipment: 'دستگاه',
+    image: '92.webp',
+    otherNames: 'Chest Dip',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+  },
 ];

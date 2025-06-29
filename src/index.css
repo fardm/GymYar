@@ -51,3 +51,20 @@ body {
 .animate-fade-in-out {
   animation: fade-in-out 3s ease-in-out forwards;
 }
+
+
+
+a {  
+  &[href*="musclewiki.com"]::before {
+    content: '';
+    width: 1.1em;
+    height: 1.1em;
+    display: inline-block;
+    vertical-align: middle;
+    margin-inline-end: 0.4em;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url("https://www.google.com/s2/favicons?sz=32&domain=musclewiki.com");
+
+  }
+}
