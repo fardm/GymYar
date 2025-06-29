@@ -66,7 +66,7 @@ export function Header({ onDataChange }: HeaderProps) {
 
   const handleExport = () => {
     setShowExportConfirm(true);
-    setShowUserMenu(false);
+    setShowUserMenu(false); // Close user menu
   };
 
   const confirmExport = () => {
@@ -76,7 +76,7 @@ export function Header({ onDataChange }: HeaderProps) {
 
   const handleImport = () => {
     setShowImportConfirm(true);
-    setShowUserMenu(false);
+    setShowUserMenu(false); // Close user menu
   };
 
   const confirmImport = async () => {
@@ -104,7 +104,7 @@ export function Header({ onDataChange }: HeaderProps) {
     clearUserData();
     onDataChange();
     setShowClearConfirm(false);
-    setShowUserMenu(false);
+    setShowUserMenu(false); // Close user menu
     showToast('تمام داده‌ها پاک شدند', 'delete');
   };
 
@@ -156,6 +156,7 @@ export function Header({ onDataChange }: HeaderProps) {
                 >
                   <Link
                     to="/my-workouts"
+                    onClick={() => setShowUserMenu(false)} // Close user menu
                     className="w-full px-4 py-2 text-right text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 space-x-reverse"
                   >
                     <Bookmark className="h-4 w-4" />
@@ -176,14 +177,14 @@ export function Header({ onDataChange }: HeaderProps) {
                     <span>وارد کردن داده‌ها</span>
                   </button>
                   <button
-                    onClick={() => setShowClearConfirm(true)}
+                    onClick={() => { setShowClearConfirm(true); setShowUserMenu(false); }} // Close user menu
                     className="w-full px-4 py-2 text-right text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center space-x-2 space-x-reverse"
                   >
                     <Trash2 className="h-4 w-4" />
                     <span>حذف داده‌ها</span>
                   </button>
                   <button
-                    onClick={() => setShowHelpModal(true)}
+                    onClick={() => { setShowHelpModal(true); setShowUserMenu(false); }} // Close user menu
                     className="w-full px-4 py-2 text-right text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 space-x-reverse"
                   >
                     <HelpCircle className="h-4 w-4" />
