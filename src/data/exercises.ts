@@ -13,7 +13,7 @@ export const exercisesData: Exercise[] = [
   {
     id: '2',
     name: 'زیربغل سیمکش دسته وی',
-    targetMuscles: ['ذوزنقه‌ای'],
+    targetMuscles: ['پشت', 'ذوزنقه‌ای'],
     equipment: 'دستگاه',
     image: '2.webp',
     otherNames: '',
@@ -49,7 +49,7 @@ export const exercisesData: Exercise[] = [
   {
     id: '6',
     name: 'نشر جلو دمبل',
-    targetMuscles: ['سرشانه'],
+    targetMuscles: ['سرشانه', 'دلتوئید قدامی'],
     equipment: 'دمبل',
     image: '6.webp',
     otherNames: 'Dumbbell Front Raise',
@@ -59,7 +59,7 @@ export const exercisesData: Exercise[] = [
     id: '7',
     name: 'نشر جلو صفحه',
     targetMuscles: ['سرشانه'],
-    equipment: 'صفحه',
+    equipment: 'صفحه وزنه',
     image: '7.webp',
     otherNames: 'Plate Front Raise',
     // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
@@ -136,7 +136,7 @@ export const exercisesData: Exercise[] = [
   {
     id: '16',
     name: 'فلای بک',
-    targetMuscles: ['سرشانه'],
+    targetMuscles: ['سرشانه', 'دلتوئید خلفی'],
     equipment: 'دستگاه',
     image: '16.webp',
     otherNames: 'Lever Seated Reverse Fly',
@@ -199,7 +199,7 @@ export const exercisesData: Exercise[] = [
   {
     id: '23',
     name: 'ساید اسکوات',
-    targetMuscles: ['پا'],
+    targetMuscles: ['ران'],
     equipment: 'وزن بدن',
     image: '23.webp',
     otherNames: 'Side Split Squat',
@@ -208,7 +208,7 @@ export const exercisesData: Exercise[] = [
   {
     id: '24',
     name: 'پرس سرشانه دمبل نشسته',
-    targetMuscles: ['سرشانه'],
+    targetMuscles: ['سرشانه', 'دلتوئید میانی'],
     equipment: 'دمبل',
     image: '24.webp',
     otherNames: 'Dumbbell Seated Shoulder Press',
@@ -325,7 +325,7 @@ export const exercisesData: Exercise[] = [
     id: '38',
     name: 'لانگ بلغاری',
     targetMuscles: ['باسن', 'جلو ران'],
-    equipment: 'وزن بدن',
+    equipment: 'نیمکت',
     image: '38.webp',
   },
   // {
@@ -346,7 +346,7 @@ export const exercisesData: Exercise[] = [
   {
     id: '41',
     name: 'خیاطه داخل ران',
-    targetMuscles: ['داخل ران'],
+    targetMuscles: ['ران', 'داخل ران'],
     equipment: 'دستگاه',
     image: '41.webp',
     otherNames: 'Lever Seated Hip Adduction',
@@ -355,7 +355,7 @@ export const exercisesData: Exercise[] = [
   {
     id: '42',
     name: 'زیربغل سیمکش تک دست',
-    targetMuscles: ['لت', 'زیربغل'],
+    targetMuscles: ['لت'],
     equipment: 'دستگاه',
     image: '42.webp',
   },
@@ -492,12 +492,12 @@ export const exercisesData: Exercise[] = [
     otherNames: 'Dumbbell Lateral to Front Raise',
     // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
   },
-  // {
-  //   id: '59',
-  //   name: 'کرانچ لمس پاشنه',
-  //   targetMuscles: ['پهلو'],
-  //   equipment: 'وزن بدن'
-  // },
+  {
+    id: '59',
+    name: 'کرانچ لمس پاشنه',
+    targetMuscles: ['شکم', 'مورب شکمی'],
+    equipment: 'وزن بدن'
+  },
   {
     id: '60',
     name: 'شنا دست جمع',
@@ -528,7 +528,7 @@ export const exercisesData: Exercise[] = [
   {
     id: '63',
     name: 'زیر شکم پارالل',
-    targetMuscles: ['شکم'],
+    targetMuscles: ['شکم', 'زیر شکم'],
     equipment: 'دستگاه',
     image: '63.webp',
     otherNames: 'Leg Raise',
@@ -608,8 +608,8 @@ export const exercisesData: Exercise[] = [
   {
     id: '72',
     name: 'زیر شکم نیمکت',
-    targetMuscles: ['شکم'],
-    equipment: 'وزن بدن',
+    targetMuscles: ['شکم', 'زیر شکم'],
+    equipment: 'نیمکت',
     image: '72.webp',
     otherNames: 'Seated Leg Raise',
     // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
@@ -644,7 +644,7 @@ export const exercisesData: Exercise[] = [
   {
     id: '76',
     name: 'کرانچ دوچرخه',
-    targetMuscles: ['پهلو'],
+    targetMuscles: ['شکم', 'مورب شکمی'],
     equipment: 'وزن بدن',
     image: '76.webp',
     otherNames: 'Bicycle Crunch',
@@ -672,7 +672,7 @@ export const exercisesData: Exercise[] = [
     id: '79',
     name: 'دیپ نیمکت',
     targetMuscles: ['پشت بازو'],
-    equipment: 'وزن بدن',
+    equipment: 'نیمکت',
     image: '79.webp',
     otherNames: 'Bench Dip on Floor',
     // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',

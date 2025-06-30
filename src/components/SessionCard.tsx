@@ -303,9 +303,10 @@ export function SessionCard({
                     </span>
                   )}
                 </div>
+                {/* توضیحات */}
                 {sessionExercise.notes && ( // Display notes if they exist
                   <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 break-words">
-                    توضیحات: {sessionExercise.notes}
+                    {sessionExercise.notes}
                   </p>
                 )}
               </div>

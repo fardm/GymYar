@@ -243,7 +243,7 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
                 عضلات درگیر
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -259,7 +259,7 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
             </div>
 
             <div>
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
                 وسایل مورد نیاز
               </h3>
               <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 px-3 py-1 rounded-full">
@@ -319,10 +319,11 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
                           <X className="h-5 w-5" />
                         </button>
                       </div>
+                    {/* توضیحات */}
                     </div>
                     {sessionExercise.notes && ( // Display notes if they exist
                       <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 text-right">
-                        توضیحات: {sessionExercise.notes}
+                        {sessionExercise.notes}
                       </p>
                     )}
                   </div>
