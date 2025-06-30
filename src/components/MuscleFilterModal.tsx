@@ -22,9 +22,7 @@ const muscleOptions: MuscleOption[] = [
   { id: 'chest', displayName: 'سینه', filterNames: ['سینه'], imageName: 'chest.webp', type: 'normal' },
   { id: 'abs', displayName: 'شکم', filterNames: ['شکم'], imageName: 'abs.webp', type: 'normal' },
   { id: 'back', displayName: 'پشت', filterNames: ['پشت'], imageName: 'back.webp', type: 'normal' },
-  { id: 'glutes', displayName: 'باسن', filterNames: ['باسن'], imageName: 'glutes.webp', type: 'normal' },
-  { id: 'thigh', displayName: 'ران', filterNames: ['ران'], imageName: 'thigh.webp', type: 'normal' },
-  { id: 'calves', displayName: 'ساق پا', filterNames: ['ساق'], imageName: 'calves.webp', type: 'normal' },
+  { id: 'legs', displayName: 'پا', filterNames: ['پا'], imageName: 'legs.webp', type: 'normal' },
 
   // Advanced Muscles (More specific, some map to existing broad categories for filtering)
   { id: 'anterior_deltoid', displayName: 'دلتوئید قدامی', filterNames: ['دلتوئید قدامی'], imageName: 'anterior_deltoid.webp', type: 'advanced' },
@@ -32,14 +30,20 @@ const muscleOptions: MuscleOption[] = [
   { id: 'posterior_deltoid', displayName: 'دلتوئید خلفی', filterNames: ['دلتوئید خلفی'], imageName: 'posterior_deltoid.webp', type: 'advanced' },
   { id: 'lower_chest', displayName: 'زیر سینه', filterNames: ['زیرسینه'], imageName: 'lower_chest.webp', type: 'advanced' },
   { id: 'upper_chest', displayName: 'بالا سینه', filterNames: ['بالا سینه'], imageName: 'upper_chest.webp', type: 'advanced' },
-  { id: 'upper_abs', displayName: 'بالاشکم', filterNames: ['بالاشکم'], imageName: 'upper_abs.webp', type: 'advanced' },
-  { id: 'lower_abs', displayName: 'زیرشکم', filterNames: ['زیرشکم'], imageName: 'lower_abs.webp', type: 'advanced' },
-  { id: 'obliques', displayName: 'مورب شکم', filterNames: ['مورب شکم'], imageName: 'obliques.webp', type: 'advanced' },
+  { id: 'upper_abs', displayName: 'بالا شکم', filterNames: ['بالا شکم'], imageName: 'upper_abs.webp', type: 'advanced' },
+  { id: 'lower_abs', displayName: 'زیر شکم', filterNames: ['زیر شکم'], imageName: 'lower_abs.webp', type: 'advanced' },
+  { id: 'obliques', displayName: 'مورب شکمی', filterNames: ['مورب شکمی'], imageName: 'obliques.webp', type: 'advanced' },
   { id: 'lats', displayName: 'لت', filterNames: ['لت'], imageName: 'lats.webp', type: 'advanced' },
   { id: 'traps', displayName: 'ذوزنقه‌ای', filterNames: ['ذوزنقه‌ای'], imageName: 'traps.webp', type: 'advanced' },
-  { id: 'quadriceps', displayName: 'چهارسر ران', filterNames: ['چهارسر ران'], imageName: 'quadriceps.webp', type: 'advanced' },
+  { id: 'upper_traps', displayName: 'کول', filterNames: ['کول'], imageName: 'upper_traps.webp', type: 'advanced' },
+  { id: 'lower_back', displayName: 'فیله', filterNames: ['فیله'], imageName: 'lower_back.webp', type: 'advanced' },
+  { id: 'quadriceps', displayName: 'چهارسر ران', filterNames: ['چهارسر ران'], imageName: 'thigh.webp', type: 'advanced' },
   { id: 'inner_thigh', displayName: 'داخل ران', filterNames: ['داخل ران'], imageName: 'inner_thigh.webp', type: 'advanced' },
+  { id: 'outer_thigh', displayName: 'خارج ران', filterNames: ['خارج ران'], imageName: 'outer_thigh.webp', type: 'advanced' },
   { id: 'hamstrings', displayName: 'همسترینگ', filterNames: ['همسترینگ'], imageName: 'hamstrings.webp', type: 'advanced' },
+  { id: 'glutes', displayName: 'باسن', filterNames: ['باسن'], imageName: 'glutes.webp', type: 'advanced' },
+  { id: 'calves', displayName: 'ساق پا', filterNames: ['ساق پا'], imageName: 'calves.webp', type: 'advanced' },
+
 ];
 
 // Mapping to define insertion points for advanced muscles
@@ -47,8 +51,8 @@ const parentToChildMapping: { [key: string]: string[] } = {
   'shoulder': ['anterior_deltoid', 'lateral_deltoid', 'posterior_deltoid'],
   'chest': ['lower_chest', 'upper_chest'],
   'abs': ['upper_abs', 'lower_abs', 'obliques'],
-  'back': ['lats', 'traps'],
-  'thigh': ['quadriceps', 'inner_thigh', 'hamstrings'],
+  'back': ['lats', 'traps', 'upper_traps', 'lower_back'],
+  'legs': ['quadriceps', 'inner_thigh', 'outer_thigh', 'hamstrings', 'glutes', 'calves'],
 };
 
 interface MuscleFilterModalProps {
@@ -201,7 +205,7 @@ export function MuscleFilterModal({ isOpen, onClose, currentFilters, onApplyFilt
         ref={modalRef}
         // Main modal container: uses flex-col to stack children vertically
         // Adjusted max-height for desktop to force scroll earlier
-        className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-xl md:max-w-4xl lg:max-w-5xl w-full mx-4 max-h-[95vh] md:max-h-[80vh] lg:max-h-[75vh] flex flex-col"
+        className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-xl md:max-w-4xl lg:max-w-5xl w-full mx-4 max-h-[80vh] md:max-h-[80vh] lg:max-h-[75vh] flex flex-col"
       >
         {/* Header - flex-shrink-0 ensures it doesn't shrink */}
         <div className="flex justify-between items-center mb-4 flex-shrink-0">
@@ -251,7 +255,7 @@ export function MuscleFilterModal({ isOpen, onClose, currentFilters, onApplyFilt
 
         {/* Scrollable Muscle Grid Section - flex-grow allows it to take available space, overflow-y-auto enables scrolling */}
         {/* pr-2 -mr-2 is added to prevent content from being pushed by the scrollbar */}
-        <div className="flex-grow overflow-y-auto pr-2 -mr-2">
+        <div className="flex-grow overflow-y-auto px-2 -mr-2">
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-4 mb-6">
             {displayedMuscles.map(muscle => (
               <div

@@ -14,10 +14,11 @@ interface EquipmentOption {
 const equipmentOptionsList: EquipmentOption[] = [
   { id: 'dumbbell', displayName: 'دمبل', filterName: 'دمبل', imageName: 'dumbbell.webp' },
   { id: 'barbell', displayName: 'هالتر', filterName: 'هالتر', imageName: 'barbell.webp' },
-  { id: 'machine', displayName: 'دستگاه', filterName: 'دستگاه', imageName: 'machine.webp' },
-  { id: 'bodyweight', displayName: 'وزن بدن', filterName: 'وزن بدن', imageName: 'bodyweight.webp' },
   { id: 'plate_weight', displayName: 'صفحه وزنه', filterName: 'صفحه وزنه', imageName: 'plate_weight.webp' },
+  { id: 'machine', displayName: 'دستگاه', filterName: 'دستگاه', imageName: 'machine.webp' },
+  { id: 'cable', displayName: 'سیمکش', filterName: 'سیمکش', imageName: 'cable.webp' },
   { id: 'bench', displayName: 'نیمکت', filterName: 'نیمکت', imageName: 'bench.webp' },
+  { id: 'bodyweight', displayName: 'وزن بدن', filterName: 'وزن بدن', imageName: 'bodyweight.webp' },
 ];
 
 
