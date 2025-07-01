@@ -210,12 +210,12 @@ export function MuscleFilterModal({ isOpen, onClose, currentFilters, onApplyFilt
         {/* Header - flex-shrink-0 ensures it doesn't shrink */}
         <div className="flex justify-between items-center mb-4 flex-shrink-0">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">فیلتر عضلات</h3>
-          <button
+          {/* <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
           >
             <X className="h-5 w-5" />
-          </button>
+          </button> */}
         </div>
 
         {/* Toggle Button for Normal/Advanced Mode and new "پاک کردن همه" button - flex-shrink-0 ensures it doesn't shrink */}

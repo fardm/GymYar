@@ -1,28 +1,28 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { SearchBar } from '../components/SearchBar';
-import { SortPanel } from '../components/SortPanel';
+import { SortPanel } from '../components/SortPanel'; // Keep if needed for future, currently commented out
 import { ExerciseGrid } from '../components/ExerciseGrid';
 import { exercisesData } from '../data/exercises';
 import { FilterRule, SortRule, UserData } from '../types';
 import { MuscleFilterModal } from '../components/MuscleFilterModal';
 import { EquipmentFilterModal } from '../components/EquipmentFilterModal';
 import { Filter } from 'lucide-react';
-import { useLocalStorage } from '../hooks/useLocalStorage'; // Import useLocalStorage
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface HomePageProps {
   userData: UserData;
 }
 
-const EXERCISES_PER_PAGE = 20;
+const EXERCISES_PER_PAGE = 20; // تعداد تمرینات برای بارگذاری در هر مرحله
 
 export function HomePage({ userData }: HomePageProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  // Use useLocalStorage for filters to persist across refreshes
   const [filters, setFilters] = useLocalStorage<FilterRule[]>('tamrinsaz-filters', []);
-  const [sortRules, setSortRules] = useState<SortRule[]>([]);
+  const [sortRules, setSortRules] = useState<SortRule[]>([]); // Keep if needed for future, currently commented out
   const [visibleExerciseCount, setVisibleExerciseCount] = useState(EXERCISES_PER_PAGE);
+  const [isLoading, setIsLoading] = useState(false); // وضعیت بارگذاری
+  const loaderRef = useRef<HTMLDivElement>(null); // رفرنس برای تشخیص رسیدن به انتهای صفحه
 
-  // New states for modal visibility
   const [showMuscleFilterModal, setShowMuscleFilterModal] = useState(false);
   const [showEquipmentFilterModal, setShowEquipmentFilterModal] = useState(false);
 
@@ -38,7 +38,7 @@ export function HomePage({ userData }: HomePageProps) {
   const filteredAndSortedExercises = useMemo(() => {
     let result = [...exercisesData];
 
-    // Apply search filter
+    // اعمال فیلتر جستجو
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
       result = result.filter(exercise =>
@@ -49,14 +49,13 @@ export function HomePage({ userData }: HomePageProps) {
       );
     }
 
-    // Apply filters from both modals
+    // اعمال فیلترها از هر دو مدال
     filters.forEach(filter => {
       if (filter.values.length > 0) {
         result = result.filter(exercise => {
           if (filter.field === 'equipment') {
             return filter.values.includes(exercise.equipment);
           } else if (filter.field === 'targetMuscles') {
-            // Check if any of the exercise's target muscles match any of the filter values
             return exercise.targetMuscles.some(muscle => filter.values.includes(muscle));
           }
           return true;
@@ -64,7 +63,7 @@ export function HomePage({ userData }: HomePageProps) {
       }
     });
 
-    // Apply sorting
+    // اعمال مرتب‌سازی (در صورت فعال بودن)
     if (sortRules.length > 0) {
       result.sort((a, b) => {
         for (const rule of sortRules) {
@@ -75,7 +74,6 @@ export function HomePage({ userData }: HomePageProps) {
           } else if (rule.field === 'equipment') {
             comparison = a.equipment.localeCompare(b.equipment, 'fa');
           } else if (rule.field === 'targetMuscles') {
-            // Compare by the first muscle if available, otherwise 0
             comparison = a.targetMuscles[0]?.localeCompare(b.targetMuscles[0] || '', 'fa') || 0;
           }
 
@@ -87,18 +85,42 @@ export function HomePage({ userData }: HomePageProps) {
       });
     }
 
-    // Reset visible count whenever filters or search terms change
+    // هر زمان که فیلترها یا عبارت جستجو تغییر کنند، تعداد تمرینات قابل مشاهده را بازنشانی کنید
+    // این کار تضمین می‌کند که اسکرول بی‌نهایت از ابتدا شروع می‌شود
     setVisibleExerciseCount(EXERCISES_PER_PAGE);
 
     return result;
   }, [searchTerm, filters, sortRules]);
   
-  const handleLoadMore = () => {
-    setVisibleExerciseCount(prevCount => prevCount + EXERCISES_PER_PAGE);
-  };
-  
   const exercisesToShow = filteredAndSortedExercises.slice(0, visibleExerciseCount);
   const hasMoreExercises = filteredAndSortedExercises.length > exercisesToShow.length;
+
+  // useEffect برای پیاده‌سازی Infinite Scrolling با IntersectionObserver
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // اگر عنصر loaderRef در حال حاضر در viewport قابل مشاهده است
+        if (entries[0].isIntersecting && hasMoreExercises && !isLoading) {
+          setIsLoading(true); // شروع بارگذاری
+          setTimeout(() => { // شبیه‌سازی تاخیر بارگذاری
+            setVisibleExerciseCount(prevCount => prevCount + EXERCISES_PER_PAGE);
+            setIsLoading(false); // پایان بارگذاری
+          }, 500); // تاخیر 500 میلی‌ثانیه
+        }
+      },
+      { threshold: 1.0 } // وقتی 100% عنصر قابل مشاهده باشد
+    );
+
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [hasMoreExercises, isLoading]); // وابستگی‌ها: زمانی که تعداد تمرینات بیشتر می‌شود یا وضعیت بارگذاری تغییر می‌کند
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -169,15 +191,22 @@ export function HomePage({ userData }: HomePageProps) {
         getSessionName={getSessionName}
       />
 
-      {/* Load More Button */}
+      {/* Loading indicator and IntersectionObserver target */}
       {hasMoreExercises && (
-        <div className="flex justify-center mt-8">
-          <button
-            onClick={handleLoadMore}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            بارگذاری بیشتر
-          </button>
+        <div ref={loaderRef} className="flex justify-center mt-8">
+          {isLoading ? (
+            <div className="flex items-center space-x-2 space-x-reverse text-gray-600 dark:text-gray-400">
+              <svg className="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>در حال بارگذاری...</span>
+            </div>
+          ) : (
+            // این بخش می‌تواند خالی باشد یا یک پیام "به پایین اسکرول کنید" داشته باشد
+            // در حالت اسکرول بی‌نهایت، دکمه "بارگذاری بیشتر" حذف می‌شود
+            <div className="text-gray-500 dark:text-gray-400"></div> 
+          )}
         </div>
       )}
 
@@ -199,4 +228,3 @@ export function HomePage({ userData }: HomePageProps) {
     </div>
   );
 }
-

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Dumbbell, User, Moon, Sun, Download, Upload, Trash2, HelpCircle, Bookmark } from 'lucide-react';
+import { Dumbbell, User, Moon, Sun, Download, Upload, Trash2, HelpCircle, ClipboardList } from 'lucide-react'; // Import ClipboardList
 import { useTheme } from '../hooks/useTheme';
 import { exportUserData, importUserData, clearUserData, saveUserData } from '../utils/storage';
 
@@ -113,32 +113,23 @@ export function Header({ onDataChange }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo and Title */}
-          <Link to="/" className="flex items-center space-x-3 space-x-reverse hover:opacity-80 transition-opacity">
+          <Link to="/" className="flex items-center space-x-2 space-x-reverse hover:opacity-80 transition-opacity">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="#3B82F6"/><path d="M8 12h4v8H8v-8zm12 0h4v8h-4v-8zm-6-4h4v16h-4V8z" fill="white"/></svg>
             {/* <Dumbbell className="p-1 rounded-lg h-9 w-9 bg-blue-600 text-white" /> */}
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">تمرین‌ساز</h1>
           </Link>
 
           {/* Navigation and Actions */}
-          <div className="flex items-center space-x-4 space-x-reverse">
-            {/* <Link
+          <div className="flex items-center space-x-3 space-x-reverse">
+            {/* "برنامه من" moved to header with text and icon in a row and added hover styles */}
+            <Link
               to="/my-workouts"
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                location.pathname === '/my-workouts'
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-              }`}
+              className="flex items-center space-x-1 space-x-reverse bg-gray-100 dark:bg-gray-700 p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700" // Added hover styles
+              aria-label="برنامه من"
             >
-              برنامه من
-            </Link> */}
-
-            <button
-              onClick={toggleTheme}
-              className="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
-              aria-label="تغییر تم"
-            >
-              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </button>
+              <ClipboardList className="h-5 w-5" />
+              <span>برنامه‌من</span>
+            </Link>
 
             <div className="relative">
               <button
@@ -154,14 +145,16 @@ export function Header({ onDataChange }: HeaderProps) {
                   ref={menuRef}
                   className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1"
                 >
-                  <Link
-                    to="/my-workouts"
-                    onClick={() => setShowUserMenu(false)} // Close user menu
+                  {/* Light/Dark mode toggle moved here */}
+                  <button
+                    onClick={() => { toggleTheme(); setShowUserMenu(false); }}
                     className="w-full px-4 py-2 text-right text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 space-x-reverse"
                   >
-                    <Bookmark className="h-4 w-4" />
-                    <span>برنامه من</span>
-                  </Link>
+                    {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                    <span>{isDark ? 'حالت روشن' : 'حالت تیره'}</span>
+                  </button>
+
+                  {/* "برنامه من" removed from here as it's now in the header */}
                   <button
                     onClick={handleExport}
                     className="w-full px-4 py-2 text-right text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2 space-x-reverse"
