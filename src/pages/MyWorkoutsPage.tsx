@@ -168,6 +168,13 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
     setShowFilterModal(false); // Just close the modal
   };
 
+  // Handle keyboard events for the new session input
+  const handleNewSessionInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleCreateSession();
+    }
+  };
+
   // Determine if the "پاک کردن همه" (Clear All) button should be disabled
   const isClearAllSessionsDisabled = tempSelectedSessionIds.length === 0;
 
@@ -311,6 +318,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
               type="text"
               value={newSessionName}
               onChange={(e) => setNewSessionName(e.target.value)}
+              onKeyDown={handleNewSessionInputKeyDown} // Added onKeyDown event listener
               placeholder="نام جلسه جدید..."
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               autoFocus
@@ -356,7 +364,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
         <div className="text-center py-12">
           <p className="text-gray-500 dark:text-gray-400 text-lg mb-4">
             {activeSessionFilterIds.length === 0
-              ? 'هنوز جلسه‌ای ایجاد نکرده‌اید'
+              ? 'هنوز جلسه‌ای ایجاد نشده!'
               : 'هیچ جلسه‌ای با فیلترهای انتخاب شده یافت نشد'
             }
           </p>

@@ -107,6 +107,13 @@ export function SessionCard({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isEditing, isDeleteExerciseModalOpen, isDeleteSessionModalOpen]);
 
+  // Handle keyboard events for the edit session name input
+  const handleEditNameInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSaveEdit();
+    }
+  };
+
   const defaultImage = 'https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=100';
 
   // Function to get the correct image URL (local or external)
@@ -160,6 +167,7 @@ export function SessionCard({
               type="text"
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
+              onKeyDown={handleEditNameInputKeyDown} // Added onKeyDown event listener
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-4"
               autoFocus
             />
@@ -326,7 +334,7 @@ export function SessionCard({
 
         {session.exercises.length === 0 && (
           <p className="text-center text-gray-500 dark:text-gray-400 py-4">
-            هنوز تمرینی اضافه نشده است
+            هنوز تمرینی اضافه نشده!
           </p>
         )}
       </div>

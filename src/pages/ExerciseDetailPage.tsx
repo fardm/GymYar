@@ -199,6 +199,13 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
     setCurrentNotes('');
   };
 
+  // Handle keyboard events for the edit notes input
+  const handleEditNotesInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSaveNotes();
+    }
+  };
+
   const defaultImage = 'https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=800';
 
   // Function to get the correct image URL (local or external)
@@ -415,14 +422,15 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <textarea
+            <input // Changed from textarea to input
+              type="text" // Specify type as text
               value={currentNotes}
               onChange={(e) => setCurrentNotes(e.target.value)}
+              onKeyDown={handleEditNotesInputKeyDown} // Added onKeyDown event listener
               placeholder="توضیحات تمرین..."
-              rows={5}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-4"
               autoFocus
-            ></textarea>
+            />
             <div className="flex space-x-2 space-x-reverse">
               <button
                 onClick={handleSaveNotes}
