@@ -42,29 +42,14 @@ export function HomePage({ userData }: HomePageProps) {
         values: [decodeURIComponent(filterValue)],
       };
 
-      // Check if this filter already exists to avoid duplicates
-      const existingFilterIndex = filters.findIndex(f => f.field === filterField);
-
-      let updatedFilters: FilterRule[];
-      if (existingFilterIndex > -1) {
-        // If filter for this field exists, update its values
-        updatedFilters = filters.map((f, index) =>
-          index === existingFilterIndex
-            ? { ...f, values: Array.from(new Set([...f.values, ...newFilter.values])) } // Add new value, ensure uniqueness
-            : f
-        );
-      } else {
-        // If filter for this field does not exist, add the new filter
-        updatedFilters = [...filters, newFilter];
-      }
-      
-      setFilters(updatedFilters);
+      // *** تغییر اصلی: جایگزینی فیلترهای قبلی با فیلتر جدید ***
+      setFilters([newFilter]); // فقط فیلتر جدید را اعمال کن و فیلترهای قبلی را پاک کن
 
       // Clear the URL parameters after applying the filter
       // This prevents the filter from being re-applied on refresh
       setSearchParams({}); 
     }
-  }, [searchParams, setFilters, filters, setSearchParams]); // Add filters to dependency array to ensure latest state is used
+  }, [searchParams, setFilters, setSearchParams]); // 'filters' از dependencies حذف شد چون دیگر به حالت قبلی آن نیازی نداریم
 
 
   const getSessionName = (exerciseId: string): string | undefined => {

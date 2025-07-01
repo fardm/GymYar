@@ -297,14 +297,14 @@ export function SessionCard({
                   {exercise.name}
                 </Link>
                 <div className="flex flex-wrap gap-1 mt-1">
-                  {exercise.targetMuscles.slice(0, 2).map((muscle, index) => (
+                  {/* {exercise.targetMuscles.slice(0, 2).map((muscle, index) => (
                     <span
                       key={index}
                       className="inline-block bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs px-2 py-0.5 rounded-full"
                     >
                       {muscle}
                     </span>
-                  ))}
+                  ))} */}
                   {exercise.targetMuscles.length > 2 && (
                     <span className="text-xs text-gray-500 dark:text-gray-400">
                       +{exercise.targetMuscles.length - 2}
