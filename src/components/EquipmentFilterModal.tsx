@@ -5,14 +5,14 @@ import { FilterRule } from '../types';
 // exercisesData is not directly used in this component, but it's kept for consistency if needed elsewhere.
 // import { exercisesData } from '../data/exercises'; 
 
-interface EquipmentOption {
+export interface EquipmentOption { // Exported for use in other components
   id: string; // Unique ID for keying
   displayName: string; // Persian name for display
   filterName: string; // Corresponding name in exercisesData.equipment
   imageName: string; // File name for the image
 }
 
-const equipmentOptionsList: EquipmentOption[] = [
+export const equipmentOptionsList: EquipmentOption[] = [ // Exported for use in other components
   { id: 'dumbbell', displayName: 'دمبل', filterName: 'دمبل', imageName: 'dumbbell.webp' },
   { id: 'barbell', displayName: 'هالتر', filterName: 'هالتر', imageName: 'barbell.webp' },
   { id: 'plate_weight', displayName: 'صفحه وزنه', filterName: 'صفحه وزنه', imageName: 'plate_weight.webp' },

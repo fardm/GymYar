@@ -5,7 +5,7 @@ import { FilterRule } from '../types';
 import { exercisesData } from '../data/exercises';
 
 
-interface MuscleOption {
+export interface MuscleOption { // Exported for use in other components
   id: string; // Unique ID for keying
   displayName: string; // Persian name for display
   filterNames: string[]; // Corresponding names in exercisesData.targetMuscles
@@ -13,7 +13,7 @@ interface MuscleOption {
   type: 'normal' | 'advanced';
 }
 
-const muscleOptions: MuscleOption[] = [
+export const muscleOptions: MuscleOption[] = [ // Exported for use in other components
   // Normal Muscles (Commonly used in exercisesData.ts)
   { id: 'shoulder', displayName: 'سرشانه', filterNames: ['سرشانه'], imageName: 'shoulder.webp', type: 'normal' },
   { id: 'biceps', displayName: 'جلو بازو', filterNames: ['جلو بازو'], imageName: 'biceps.webp', type: 'normal' },

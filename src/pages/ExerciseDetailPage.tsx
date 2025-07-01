@@ -1,10 +1,13 @@
 // src/pages/ExerciseDetailPage.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { ArrowRight, Plus, Check, X, SquarePen } from 'lucide-react'; // Import SquarePen icon
 import { exercisesData } from '../data/exercises';
-import { AddToWorkoutModal } from '../components/AddToWorkoutModal';
+import { AddToWorkoutModal } from '../components/AddToWorkoutModal'; // Corrected import syntax
 import { UserData, WorkoutSession, SessionExercise } from '../types';
+import { ImageTextDisplay } from '../components/ImageTextDisplay'; // Import the new component
+import { muscleOptions } from '../components/MuscleFilterModal'; // Import muscle options
+import { equipmentOptionsList } from '../components/EquipmentFilterModal'; // Import equipment options
 
 interface ExerciseDetailPageProps {
   userData: UserData;
@@ -13,6 +16,7 @@ interface ExerciseDetailPageProps {
 
 export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetailPageProps) {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate(); // Initialize useNavigate hook
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [sessionIdToDelete, setSessionIdToDelete] = useState<string | null>(null);
@@ -74,7 +78,7 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
   
   if (!exercise) {
     return (
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-[35rem] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
             تمرین یافت نشد
@@ -212,7 +216,7 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
   const getImageUrl = (imageName: string | undefined) => {
     if (imageName && !imageName.startsWith('http')) { // If it's not an external link
       try {
-        // Construct URL for local images
+        // Constructs a URL for local images
         return new URL(`/src/assets/images/${imageName}`, import.meta.url).href;
       } catch (error) {
         console.error("Error creating local image URL:", error);
@@ -222,8 +226,31 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
     return imageName || defaultImage; // If it's an external link or undefined, return as is
   };
 
+  // Helper to get muscle image name
+  const getMuscleImageName = (muscleDisplayName: string): string => {
+    const muscle = muscleOptions.find(opt => opt.displayName === muscleDisplayName || opt.filterNames.includes(muscleDisplayName));
+    return muscle ? muscle.imageName : 'placeholder.webp'; // Fallback to a generic placeholder
+  };
+
+  // Helper to get equipment image name
+  const getEquipmentImageName = (equipmentDisplayName: string): string => {
+    const equipment = equipmentOptionsList.find(opt => opt.displayName === equipmentDisplayName || opt.filterName === equipmentDisplayName);
+    return equipment ? equipment.imageName : 'placeholder.webp'; // Fallback to a generic placeholder
+  };
+
+  // Handler for clicking on a muscle item
+  const handleMuscleClick = (muscleName: string) => {
+    navigate(`/?filterField=targetMuscles&filterValue=${encodeURIComponent(muscleName)}`);
+  };
+
+  // Handler for clicking on an equipment item
+  const handleEquipmentClick = (equipmentName: string) => {
+    navigate(`/?filterField=equipment&filterValue=${encodeURIComponent(equipmentName)}`);
+  };
+
+
   return (
-    <div className="max-w-4xl mx-auto px-2 sm:px-6 lg:px-8 py-6">
+    <div className="max-w-[35rem] mx-auto px-2 sm:px-6 lg:px-8 py-6">
       <div className="overflow-hidden">
         <div className="aspect-video flex items-center justify-center bg-white dark:bg-white rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden mb-4">
           <img
@@ -248,30 +275,39 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
-                عضلات درگیر
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {exercise.targetMuscles.map((muscle, index) => (
-                  <span
-                    key={index}
-                    className="inline-block bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 px-3 py-1 rounded-full text-sm"
-                  >
-                    {muscle}
-                  </span>
-                ))}
-              </div>
+          {/* Each section now stands alone, taking full width */}
+          <div className="mb-8"> {/* Added margin-bottom for spacing between sections */}
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
+              عضلات درگیر
+            </h3>
+            <div className="flex flex-wrap justify-start gap-4"> 
+              {exercise.targetMuscles.map((muscle, index) => (
+                <ImageTextDisplay
+                  key={index}
+                  text={muscle}
+                  imageName={getMuscleImageName(muscle)}
+                  altText={muscle}
+                  onClick={handleMuscleClick} // Pass click handler
+                  filterValue={muscle} // Pass muscle name as filter value
+                />
+              ))}
             </div>
+          </div>
 
-            <div>
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
-                وسایل مورد نیاز
-              </h3>
-              <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 px-3 py-1 rounded-full">
-                {exercise.equipment}
-              </span>
+          <div className="mb-8"> {/* Added margin-bottom for spacing between sections */}
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
+              وسایل مورد نیاز
+            </h3>
+            <div className="flex flex-wrap justify-start">
+              {exercise.equipment && (
+                <ImageTextDisplay
+                  text={exercise.equipment}
+                  imageName={getEquipmentImageName(exercise.equipment)}
+                  altText={exercise.equipment}
+                  onClick={handleEquipmentClick} // Pass click handler
+                  filterValue={exercise.equipment} // Pass equipment name as filter value
+                />
+              )}
             </div>
           </div>
 

@@ -8,6 +8,7 @@ import { MuscleFilterModal } from '../components/MuscleFilterModal';
 import { EquipmentFilterModal } from '../components/EquipmentFilterModal';
 import { Filter } from 'lucide-react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useSearchParams } from 'react-router-dom'; // Import useSearchParams
 
 interface HomePageProps {
   userData: UserData;
@@ -25,6 +26,46 @@ export function HomePage({ userData }: HomePageProps) {
 
   const [showMuscleFilterModal, setShowMuscleFilterModal] = useState(false);
   const [showEquipmentFilterModal, setShowEquipmentFilterModal] = useState(false);
+
+  const [searchParams, setSearchParams] = useSearchParams(); // Initialize useSearchParams
+
+  // Effect to read URL parameters and apply filters
+  useEffect(() => {
+    const filterField = searchParams.get('filterField');
+    const filterValue = searchParams.get('filterValue');
+
+    if (filterField && filterValue) {
+      // Create a new filter rule based on URL parameters
+      const newFilter: FilterRule = {
+        id: Date.now().toString(), // Unique ID for the filter rule
+        field: filterField,
+        values: [decodeURIComponent(filterValue)],
+      };
+
+      // Check if this filter already exists to avoid duplicates
+      const existingFilterIndex = filters.findIndex(f => f.field === filterField);
+
+      let updatedFilters: FilterRule[];
+      if (existingFilterIndex > -1) {
+        // If filter for this field exists, update its values
+        updatedFilters = filters.map((f, index) =>
+          index === existingFilterIndex
+            ? { ...f, values: Array.from(new Set([...f.values, ...newFilter.values])) } // Add new value, ensure uniqueness
+            : f
+        );
+      } else {
+        // If filter for this field does not exist, add the new filter
+        updatedFilters = [...filters, newFilter];
+      }
+      
+      setFilters(updatedFilters);
+
+      // Clear the URL parameters after applying the filter
+      // This prevents the filter from being re-applied on refresh
+      setSearchParams({}); 
+    }
+  }, [searchParams, setFilters, filters, setSearchParams]); // Add filters to dependency array to ensure latest state is used
+
 
   const getSessionName = (exerciseId: string): string | undefined => {
     for (const session of userData.sessions) {
@@ -49,7 +90,7 @@ export function HomePage({ userData }: HomePageProps) {
       );
     }
 
-    // اعمال فیلترها از هر دو مدال
+    // اعمال فیلترها از هر دو مدال (و از URL اگر اعمال شده باشند)
     filters.forEach(filter => {
       if (filter.values.length > 0) {
         result = result.filter(exercise => {
