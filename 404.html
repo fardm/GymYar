@@ -2,13 +2,44 @@
 <html lang="fa" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="refresh" content="0; URL=/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>در حال انتقال...</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="text/javascript">
+      // این اسکریپت برای مدیریت مسیریابی در برنامه‌های تک‌صفحه‌ای (SPA)
+      // که روی GitHub Pages میزبانی می‌شوند، استفاده می‌شود.
+      // مجوز MIT
+      // منبع: https://github.com/rafgraph/spa-github-pages
+      
+      // این تابع بلافاصله پس از بارگذاری اسکریپت اجرا می‌شود.
+      (function(){
+        // سعی می‌کنیم مسیر ریدایرکت شده را از sessionStorage دریافت کنیم.
+        // این مسیر همان مسیری است که کاربر ابتدا درخواست داده بود (مثلاً /exercise/4).
+        var redirect = sessionStorage.getItem('redirect');
+        
+        // اگر مسیری برای ریدایرکت وجود دارد (یعنی قبلاً یک 404 رخ داده و مسیر ذخیره شده است)
+        if (redirect) {
+          // مسیر را از sessionStorage حذف می‌کنیم تا در بارگذاری‌های بعدی تکرار نشود.
+          sessionStorage.removeItem('redirect');
+          // از history API مرورگر برای جایگزینی URL فعلی با مسیر اصلی استفاده می‌کنیم.
+          // این کار باعث می‌شود React Router فکر کند صفحه مستقیماً با آن URL بارگذاری شده است.
+          window.history.replaceState(null, null, redirect);
+        }
+
+        // اگر مسیر فعلی مرورگر ریشه ('/') نیست و شامل پسوند فایل (مثل .js, .css) نمی‌باشد،
+        // این بدان معناست که یک مسیر SPA است که سرور آن را پیدا نکرده است.
+        if (location.pathname !== '/' && !location.pathname.includes('.')) {
+          // مسیر کامل (شامل کوئری پارامترها و هش) را در sessionStorage ذخیره می‌کنیم.
+          sessionStorage.setItem('redirect', location.pathname + location.search + location.hash);
+          // مرورگر را به ریشه‌ی سایت (index.html) ریدایرکت می‌کنیم.
+          // این باعث می‌شود index.html بارگذاری شود و React Router کنترل را به دست گیرد.
+          location.replace('/');
+        }
+      })();
+    </script>
     <style>
       body {
         font-family: 'Vazirmatn', sans-serif;
