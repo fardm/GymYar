@@ -1,66 +1,129 @@
-// src/components/FilterPanel.tsx
-import React, { useState, useEffect, useRef } from 'react';
-import { Filter, X, Check, Trash2 } from 'lucide-react'; // Added Check and Trash2 icons
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { X, Check, Eraser } from 'lucide-react';
 import { FilterRule } from '../types';
 import { exercisesData } from '../data/exercises';
-import { useLocalStorage } from '../hooks/useLocalStorage';
 
-interface FilterPanelProps {
-  filters: FilterRule[];
-  onFiltersChange: (filters: FilterRule[]) => void;
+// --- Muscle Options (Moved from MuscleFilterModal.tsx) ---
+export interface MuscleOption {
+  id: string;
+  displayName: string;
+  filterNames: string[];
+  imageName: string;
+  type: 'normal' | 'advanced';
 }
 
-export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export const muscleOptions: MuscleOption[] = [
+  { id: 'shoulder', displayName: 'سرشانه', filterNames: ['سرشانه'], imageName: 'shoulder.webp', type: 'normal' },
+  { id: 'biceps', displayName: 'جلو بازو', filterNames: ['جلو بازو'], imageName: 'biceps.webp', type: 'normal' },
+  { id: 'triceps', displayName: 'پشت بازو', filterNames: ['پشت بازو'], imageName: 'triceps.webp', type: 'normal' },
+  { id: 'forearm', displayName: 'ساعد', filterNames: ['ساعد'], imageName: 'forearm.webp', type: 'normal' },
+  { id: 'chest', displayName: 'سینه', filterNames: ['سینه'], imageName: 'chest.webp', type: 'normal' },
+  { id: 'abs', displayName: 'شکم', filterNames: ['شکم'], imageName: 'abs.webp', type: 'normal' },
+  { id: 'back', displayName: 'پشت', filterNames: ['پشت'], imageName: 'back.webp', type: 'normal' },
+  { id: 'legs', displayName: 'پا', filterNames: ['پا'], imageName: 'legs.webp', type: 'normal' },
+  { id: 'anterior_deltoid', displayName: 'دلتوئید قدامی', filterNames: ['دلتوئید قدامی'], imageName: 'anterior_deltoid.webp', type: 'advanced' },
+  { id: 'lateral_deltoid', displayName: 'دلتوئید میانی', filterNames: ['دلتوئید میانی'], imageName: 'lateral_deltoid.webp', type: 'advanced' },
+  { id: 'posterior_deltoid', displayName: 'دلتوئید خلفی', filterNames: ['دلتوئید خلفی'], imageName: 'posterior_deltoid.webp', type: 'advanced' },
+  { id: 'lower_chest', displayName: 'زیر سینه', filterNames: ['زیرسینه'], imageName: 'lower_chest.webp', type: 'advanced' },
+  { id: 'upper_chest', displayName: 'بالا سینه', filterNames: ['بالا سینه'], imageName: 'upper_chest.webp', type: 'advanced' },
+  { id: 'upper_abs', displayName: 'بالا شکم', filterNames: ['بالا شکم'], imageName: 'upper_abs.webp', type: 'advanced' },
+  { id: 'lower_abs', displayName: 'زیر شکم', filterNames: ['زیر شکم'], imageName: 'lower_abs.webp', type: 'advanced' },
+  { id: 'obliques', displayName: 'مورب شکمی', filterNames: ['مورب شکمی'], imageName: 'obliques.webp', type: 'advanced' },
+  { id: 'lats', displayName: 'لت', filterNames: ['لت'], imageName: 'lats.webp', type: 'advanced' },
+  { id: 'traps', displayName: 'ذوزنقه‌ای', filterNames: ['ذوزنقه‌ای'], imageName: 'traps.webp', type: 'advanced' },
+  { id: 'upper_traps', displayName: 'کول', filterNames: ['کول'], imageName: 'upper_traps.webp', type: 'advanced' },
+  { id: 'lower_back', displayName: 'فیله', filterNames: ['فیله'], imageName: 'lower_back.webp', type: 'advanced' },
+  { id: 'quadriceps', displayName: 'چهارسر ران', filterNames: ['چهارسر ران'], imageName: 'thigh.webp', type: 'advanced' },
+  { id: 'inner_thigh', displayName: 'داخل ران', filterNames: ['داخل ران'], imageName: 'inner_thigh.webp', type: 'advanced' },
+  { id: 'outer_thigh', displayName: 'خارج ران', filterNames: ['خارج ران'], imageName: 'outer_thigh.webp', type: 'advanced' },
+  { id: 'hamstrings', displayName: 'همسترینگ', filterNames: ['همسترینگ'], imageName: 'hamstrings.webp', type: 'advanced' },
+  { id: 'glutes', displayName: 'باسن', filterNames: ['باسن'], imageName: 'glutes.webp', type: 'advanced' },
+  { id: 'calves', displayName: 'ساق پا', filterNames: ['ساق پا'], imageName: 'calves.webp', type: 'advanced' },
+];
+
+const parentToChildMapping: { [key: string]: string[] } = {
+  'shoulder': ['anterior_deltoid', 'lateral_deltoid', 'posterior_deltoid'],
+  'chest': ['lower_chest', 'upper_chest'],
+  'abs': ['upper_abs', 'lower_abs', 'obliques'],
+  'back': ['lats', 'traps', 'upper_traps', 'lower_back'],
+  'legs': ['quadriceps', 'inner_thigh', 'outer_thigh', 'hamstrings', 'glutes', 'calves'],
+};
+
+// --- Equipment Options (Moved from EquipmentFilterModal.tsx) ---
+export interface EquipmentOption {
+  id: string;
+  displayName: string;
+  filterName: string;
+  imageName: string;
+}
+
+export const equipmentOptionsList: EquipmentOption[] = [
+  { id: 'dumbbell', displayName: 'دمبل', filterName: 'دمبل', imageName: 'dumbbell.webp' },
+  { id: 'barbell', displayName: 'هالتر', filterName: 'هالتر', imageName: 'barbell.webp' },
+  { id: 'plate_weight', displayName: 'صفحه وزنه', filterName: 'صفحه وزنه', imageName: 'plate_weight.webp' },
+  { id: 'machine', displayName: 'دستگاه', filterName: 'دستگاه', imageName: 'machine.webp' },
+  { id: 'cable', displayName: 'سیمکش', filterName: 'سیمکش', imageName: 'cable.webp' },
+  { id: 'bench', displayName: 'نیمکت', filterName: 'نیمکت', imageName: 'bench.webp' },
+  { id: 'bodyweight', displayName: 'وزن بدن', filterName: 'وزن بدن', imageName: 'bodyweight.webp' },
+];
+
+
+interface FilterPanelProps {
+  isOpen: boolean;
+  onClose: () => void;
+  currentFilters: FilterRule[];
+  onApplyFilters: (filters: FilterRule[]) => void;
+}
+
+export function FilterPanel({ isOpen, onClose, currentFilters, onApplyFilters }: FilterPanelProps) {
+  const [activeTab, setActiveTab] = useState<'muscles' | 'equipment'>('muscles');
+  const [isAdvancedMode, setIsAdvancedMode] = useState(false);
+  const [selectedMuscleIds, setSelectedMuscleIds] = useState<string[]>([]);
+  const [selectedEquipmentIds, setSelectedEquipmentIds] = useState<string[]>([]);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // Use local state for filters within the modal until applied
-  const [tempFilters, setTempFilters] = useState<FilterRule[]>([]);
-  // Store the active state of filter sections (equipment, targetMuscles)
-  const [isEquipmentFilterEnabled, setIsEquipmentFilterEnabled] = useState(false);
-  const [isMusclesFilterEnabled, setIsMusclesFilterEnabled] = useState(false);
-
-  // Load stored filters on initial render and when modal opens
-  const [storedFilters, setStoredFilters] = useLocalStorage<FilterRule[]>('tamrinsaz-filters', []);
-
-  useEffect(() => {
-    // When component mounts, apply stored filters
-    if (storedFilters.length > 0) {
-      onFiltersChange(storedFilters);
-      // Initialize enabled states based on stored filters
-      setIsEquipmentFilterEnabled(storedFilters.some(f => f.field === 'equipment'));
-      setIsMusclesFilterEnabled(storedFilters.some(f => f.field === 'targetMuscles'));
-    }
-  }, []); // Run only once on mount
-
-  useEffect(() => {
-    // Sync external filters prop to stored filters whenever it changes
-    setStoredFilters(filters);
-  }, [filters, setStoredFilters]);
-
-  // Sync tempFilters with current global filters when modal opens
+  // Initialize selected filters when modal opens
   useEffect(() => {
     if (isOpen) {
-      setTempFilters(filters);
-      setIsEquipmentFilterEnabled(filters.some(f => f.field === 'equipment'));
-      setIsMusclesFilterEnabled(filters.some(f => f.field === 'targetMuscles'));
+      document.body.style.overflow = 'hidden'; // Disable background scrolling
+
+      const muscleFilter = currentFilters.find(f => f.field === 'targetMuscles');
+      if (muscleFilter) {
+        const initialSelected = muscleOptions.filter(option =>
+          option.filterNames.some(name => muscleFilter.values.includes(name))
+        ).map(option => option.id);
+        setSelectedMuscleIds(initialSelected);
+      } else {
+        setSelectedMuscleIds([]);
+      }
+
+      const equipmentFilter = currentFilters.find(f => f.field === 'equipment');
+      if (equipmentFilter) {
+        const initialSelected = equipmentOptionsList.filter(option =>
+          equipmentFilter.values.includes(option.filterName)
+        ).map(option => option.id);
+        setSelectedEquipmentIds(initialSelected);
+      } else {
+        setSelectedEquipmentIds([]);
+      }
     }
-  }, [isOpen, filters]);
 
-  const equipmentOptions = [...new Set(exercisesData.map(ex => ex.equipment))].filter(Boolean);
-  const muscleOptions = [...new Set(exercisesData.flatMap(ex => ex.targetMuscles))].filter(Boolean);
+    return () => {
+      document.body.style.overflow = ''; // Re-enable scrolling on cleanup
+    };
+  }, [isOpen, currentFilters]);
 
-  // Handle click outside and escape key to close modal
+  // Handle closing modal on escape key or outside click
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setIsOpen(false);
+        onClose();
       }
     };
 
     const handleClickOutside = (event: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+        onClose();
       }
     };
 
@@ -73,250 +136,269 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
-  const toggleFilterSection = (field: 'equipment' | 'targetMuscles', isChecked: boolean) => {
-    if (field === 'equipment') {
-      setIsEquipmentFilterEnabled(isChecked);
-    } else {
-      setIsMusclesFilterEnabled(isChecked);
-    }
+  // Dynamically build displayedMuscles based on isAdvancedMode and parentToChildMapping
+  const displayedMuscles = useMemo(() => {
+    const result: MuscleOption[] = [];
+    const normalMuscles = muscleOptions.filter(m => m.type === 'normal');
+    const advancedMusclesMap = new Map<string, MuscleOption>(
+      muscleOptions.filter(m => m.type === 'advanced').map(m => [m.id, m])
+    );
 
-    // If unchecking a section, remove its filter rules from tempFilters
-    if (!isChecked) {
-      setTempFilters(prevFilters => prevFilters.filter(f => f.field !== field));
-    } else {
-      // If checking a section and it's not already in tempFilters, add an empty rule
-      if (!tempFilters.some(f => f.field === field)) {
-        const newFilter: FilterRule = {
-          id: Date.now().toString(),
-          field,
-          values: []
-        };
-        setTempFilters(prevFilters => [...prevFilters, newFilter]);
-      }
-    }
-  };
+    normalMuscles.forEach(normalMuscle => {
+      result.push(normalMuscle);
 
-  const addFilterValue = (filterField: 'equipment' | 'targetMuscles', value: string) => {
-    setTempFilters(prevFilters => {
-      const existingFilter = prevFilters.find(f => f.field === filterField);
-      if (existingFilter) {
-        if (!existingFilter.values.includes(value)) {
-          return prevFilters.map(f =>
-            f.field === filterField ? { ...f, values: [...f.values, value] } : f
-          );
+      if (isAdvancedMode) {
+        const childrenIds = parentToChildMapping[normalMuscle.id];
+        if (childrenIds) {
+          childrenIds.forEach(childId => {
+            const childMuscle = advancedMusclesMap.get(childId);
+            if (childMuscle) {
+              result.push(childMuscle);
+            }
+          });
         }
-      } else {
-        // This case should ideally not happen if toggleFilterSection is used correctly
-        // to enable the section before adding values.
-        const newFilter: FilterRule = {
-          id: Date.now().toString(),
-          field: filterField,
-          values: [value]
-        };
-        return [...prevFilters, newFilter];
       }
-      return prevFilters;
     });
+    return result;
+  }, [isAdvancedMode]);
+
+
+  // Common image getter
+  const getImageUrl = (imageName: string) => {
+    try {
+      return new URL(`/src/assets/images/${imageName}`, import.meta.url).href;
+    }
+    catch (error) {
+      console.error("Error creating local image URL:", error);
+      return 'https://placehold.co/100x100/e0e0e0/000000?text=No+Image';
+    }
   };
 
-  const removeFilterValue = (filterField: 'equipment' | 'targetMuscles', value: string) => {
-    setTempFilters(prevFilters => {
-      return prevFilters.map(filter =>
-        filter.field === filterField
-          ? { ...filter, values: filter.values.filter(v => v !== value) }
-          : filter
-      ).filter(filter => filter.values.length > 0 || filter.field !== filterField); // Remove rule if no values left
-    });
+  const toggleMuscleSelection = (muscleId: string) => {
+    setSelectedMuscleIds(prev =>
+      prev.includes(muscleId) ? prev.filter(id => id !== muscleId) : [...prev, muscleId]
+    );
   };
 
+  const toggleEquipmentSelection = (equipmentId: string) => {
+    setSelectedEquipmentIds(prev =>
+      prev.includes(equipmentId) ? prev.filter(id => id !== equipmentId) : [...prev, equipmentId]
+    );
+  };
+
+  // Handles applying filters and closing the modal
   const handleApplyFilters = () => {
-    // Filter out rules that have no values and their section is disabled
-    const appliedFilters = tempFilters.filter(filter => {
-      if (filter.field === 'equipment' && !isEquipmentFilterEnabled) return false;
-      if (filter.field === 'targetMuscles' && !isMusclesFilterEnabled) return false;
-      return filter.values.length > 0;
+    const newFilterRules: FilterRule[] = [];
+
+    const tempMuscleValues: string[] = [];
+    selectedMuscleIds.forEach(id => {
+      const foundOption = muscleOptions.find(mo => mo.id === id);
+      if (foundOption && foundOption.filterNames) {
+        tempMuscleValues.push(...foundOption.filterNames);
+      }
     });
-    onFiltersChange(appliedFilters);
-    setIsOpen(false);
+    const uniqueMuscleFilterValues = Array.from(new Set(tempMuscleValues));
+
+    if (uniqueMuscleFilterValues.length > 0) {
+      newFilterRules.push({
+        id: 'muscle-filter',
+        field: 'targetMuscles',
+        values: uniqueMuscleFilterValues,
+      });
+    }
+
+    const tempEquipmentValues: string[] = [];
+    selectedEquipmentIds.forEach(id => {
+      const foundOption = equipmentOptionsList.find(eo => eo.id === id);
+      if (foundOption && foundOption.filterName) { // Check for filterName existence
+        tempEquipmentValues.push(foundOption.filterName);
+      }
+    });
+    const uniqueEquipmentFilterValues = Array.from(new Set(tempEquipmentValues)); // No need for .filter(Boolean) as we only push non-empty values
+
+    if (uniqueEquipmentFilterValues.length > 0) {
+      newFilterRules.push({
+        id: 'equipment-filter',
+        field: 'equipment',
+        values: uniqueEquipmentFilterValues, // Corrected variable name here
+      });
+    }
+    onApplyFilters(newFilterRules);
+    onClose(); // Close the modal after applying filters
   };
 
-  const handleClearAllFilters = () => {
-    onFiltersChange([]);
-    setTempFilters([]);
-    setIsEquipmentFilterEnabled(false);
-    setIsMusclesFilterEnabled(false);
-    setIsOpen(false);
+  // Handles clearing all selected filters and keeps the modal open
+  const handleClearAll = () => {
+    setSelectedMuscleIds([]);
+    setSelectedEquipmentIds([]);
+    onApplyFilters([]); // Apply empty filters to clear the main page view
+    // Do NOT call onClose() here, as per user's request.
   };
 
-  const getFilterValuesForField = (field: 'equipment' | 'targetMuscles'): string[] => {
-    const filter = tempFilters.find(f => f.field === field);
-    return filter ? filter.values : [];
-  };
+  if (!isOpen) return null;
+
+  const isClearAllDisabled = selectedMuscleIds.length === 0 && selectedEquipmentIds.length === 0;
 
   return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(true)}
-        className={`flex items-center space-x-2 space-x-reverse px-4 py-2 rounded-lg border transition-colors ${
-          filters.length > 0
-            ? 'bg-blue-50 border-blue-300 text-blue-700 dark:bg-blue-900/20 dark:border-blue-600 dark:text-blue-300'
-            : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-        }`}
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div
+        ref={modalRef}
+        className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-xl md:max-w-4xl lg:max-w-5xl w-full mx-4 max-h-[80vh] flex flex-col"
       >
-        <Filter className="h-4 w-4" />
-        <span>فیلتر</span>
-        {filters.length > 0 && (
-          <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
-            {filters.length}
-          </span>
-        )}
-      </button>
-
-      {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div
-            ref={modalRef}
-            className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto"
+        {/* Header */}
+        <div className="flex justify-between items-center mb-4 flex-shrink-0">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">فیلتر تمرینات</h3>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
           >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">فیلتر تمرینات</h3>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
+            <X className="h-5 w-5" />
+          </button>
+        </div>
 
-            <div className="space-y-6">
-              {/* Equipment Filter Section */}
-              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                <label className="flex items-center justify-between cursor-pointer mb-3">
-                  <span className="text-gray-900 dark:text-white font-medium">فیلتر وسایل</span>
-                  <input
-                    type="checkbox"
-                    checked={isEquipmentFilterEnabled}
-                    onChange={(e) => toggleFilterSection('equipment', e.target.checked)}
-                    className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
-                  />
-                </label>
-                {isEquipmentFilterEnabled && (
-                  <>
-                    <div className="relative w-full mb-3">
-                      <select
-                        onChange={(e) => {
-                          if (e.target.value) {
-                            addFilterValue('equipment', e.target.value);
-                            e.target.value = ''; // Reset select after selection
-                          }
-                        }}
-                        value="" // Control value to allow re-selection of the same option
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      >
-                        <option value="" disabled>انتخاب وسایل...</option>
-                        {equipmentOptions
-                          .filter(option => !getFilterValuesForField('equipment').includes(option))
-                          .map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {getFilterValuesForField('equipment').map((value) => (
-                        <span
-                          key={value}
-                          className="flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm px-2 py-1 rounded-full"
-                        >
-                          {value}
-                          <button
-                            onClick={() => removeFilterValue('equipment', value)}
-                            className="ml-1 text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        </span>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* Target Muscles Filter Section */}
-              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                <label className="flex items-center justify-between cursor-pointer mb-3">
-                  <span className="text-gray-900 dark:text-white font-medium">فیلتر عضلات درگیر</span>
-                  <input
-                    type="checkbox"
-                    checked={isMusclesFilterEnabled}
-                    onChange={(e) => toggleFilterSection('targetMuscles', e.target.checked)}
-                    className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
-                  />
-                </label>
-                {isMusclesFilterEnabled && (
-                  <>
-                    <div className="relative w-full mb-3">
-                      <select
-                        onChange={(e) => {
-                          if (e.target.value) {
-                            addFilterValue('targetMuscles', e.target.value);
-                            e.target.value = ''; // Reset select after selection
-                          }
-                        }}
-                        value="" // Control value to allow re-selection of the same option
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      >
-                        <option value="" disabled>انتخاب عضلات...</option>
-                        {muscleOptions
-                          .filter(option => !getFilterValuesForField('targetMuscles').includes(option))
-                          .map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {getFilterValuesForField('targetMuscles').map((value) => (
-                        <span
-                          key={value}
-                          className="flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm px-2 py-1 rounded-full"
-                        >
-                          {value}
-                          <button
-                            onClick={() => removeFilterValue('targetMuscles', value)}
-                            className="ml-1 text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        </span>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
+        {/* This div contains both the Clear All button (if it were there) and the Advanced Toggle */}
+        <div className="flex justify-start items-center mb-6 flex-shrink-0">
+          {/* Advanced Toggle (always rendered to maintain layout) */}
+          <div className="flex flex-col items-center">
+            <div
+              dir="ltr"
+              className={`relative inline-flex flex-shrink-0 h-8 w-14 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+                ${isAdvancedMode ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'}`}
+              onClick={() => setIsAdvancedMode(prev => !prev)}
+            >
+              <span
+                aria-hidden="true"
+                className={`pointer-events-none inline-block h-7 w-7 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200
+                  ${isAdvancedMode ? 'translate-x-6' : 'translate-x-0'}`}
+              />
             </div>
-
-            <div className="flex space-x-2 space-x-reverse mt-6">
-              <button
-                onClick={handleApplyFilters}
-                className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                اعمال فیلتر
-              </button>
-              <button
-                onClick={handleClearAllFilters}
-                className="flex-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
-              >
-                پاک کردن فیلتر
-              </button>
-            </div>
+            <span className="mt-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              پیشرفته
+            </span>
           </div>
         </div>
-      )}
+
+
+        {/* Tabs */}
+        <div className="flex border-b border-gray-200 dark:border-gray-700 mb-4 flex-shrink-0">
+          <button
+            onClick={() => setActiveTab('muscles')}
+            className={`flex-1 py-2 text-center text-sm font-medium rounded-t-lg transition-colors
+              ${activeTab === 'muscles'
+                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+          >
+            فیلتر عضلات
+          </button>
+          <button
+            onClick={() => setActiveTab('equipment')}
+            className={`flex-1 py-2 text-center text-sm font-medium rounded-t-lg transition-colors
+              ${activeTab === 'equipment'
+                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+          >
+            فیلتر وسایل
+          </button>
+        </div>
+
+        {/* Scrollable Content Area */}
+        <div className="flex-grow overflow-y-auto px-2 -mr-2">
+          {activeTab === 'muscles' && (
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-4 mb-6">
+              {displayedMuscles.map(muscle => (
+                <div
+                  key={muscle.id}
+                  className={`relative flex flex-col items-center p-2 border rounded-lg cursor-pointer transition-all duration-200
+                    ${selectedMuscleIds.includes(muscle.id)
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/40'
+                      : muscle.type === 'advanced'
+                        ? 'border border-dashed border-gray-400 dark:border-gray-500 bg-gray-50 dark:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                        : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                    }`}
+                  onClick={() => toggleMuscleSelection(muscle.id)}
+                >
+                  <img
+                    src={getImageUrl(muscle.imageName)}
+                    alt={muscle.displayName}
+                    className="w-20 h-20 object-contain mb-2 rounded-lg bg-gray-200 dark:bg-gray-600 p-1"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://placehold.co/100x100/e0e0e0/000000?text=No+Image';
+                    }}
+                  />
+                  <span className="text-sm font-medium text-center text-gray-900 dark:text-white">
+                    {muscle.displayName}
+                  </span>
+                  {selectedMuscleIds.includes(muscle.id) && (
+                    <div className="absolute top-1 right-1 bg-blue-600 rounded-full p-0.5">
+                      <Check className="h-3 w-3 text-white" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {activeTab === 'equipment' && (
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-4 mb-6">
+              {equipmentOptionsList.map(equipment => (
+                <div
+                  key={equipment.id}
+                  className={`relative flex flex-col items-center p-2 border rounded-lg cursor-pointer transition-all duration-200
+                    ${selectedEquipmentIds.includes(equipment.id)
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/40'
+                      : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                    }`}
+                  onClick={() => toggleEquipmentSelection(equipment.id)}
+                >
+                  <img
+                    src={getImageUrl(equipment.imageName)}
+                    alt={equipment.displayName}
+                    className="w-20 h-20 object-contain mb-2 rounded-lg bg-gray-200 dark:bg-gray-600 p-1"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://placehold.co/100x100/e0e0e0/000000?text=No+Image';
+                    }}
+                  />
+                  <span className="text-sm font-medium text-center text-gray-900 dark:text-white">
+                    {equipment.displayName}
+                  </span>
+                  {selectedEquipmentIds.includes(equipment.id) && (
+                    <div className="absolute top-1 right-1 bg-blue-600 rounded-full p-0.5">
+                      <Check className="h-3 w-3 text-white" />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Footer Buttons */}
+        <div className="flex justify-center mt-6 flex-shrink-0">
+          <div className="flex space-x-2 space-x-reverse w-auto">
+            <button
+              onClick={handleApplyFilters}
+              className="w-40 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              تایید
+            </button>
+            <button
+              onClick={handleClearAll}
+              disabled={isClearAllDisabled}
+              className={`w-40 px-4 py-2 rounded-lg transition-colors
+                ${isClearAllDisabled
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400'
+                  : 'bg-red-500 text-white hover:bg-red-600'
+                }`}
+            >
+              پاک کردن همه
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,33 +1,30 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { SearchBar } from '../components/SearchBar';
-import { SortPanel } from '../components/SortPanel'; // Keep if needed for future, currently commented out
 import { ExerciseGrid } from '../components/ExerciseGrid';
 import { exercisesData } from '../data/exercises';
 import { FilterRule, SortRule, UserData } from '../types';
-import { MuscleFilterModal } from '../components/MuscleFilterModal';
-import { EquipmentFilterModal } from '../components/EquipmentFilterModal';
 import { Filter } from 'lucide-react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { useSearchParams } from 'react-router-dom'; // Import useSearchParams
+import { useSearchParams } from 'react-router-dom';
+import { FilterPanel } from '../components/FilterPanel';
 
 interface HomePageProps {
   userData: UserData;
 }
 
-const EXERCISES_PER_PAGE = 20; // تعداد تمرینات برای بارگذاری در هر مرحله
+const EXERCISES_PER_PAGE = 20;
 
 export function HomePage({ userData }: HomePageProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useLocalStorage<FilterRule[]>('tamrinsaz-filters', []);
   const [sortRules, setSortRules] = useState<SortRule[]>([]); // Keep if needed for future, currently commented out
   const [visibleExerciseCount, setVisibleExerciseCount] = useState(EXERCISES_PER_PAGE);
-  const [isLoading, setIsLoading] = useState(false); // وضعیت بارگذاری
-  const loaderRef = useRef<HTMLDivElement>(null); // رفرنس برای تشخیص رسیدن به انتهای صفحه
+  const [isLoading, setIsLoading] = useState(false);
+  const loaderRef = useRef<HTMLDivElement>(null);
 
-  const [showMuscleFilterModal, setShowMuscleFilterModal] = useState(false);
-  const [showEquipmentFilterModal, setShowEquipmentFilterModal] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false); // State to control the new unified FilterModal
 
-  const [searchParams, setSearchParams] = useSearchParams(); // Initialize useSearchParams
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // Effect to read URL parameters and apply filters
   useEffect(() => {
@@ -35,22 +32,16 @@ export function HomePage({ userData }: HomePageProps) {
     const filterValue = searchParams.get('filterValue');
 
     if (filterField && filterValue) {
-      // Create a new filter rule based on URL parameters
       const newFilter: FilterRule = {
-        id: Date.now().toString(), // Unique ID for the filter rule
+        id: Date.now().toString(),
         field: filterField,
         values: [decodeURIComponent(filterValue)],
       };
 
-      // *** تغییر اصلی: جایگزینی فیلترهای قبلی با فیلتر جدید ***
-      setFilters([newFilter]); // فقط فیلتر جدید را اعمال کن و فیلترهای قبلی را پاک کن
-
-      // Clear the URL parameters after applying the filter
-      // This prevents the filter from being re-applied on refresh
-      setSearchParams({}); 
+      setFilters([newFilter]);
+      setSearchParams({});
     }
-  }, [searchParams, setFilters, setSearchParams]); // 'filters' از dependencies حذف شد چون دیگر به حالت قبلی آن نیازی نداریم
-
+  }, [searchParams, setFilters, setSearchParams]);
 
   const getSessionName = (exerciseId: string): string | undefined => {
     for (const session of userData.sessions) {
@@ -75,7 +66,7 @@ export function HomePage({ userData }: HomePageProps) {
       );
     }
 
-    // اعمال فیلترها از هر دو مدال (و از URL اگر اعمال شده باشند)
+    // اعمال فیلترها
     filters.forEach(filter => {
       if (filter.values.length > 0) {
         result = result.filter(exercise => {
@@ -111,8 +102,6 @@ export function HomePage({ userData }: HomePageProps) {
       });
     }
 
-    // هر زمان که فیلترها یا عبارت جستجو تغییر کنند، تعداد تمرینات قابل مشاهده را بازنشانی کنید
-    // این کار تضمین می‌کند که اسکرول بی‌نهایت از ابتدا شروع می‌شود
     setVisibleExerciseCount(EXERCISES_PER_PAGE);
 
     return result;
@@ -125,16 +114,15 @@ export function HomePage({ userData }: HomePageProps) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        // اگر عنصر loaderRef در حال حاضر در viewport قابل مشاهده است
         if (entries[0].isIntersecting && hasMoreExercises && !isLoading) {
-          setIsLoading(true); // شروع بارگذاری
-          setTimeout(() => { // شبیه‌سازی تاخیر بارگذاری
+          setIsLoading(true);
+          setTimeout(() => {
             setVisibleExerciseCount(prevCount => prevCount + EXERCISES_PER_PAGE);
-            setIsLoading(false); // پایان بارگذاری
-          }, 500); // تاخیر 500 میلی‌ثانیه
+            setIsLoading(false);
+          }, 500);
         }
       },
-      { threshold: 1.0 } // وقتی 100% عنصر قابل مشاهده باشد
+      { threshold: 1.0 }
     );
 
     if (loaderRef.current) {
@@ -146,7 +134,9 @@ export function HomePage({ userData }: HomePageProps) {
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [hasMoreExercises, isLoading]); // وابستگی‌ها: زمانی که تعداد تمرینات بیشتر می‌شود یا وضعیت بارگذاری تغییر می‌کند
+  }, [hasMoreExercises, isLoading]);
+
+  const hasActiveFilters = filters.some(f => f.values.length > 0);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -168,42 +158,24 @@ export function HomePage({ userData }: HomePageProps) {
           placeholder="جستجوی تمرینات..."
         />
 
-        {/* New Muscle Filter Button */}
+        {/* Unified Filter Button */}
         <button
-          onClick={() => setShowMuscleFilterModal(true)}
+          onClick={() => setShowFilterModal(true)}
           className={`flex items-center space-x-2 space-x-reverse px-4 py-2 rounded-lg border transition-colors ${
-            filters.some(f => f.field === 'targetMuscles' && f.values.length > 0)
+            hasActiveFilters
               ? 'bg-blue-50 border-blue-300 text-blue-700 dark:bg-blue-900/20 dark:border-blue-600 dark:text-blue-300'
               : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
           }`}
         >
           <Filter className="h-4 w-4" />
-          <span>فیلتر عضلات</span>
-          {filters.find(f => f.field === 'targetMuscles')?.values.length > 0 && (
+          <span>فیلتر</span>
+          {hasActiveFilters && (
             <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
-              {filters.find(f => f.field === 'targetMuscles')?.values.length}
+              {filters.length}
             </span>
           )}
         </button>
 
-        {/* New Equipment Filter Button */}
-        <button
-          onClick={() => setShowEquipmentFilterModal(true)}
-          className={`flex items-center space-x-2 space-x-reverse px-4 py-2 rounded-lg border transition-colors ${
-            filters.some(f => f.field === 'equipment' && f.values.length > 0)
-              ? 'bg-blue-50 border-blue-300 text-blue-700 dark:bg-blue-900/20 dark:border-blue-600 dark:text-blue-300'
-              : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-          }`}
-        >
-          <Filter className="h-4 w-4" />
-          <span>فیلتر وسایل</span>
-          {filters.find(f => f.field === 'equipment')?.values.length > 0 && (
-            <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
-              {filters.find(f => f.field === 'equipment')?.values.length}
-            </span>
-          )}
-        </button>
-        
         {/* Sort Panel (Commented out) */}
         {/* <SortPanel
           sortRules={sortRules}
@@ -229,25 +201,15 @@ export function HomePage({ userData }: HomePageProps) {
               <span>در حال بارگذاری...</span>
             </div>
           ) : (
-            // این بخش می‌تواند خالی باشد یا یک پیام "به پایین اسکرول کنید" داشته باشد
-            // در حالت اسکرول بی‌نهایت، دکمه "بارگذاری بیشتر" حذف می‌شود
-            <div className="text-gray-500 dark:text-gray-400"></div> 
+            <div className="text-gray-500 dark:text-gray-400"></div>
           )}
         </div>
       )}
 
-      {/* Muscle Filter Modal */}
-      <MuscleFilterModal
-        isOpen={showMuscleFilterModal}
-        onClose={() => setShowMuscleFilterModal(false)}
-        currentFilters={filters}
-        onApplyFilters={setFilters}
-      />
-
-      {/* Equipment Filter Modal */}
-      <EquipmentFilterModal
-        isOpen={showEquipmentFilterModal}
-        onClose={() => setShowEquipmentFilterModal(false)}
+      {/* Unified Filter Modal */}
+      <FilterPanel
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
         currentFilters={filters}
         onApplyFilters={setFilters}
       />

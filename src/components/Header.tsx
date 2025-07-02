@@ -1,4 +1,3 @@
-// tamrin/src/components/Header.tsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Dumbbell, Moon, Sun } from 'lucide-react'; // Removed ClipboardList
@@ -38,7 +37,7 @@ export function Header({ onDataChange, userData, onUpdateUserData }: HeaderProps
             </button>
 
             {/* User Menu component */}
-            <UserMenu userData={userData} onUpdateUserData={onUpdateUserData} showToast={onDataChange} /> {/* Pass showToast as onDataChange for simplicity */}
+            <UserMenu userData={userData} onUpdateUserData={onUpdateUserData} />
           </div>
         </div>
       </div>

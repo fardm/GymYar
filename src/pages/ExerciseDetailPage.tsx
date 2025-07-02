@@ -5,8 +5,7 @@ import { exercisesData } from '../data/exercises';
 import { AddToWorkoutModal } from '../components/AddToWorkoutModal'; // Corrected import syntax
 import { UserData, WorkoutSession, SessionExercise } from '../types';
 import { ImageTextDisplay } from '../components/ImageTextDisplay'; // Import the new component
-import { muscleOptions } from '../components/MuscleFilterModal'; // Import muscle options
-import { equipmentOptionsList } from '../components/EquipmentFilterModal'; // Import equipment options
+import { muscleOptions, equipmentOptionsList } from '../components/FilterPanel'; // Import muscle and equipment options from FilterPanel
 
 interface ExerciseDetailPageProps {
   userData: UserData;

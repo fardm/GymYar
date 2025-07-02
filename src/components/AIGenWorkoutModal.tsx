@@ -11,22 +11,19 @@ export function AIGenWorkoutModal({ isOpen, onClose }: AIGenWorkoutModalProps) {
   const promptTextRef = useRef<HTMLTextAreaElement>(null); // Ref for the textarea to copy its content
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copied'>('idle'); // State for copy button text/status
 
-  const promptText = `یک برنامه بدنسازی برام بنویس که ۴ جلسه در هفته باشد.
-هر جلسه شامل تمرین‌هایی برای گروه عضلانی مشخص شده باشد، به‌طوری که هر گروه به طور کامل و متعادل درگیر شود. مثل این:
+  const promptText = `یک برنامه بدنسازی بنویس که شامل ۴ جلسه باشد:
 - جلسه ۱: سینه + جلو بازو
 - جلسه ۲: پشت + لت + ساعد
 - جلسه ۳: سرشانه + پشت بازو
 - جلسه ۴: پا + شکم
 
-برای هر جلسه:
-- تمرینات به اندازه کافی باشند تا تمامی بخش‌ها و عضلات مهم گروه عضلانی درگیر شوند.
-- تعداد تمرین‌ها در هر جلسه حداقل ۵ تا ۷ حرکت باشد.
-- تعداد ست‌ها و تکرارها متناسب با اصول هایپرتروفی باشد(مثلاً ۳ تا ۴ ست، ۸ تا ۱۵ تکرار).
-- در تمریناتی مثل پلانک که تکرار معنا ندارد از توضیح مناسب استفاده کن(مثلا ۳ * ۱ دقیقه).
-
-تمرینات را فقط از لیست موجود در فایل exercises.ts که ارسال کردم انتخاب کن.
-
-خروجی را در قالب یک فایل JSON طبق ساختار زیر بساز:
+از این قوانین پیروی کن:
+۱. هر جلسه شامل تمرین‌هایی برای گروه عضلانی مشخص شده باشد، به‌طوری که هر گروه به طور کامل و متعادل درگیر شود.
+۲. تعداد تمرین‌ها در هر جلسه حداقل ۵ تا ۷ حرکت باشد.
+۳. تعداد ست‌ها و تکرارها متناسب با اصول هایپرتروفی باشد(مثلاً ۳ تا ۴ ست، ۸ تا ۱۵ تکرار).
+۴. در تمریناتی مثل پلانک که تکرار معنا ندارد از توضیح مناسب استفاده کن(مثلا ۳ * ۱ دقیقه).
+۵. تمرینات را فقط از لیست موجود در فایل exercises.ts که ارسال کردم انتخاب کن.
+۶. خروجی را در قالب یک فایل JSON طبق ساختار زیر بساز (باحفظ نام فیلد فقط مقدار را بنویس):
 
 {
   "sessions": [
@@ -149,10 +146,10 @@ export function AIGenWorkoutModal({ isOpen, onClose }: AIGenWorkoutModalProps) {
           ⚠️ حتما حالت سرچ را در هوش مصنوعی فعال کنید. اگر به درستی اطلاعات از لینک استخراج نشد خودتان فایل exercises.ts را از همان لینک دانلود کرده و در محیط چت آپلود کنید.
         </p> */}
 
-        <div className="flex justify-end flex-shrink-0">
+        <div className="flex justify-center flex-shrink-0">
           <button
             onClick={onClose}
-            className="bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
             بستن
           </button>

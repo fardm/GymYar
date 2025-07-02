@@ -148,11 +148,13 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
 
   const handleConfirmFilter = () => {
     setActiveSessionFilterIds(tempSelectedSessionIds);
-    setShowFilterModal(false);
+    setShowFilterModal(false); // Close the modal
   };
 
   const handleClearAllSessionsFilter = () => {
-    setTempSelectedSessionIds([]);
+    setActiveSessionFilterIds([]); // Clear filters
+    setTempSelectedSessionIds([]); // Also clear temp selections to reset the modal state visually
+    // Do NOT close the modal here, as per user request.
   };
 
   const handleCancelFilter = () => {
@@ -214,7 +216,8 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
                 </h3>
               </div>
 
-              <div className="flex justify-end mb-6 flex-shrink-0">
+              {/* Removed the top-right "پاک کردن همه" button */}
+              {/* <div className="flex justify-end mb-6 flex-shrink-0">
                 <button
                   onClick={handleClearAllSessionsFilter}
                   disabled={isClearAllSessionsDisabled}
@@ -227,7 +230,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
                   <Eraser className="h-4 w-4 ml-2" />
                   پاک کردن همه
                 </button>
-              </div>
+              </div> */}
 
               <div className="flex-grow overflow-y-auto px-2 -mr-2">
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
@@ -265,19 +268,27 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
                 </div>
               </div>
 
-              <div className="flex space-x-2 space-x-reverse mt-6 flex-shrink-0">
-                <button
-                  onClick={handleConfirmFilter}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  تایید
-                </button>
-                <button
-                  onClick={handleCancelFilter}
-                  className="flex-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
-                >
-                  لغو
-                </button>
+              {/* Updated Footer Buttons */}
+              <div className="flex justify-center mt-6 flex-shrink-0">
+                <div className="flex space-x-2 space-x-reverse w-auto">
+                  <button
+                    onClick={handleConfirmFilter}
+                    className="w-40 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    تایید
+                  </button>
+                  <button
+                    onClick={handleClearAllSessionsFilter}
+                    disabled={isClearAllSessionsDisabled}
+                    className={`w-40 px-4 py-2 rounded-lg transition-colors
+                      ${isClearAllSessionsDisabled
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400'
+                        : 'bg-red-500 text-white hover:bg-red-600'
+                      }`}
+                  >
+                    پاک کردن همه
+                  </button>
+                </div>
               </div>
             </div>
           </div>
