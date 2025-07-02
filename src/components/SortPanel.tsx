@@ -1,4 +1,3 @@
-// src/components/SortPanel.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowUpDown, X, MoveUp, MoveDown } from 'lucide-react';
 import { SortRule } from '../types';
@@ -64,11 +63,13 @@ export function SortPanel({ sortRules, onSortRulesChange }: SortPanelProps) {
     };
 
     if (isOpen) {
+      document.body.style.overflow = 'hidden'; // Disable background scrolling
       document.addEventListener('keydown', handleEscape);
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
+      document.body.style.overflow = ''; // Re-enable scrolling on cleanup
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('mousedown', handleClickOutside);
     };

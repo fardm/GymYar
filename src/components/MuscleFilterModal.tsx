@@ -1,4 +1,3 @@
-// src/components/MuscleFilterModal.tsx
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { X, Check, Eraser } from 'lucide-react'; // Eraser icon imported
 import { FilterRule } from '../types';
@@ -126,11 +125,13 @@ export function MuscleFilterModal({ isOpen, onClose, currentFilters, onApplyFilt
     };
 
     if (isOpen) {
+      document.body.style.overflow = 'hidden'; // Disable background scrolling
       document.addEventListener('keydown', handleEscape);
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
+      document.body.style.overflow = ''; // Re-enable scrolling on cleanup
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('mousedown', handleClickOutside);
     };

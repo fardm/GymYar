@@ -1,4 +1,3 @@
-// tamrin/src/components/AIGenWorkoutModal.tsx
 import React, { useRef, useEffect, useState } from 'react';
 import { X, Copy, Bot } from 'lucide-react'; // Import Bot icon
 
@@ -68,11 +67,13 @@ export function AIGenWorkoutModal({ isOpen, onClose }: AIGenWorkoutModalProps) {
     };
 
     if (isOpen) {
+      document.body.style.overflow = 'hidden'; // Disable background scrolling
       document.addEventListener('keydown', handleEscape);
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
+      document.body.style.overflow = ''; // Re-enable scrolling on cleanup
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('mousedown', handleClickOutside);
     };

@@ -1,4 +1,3 @@
-// tamrin/src/components/ExportProgramModal.tsx
 import React, { useRef, useEffect, useState } from 'react';
 import { X, Download, Copy } from 'lucide-react';
 import { exportUserData } from '../utils/storage';
@@ -31,11 +30,13 @@ export function ExportProgramModal({ isOpen, onClose, userData, showToast }: Exp
     };
 
     if (isOpen) {
+      document.body.style.overflow = 'hidden'; // Disable background scrolling
       document.addEventListener('keydown', handleEscape);
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
+      document.body.style.overflow = ''; // Re-enable scrolling on cleanup
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('mousedown', handleClickOutside);
     };

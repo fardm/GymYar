@@ -1,7 +1,6 @@
-// tamrin/src/components/ImportProgramModal.tsx
 import React, { useRef, useEffect, useState } from 'react';
 import { X, Upload, Trash2 } from 'lucide-react'; // Import Trash2 icon for clearing file
-import { importUserData, saveUserData } from '../utils/storage';
+import { importUserData, saveUserData } from '../utils/storage'; // مسیر وارد کردن فایل ذخیره‌سازی اصلاح شد
 import { UserData } from '../types';
 
 interface ImportProgramModalProps {
@@ -16,6 +15,7 @@ export function ImportProgramModal({ isOpen, onClose, onUpdateUserData, showToas
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [jsonInput, setJsonInput] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [activeTab, setActiveTab] = useState<'json' | 'file'>('json'); // State for active tab
 
   // Effect to handle closing modal on escape key or outside click
   useEffect(() => {
@@ -32,11 +32,13 @@ export function ImportProgramModal({ isOpen, onClose, onUpdateUserData, showToas
     };
 
     if (isOpen) {
+      document.body.style.overflow = 'hidden'; // Disable background scrolling
       document.addEventListener('keydown', handleEscape);
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
+      document.body.style.overflow = ''; // Re-enable scrolling on cleanup
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -50,13 +52,15 @@ export function ImportProgramModal({ isOpen, onClose, onUpdateUserData, showToas
       if (fileInputRef.current) {
         fileInputRef.current.value = ''; // Clear file input
       }
+      setActiveTab('json'); // Reset to JSON tab when opening
     }
   }, [isOpen]);
 
   const handleJsonInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setJsonInput(e.target.value);
+    // If JSON input is used, clear any selected file
     if (e.target.value && selectedFile) {
-      setSelectedFile(null); // Clear file if JSON input is used
+      setSelectedFile(null);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -66,8 +70,9 @@ export function ImportProgramModal({ isOpen, onClose, onUpdateUserData, showToas
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setSelectedFile(file);
+    // If a file is selected, clear JSON input
     if (file && jsonInput) {
-      setJsonInput(''); // Clear JSON input if file is selected
+      setJsonInput('');
     }
   };
 
@@ -78,22 +83,15 @@ export function ImportProgramModal({ isOpen, onClose, onUpdateUserData, showToas
     }
   };
 
-  // New function to clear JSON input
+  // Function to clear JSON input
   const handleClearJsonInput = () => {
     setJsonInput('');
-    // If a file was selected and JSON input was disabled, re-enable file input
-    if (selectedFile) {
-      setSelectedFile(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }
   };
 
   const confirmImport = async () => {
     let dataToImport: UserData | null = null;
 
-    if (jsonInput.trim()) {
+    if (activeTab === 'json' && jsonInput.trim()) {
       try {
         dataToImport = JSON.parse(jsonInput);
         // Basic validation for sessions structure
@@ -109,7 +107,7 @@ export function ImportProgramModal({ isOpen, onClose, onUpdateUserData, showToas
         showToast('خطا در تجزیه JSON: ' + (error as Error).message, 'delete');
         return;
       }
-    } else if (selectedFile) {
+    } else if (activeTab === 'file' && selectedFile) {
       try {
         dataToImport = await importUserData(selectedFile);
       } catch (error) {
@@ -129,7 +127,7 @@ export function ImportProgramModal({ isOpen, onClose, onUpdateUserData, showToas
     }
   };
 
-  const isImportDisabled = !jsonInput.trim() && !selectedFile;
+  const isImportDisabled = (activeTab === 'json' && !jsonInput.trim()) || (activeTab === 'file' && !selectedFile);
 
   if (!isOpen) return null;
 
@@ -137,7 +135,7 @@ export function ImportProgramModal({ isOpen, onClose, onUpdateUserData, showToas
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div
         ref={modalRef}
-        className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] flex flex-col" // Increased max-w to lg
+        className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] flex flex-col"
       >
         <div className="flex justify-between items-center mb-4 flex-shrink-0">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center space-x-2 space-x-reverse">
@@ -156,57 +154,88 @@ export function ImportProgramModal({ isOpen, onClose, onUpdateUserData, showToas
           می‌توانید کد JSON برنامه را مستقیماً وارد کنید یا یک فایل JSON را آپلود کنید.
         </p>
 
-        {/* JSON Input */}
-        <div className="mb-4 relative"> {/* Added relative for positioning the clear button */}
-          <label htmlFor="json-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            ورود مستقیم کد JSON:
-          </label>
-          <textarea
-            id="json-input"
-            value={jsonInput}
-            onChange={handleJsonInputChange}
-            placeholder='{ "sessions": [...] }'
-            rows={8}
-            dir="ltr"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none pr-10" // Added pr-10 for button spacing
-            disabled={!!selectedFile} // Disable if file is selected
-          />
-          {jsonInput.trim().length > 0 && ( // Only show button if there's text
-            <button
-              onClick={handleClearJsonInput}
-              className="absolute top-9 right-3 p-1 rounded-lg bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors"
-              aria-label="پاک کردن کد JSON"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
-          )}
+        {/* Tab Buttons */}
+        <div className="flex border-b border-gray-200 dark:border-gray-700 mb-4">
+          <button
+            onClick={() => setActiveTab('json')}
+            className={`flex-1 py-2 text-center text-sm font-medium rounded-t-lg transition-colors
+              ${activeTab === 'json'
+                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+          >
+            ورود مستقیم کد
+          </button>
+          <button
+            onClick={() => setActiveTab('file')}
+            className={`flex-1 py-2 text-center text-sm font-medium rounded-t-lg transition-colors
+              ${activeTab === 'file'
+                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+          >
+            آپلود فایل
+          </button>
         </div>
 
-        {/* File Upload */}
-        <div className="mb-6">
-          <label htmlFor="file-upload" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            آپلود فایل JSON:
-          </label>
-          <div className="flex items-center space-x-2 space-x-reverse bg-gray-100 dark:bg-gray-700 rounded-md" dir="ltr">
-            <input
-              ref={fileInputRef}
-              id="file-upload"
-              type="file"
-              accept=".json"
-              onChange={handleFileChange}
-              className="flex-grow p-2 text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 dark:file:bg-blue-800 dark:file:text-white dark:hover:file:bg-blue-900" // Changed file:bg-blue-50 to file:bg-blue-600 and adjusted text color
-              disabled={!!jsonInput.trim()} // Disable if JSON input is used
-            />
-            {selectedFile && (
-              <button
-                onClick={handleClearFile}
-                className="p-2 rounded-lg bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors flex-shrink-0"
-                aria-label="حذف فایل انتخاب شده"
-              >
-                <Trash2 className="h-5 w-5" />
-              </button>
-            )}
-          </div>
+        {/* Tab Content Wrapper with fixed height */}
+        <div className="flex-grow min-h-[200px] relative">
+          {activeTab === 'json' && (
+            <div className="mb-4 relative h-full">
+              <label htmlFor="json-input" className="sr-only">
+                ورود مستقیم کد JSON:
+              </label>
+              <textarea
+                id="json-input"
+                value={jsonInput}
+                onChange={handleJsonInputChange}
+                placeholder='{ "sessions": [...] }'
+                rows={8}
+                dir="ltr"
+                className="w-full h-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none pr-10"
+              />
+              {jsonInput.trim().length > 0 && (
+                <button
+                  onClick={handleClearJsonInput}
+                  className="absolute top-3 right-3 p-1 rounded-lg bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors"
+                  aria-label="پاک کردن کد JSON"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'file' && (
+            <div className="mb-6 h-full flex items-center justify-center">
+              <label htmlFor="file-upload" className="sr-only">
+                آپلود فایل JSON:
+              </label>
+              <div className="flex items-center space-x-2 space-x-reverse bg-gray-100 dark:bg-gray-700 rounded-md p-2 w-full flex-nowrap" dir="ltr">
+                <input
+                  ref={fileInputRef}
+                  id="file-upload"
+                  type="file"
+                  accept=".json"
+                  onChange={handleFileChange}
+                  className="flex-grow text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 dark:file:bg-blue-800 dark:file:text-white dark:hover:file:bg-blue-900 min-w-0"
+                  disabled={!!jsonInput.trim()}
+                />
+                <button
+                  onClick={handleClearFile}
+                  disabled={!selectedFile}
+                  className={`p-2 rounded-lg transition-colors flex-shrink-0 ${
+                    selectedFile
+                      ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40'
+                      : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                  }`}
+                  aria-label="حذف فایل انتخاب شده"
+                >
+                  <Trash2 className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         <p className="text-sm text-blue-500 dark:text-blue-400 mb-6 text-right">

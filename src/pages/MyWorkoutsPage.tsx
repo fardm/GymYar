@@ -1,4 +1,3 @@
-// tamrin/src/pages/MyWorkoutsPage.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Plus, Filter, X, Check, Eraser } from 'lucide-react';
@@ -57,11 +56,13 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
     };
 
     if (showFilterModal) {
+      document.body.style.overflow = 'hidden'; // Disable background scrolling
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('keydown', handleEscape);
     }
 
     return () => {
+      document.body.style.overflow = ''; // Re-enable scrolling on cleanup
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
     };

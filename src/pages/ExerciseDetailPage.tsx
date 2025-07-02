@@ -1,4 +1,3 @@
-// src/pages/ExerciseDetailPage.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { ArrowRight, Plus, Check, X, SquarePen } from 'lucide-react'; // Import SquarePen icon
@@ -31,6 +30,7 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        if (showAddModal) setShowAddModal(false); // Close AddToWorkoutModal
         if (showDeleteModal) {
           setShowDeleteModal(false);
           setSessionIdToDelete(null);
@@ -44,6 +44,11 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
     };
 
     const handleClickOutside = (event: MouseEvent) => {
+      if (showAddModal &&
+        (document.getElementById('add-to-workout-modal-container') && !document.getElementById('add-to-workout-modal-container')?.contains(event.target as Node))
+      ) {
+        setShowAddModal(false);
+      }
       if (
         showDeleteModal &&
         deleteModalRef.current &&
@@ -63,16 +68,18 @@ export function ExerciseDetailPage({ userData, onUpdateUserData }: ExerciseDetai
       }
     };
 
-    if (showDeleteModal || showEditNotesModal) { // Add edit notes modal to event listener dependencies
+    if (showAddModal || showDeleteModal || showEditNotesModal) { // Add all modal states to dependencies
+      document.body.style.overflow = 'hidden'; // Disable background scrolling
       document.addEventListener('keydown', handleEscape);
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
+      document.body.style.overflow = ''; // Re-enable scrolling on cleanup
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showDeleteModal, showEditNotesModal]); // Add showEditNotesModal to dependencies
+  }, [showAddModal, showDeleteModal, showEditNotesModal]); // Add all modal states to dependencies
 
   const exercise = exercisesData.find(ex => ex.id === id);
   

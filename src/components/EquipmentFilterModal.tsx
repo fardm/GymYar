@@ -1,4 +1,3 @@
-// src/components/EquipmentFilterModal.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Check, Eraser } from 'lucide-react'; // Eraser icon imported
 import { FilterRule } from '../types';
@@ -70,12 +69,14 @@ export function EquipmentFilterModal({ isOpen, onClose, currentFilters, onApplyF
     };
 
     if (isOpen) {
+      document.body.style.overflow = 'hidden'; // Disable background scrolling
       // Add event listeners when modal is open
       document.addEventListener('keydown', handleEscape);
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
+      document.body.style.overflow = ''; // Re-enable scrolling on cleanup
       // Clean up event listeners when modal closes or component unmounts
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('mousedown', handleClickOutside);

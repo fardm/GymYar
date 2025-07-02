@@ -1,4 +1,3 @@
-// tamrin/src/components/UserMenu.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, Download, Upload, Trash2, HelpCircle, Bot, ClipboardList } from 'lucide-react';
@@ -53,11 +52,13 @@ export function UserMenu({ onUpdateUserData, userData }: UserMenuProps) {
     };
 
     if (showUserMenu || showHelpModal || showExportProgramModal || showImportProgramModal || showClearConfirm || showAIGenWorkoutModal) {
+      document.body.style.overflow = 'hidden'; // Disable background scrolling
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('keydown', handleEscape);
     }
 
     return () => {
+      document.body.style.overflow = ''; // Re-enable scrolling on cleanup
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
     };

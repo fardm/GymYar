@@ -1,4 +1,3 @@
-// src/components/AddToWorkoutModal.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Plus, Check } from 'lucide-react'; // Import Check icon
 import { WorkoutSession } from '../types';
@@ -42,11 +41,13 @@ export function AddToWorkoutModal({
     };
 
     if (isOpen) {
+      document.body.style.overflow = 'hidden'; // Disable background scrolling
       document.addEventListener('keydown', handleEscape);
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
+      document.body.style.overflow = ''; // Re-enable scrolling on cleanup
       document.removeEventListener('keydown', handleEscape);
       document.removeEventListener('mousedown', handleClickOutside);
     };

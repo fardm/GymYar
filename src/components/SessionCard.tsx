@@ -1,4 +1,3 @@
-// src/components/SessionCard.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { WorkoutSession, Exercise } from '../types';
 import { Trash2, Edit2, Check, X, SquarePen } from 'lucide-react';
@@ -77,7 +76,7 @@ export function SessionCard({
     setIsDeleteSessionModalOpen(false);
   };
 
-  // Handle Esc key to close modals
+  // Handle Esc key to close modals and disable/enable scrolling
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -87,7 +86,17 @@ export function SessionCard({
       }
     };
     window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
+
+    if (isEditing || isDeleteExerciseModalOpen || isDeleteSessionModalOpen) {
+      document.body.style.overflow = 'hidden'; // Disable background scrolling
+    } else {
+      document.body.style.overflow = ''; // Re-enable scrolling
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+      document.body.style.overflow = ''; // Ensure scrolling is re-enabled on unmount/cleanup
+    };
   }, [isEditing, isDeleteExerciseModalOpen, isDeleteSessionModalOpen]);
 
   // Handle click outside to close modals
