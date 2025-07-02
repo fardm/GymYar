@@ -1,11 +1,12 @@
-// src/pages/MyWorkoutsPage.tsx
+// tamrin/src/pages/MyWorkoutsPage.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom'; // Import useSearchParams
-import { Plus, Filter, X, Check, Eraser } from 'lucide-react'; // Changed SlidersHorizontal to Filter, added Check and Eraser
+import { useSearchParams } from 'react-router-dom';
+import { Plus, Filter, X, Check, Eraser } from 'lucide-react';
 import { SessionCard } from '../components/SessionCard';
 import { exercisesData } from '../data/exercises';
 import { UserData, WorkoutSession } from '../types';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { UserMenu } from '../components/UserMenu'; // Import the new UserMenu component
 
 interface MyWorkoutsPageProps {
   userData: UserData;
@@ -13,35 +14,26 @@ interface MyWorkoutsPageProps {
 }
 
 export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPageProps) {
-  // Use useLocalStorage for persisting the active filter IDs
   const [activeSessionFilterIds, setActiveSessionFilterIds] = useLocalStorage<string[]>('workout-session-filter', []);
   const [newSessionName, setNewSessionName] = useState('');
   const [showNewSessionForm, setShowNewSessionForm] = useState(false);
 
-  // States for the filter modal
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [tempSelectedSessionIds, setTempSelectedSessionIds] = useState<string[]>([]);
   const filterModalRef = useRef<HTMLDivElement>(null);
 
-  const [searchParams, setSearchParams] = useSearchParams(); // Get search params
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // Effect to handle initial filtering from URL search params
   useEffect(() => {
     const filterSessionIdFromUrl = searchParams.get('sessionId');
     if (filterSessionIdFromUrl) {
-      // If a sessionId is in the URL, prioritize it and set it as the active filter
-      // This will also persist it via useLocalStorage
       if (!activeSessionFilterIds.includes(filterSessionIdFromUrl) || activeSessionFilterIds.length !== 1) {
         setActiveSessionFilterIds([filterSessionIdFromUrl]);
       }
-      // Clean up the URL after applying the filter to avoid re-applying on future navigation/refresh
-      setSearchParams({}, { replace: true }); // Clear search params without adding to history
+      setSearchParams({}, { replace: true });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]); // Only re-run when searchParams change (i.e., URL changes)
-  // Disable exhaustive-deps for activeSessionFilterIds as it might create a loop or unintended behavior.
-  // The goal is to react to URL changes, not internal filter state changes here.
-
+  }, [searchParams]);
 
   // Initialize tempSelectedSessionIds when the modal opens
   useEffect(() => {
@@ -78,7 +70,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
   // Filter sessions based on activeSessionFilterIds
   const filteredSessions = userData.sessions.filter(session => {
     if (activeSessionFilterIds.length === 0) {
-      return true; // Show all sessions if no filters are active
+      return true;
     }
     return activeSessionFilterIds.includes(session.id);
   });
@@ -134,7 +126,6 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
   const handleDeleteSession = (sessionId: string) => {
     const updatedSessions = userData.sessions.filter(session => session.id !== sessionId);
     onUpdateUserData({ sessions: updatedSessions });
-    // Also remove from active filter if the deleted session was filtered
     setActiveSessionFilterIds(prev => prev.filter(id => id !== sessionId));
   };
 
@@ -154,28 +145,25 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
     );
   };
 
-  const handleConfirmFilter = () => { // Renamed from handleApplyFilter
+  const handleConfirmFilter = () => {
     setActiveSessionFilterIds(tempSelectedSessionIds);
     setShowFilterModal(false);
   };
 
-  const handleClearAllSessionsFilter = () => { // New handler for "پاک کردن همه"
-    setTempSelectedSessionIds([]); // Clear selected IDs in modal state
-    // Changes will only be applied on "تایید" click.
+  const handleClearAllSessionsFilter = () => {
+    setTempSelectedSessionIds([]);
   };
 
-  const handleCancelFilter = () => { // Renamed from handleClearFilter
-    setShowFilterModal(false); // Just close the modal
+  const handleCancelFilter = () => {
+    setShowFilterModal(false);
   };
 
-  // Handle keyboard events for the new session input
   const handleNewSessionInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       handleCreateSession();
     }
   };
 
-  // Determine if the "پاک کردن همه" (Clear All) button should be disabled
   const isClearAllSessionsDisabled = tempSelectedSessionIds.length === 0;
 
   return (
@@ -192,19 +180,21 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
 
       {/* Controls */}
       <div className="mb-8 flex flex-col sm:flex-row sm:items-center gap-4">
+        {/* User Menu is now in the Header component, so it's removed from here */}
+
         {/* Filter Button */}
         <button
           onClick={() => setShowFilterModal(true)}
           className={`flex items-center justify-center space-x-2 space-x-reverse px-6 py-2 rounded-lg transition-colors w-full sm:w-auto
             ${activeSessionFilterIds.length > 0
-              ? 'bg-blue-50 text-blue-800 hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-200 dark:hover:bg-blue-900/60 border border-blue-300 dark:border-blue-600' // Soft blue background when active
+              ? 'bg-blue-50 text-blue-800 hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-200 dark:hover:bg-blue-900/60 border border-blue-300 dark:border-blue-600'
               : 'bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
             }`}
         >
-          <Filter className="h-4 w-4" /> {/* Changed icon to Filter (funnel) */}
+          <Filter className="h-4 w-4" />
           <span>فیلتر جلسات</span>
           {activeSessionFilterIds.length > 0 && (
-            <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full ml-2"> {/* Updated style */}
+            <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full ml-2">
               {activeSessionFilterIds.length}
             </span>
           )}
@@ -215,41 +205,31 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div
               ref={filterModalRef}
-              // Increased max-w to allow for 3 columns on larger screens
               className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-xl md:max-w-2xl lg:max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto flex flex-col"
             >
-              {/* Header */}
               <div className="flex justify-between items-center mb-4 flex-shrink-0">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   فیلتر جلسات
                 </h3>
-                {/* <button
-                  onClick={() => setShowFilterModal(false)}
-                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                >
-                  <X className="h-5 w-5" />
-                </button> */}
               </div>
 
-              {/* Clear All button section */}
               <div className="flex justify-end mb-6 flex-shrink-0">
                 <button
                   onClick={handleClearAllSessionsFilter}
-                  disabled={isClearAllSessionsDisabled} // Disable button when no sessions are selected
+                  disabled={isClearAllSessionsDisabled}
                   className={`flex items-center px-4 py-2 rounded-lg transition-colors text-sm font-medium
                     ${isClearAllSessionsDisabled
-                      ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed' // Disabled state styling
-                      : 'text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20' // Enabled state styling
+                      ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                      : 'text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20'
                     }`}
                 >
-                  <Eraser className="h-4 w-4 ml-2" /> {/* آیکون پاک کن */}
+                  <Eraser className="h-4 w-4 ml-2" />
                   پاک کردن همه
                 </button>
               </div>
 
-              {/* Scrollable Session Grid Section */}
               <div className="flex-grow overflow-y-auto px-2 -mr-2">
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6"> {/* Adjusted grid for 3 columns */}
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                   {userData.sessions.length > 0 ? (
                     userData.sessions.map(session => (
                       <div
@@ -261,7 +241,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
                           }`}
                         onClick={() => handleTempSessionToggle(session.id)}
                       >
-                        <div className="flex-1 text-center"> {/* Added pr-6 for padding from checkmark */}
+                        <div className="flex-1 text-center">
                           <div className="font-medium text-gray-900 dark:text-white">
                             {session.name}
                           </div>
@@ -270,30 +250,29 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
                           </div>
                         </div>
                         {tempSelectedSessionIds.includes(session.id) && (
-                          <div className="absolute top-2 right-2 bg-blue-600 rounded-full p-0.5"> {/* Adjusted top/right for padding */}
+                          <div className="absolute top-2 right-2 bg-blue-600 rounded-full p-0.5">
                             <Check className="h-3 w-3 text-white" />
                           </div>
                         )}
                       </div>
                     ))
                   ) : (
-                    <p className="text-gray-500 dark:text-gray-400 text-center col-span-full"> {/* col-span-full to center text in grid */}
+                    <p className="text-gray-500 dark:text-gray-400 text-center col-span-full">
                       هیچ جلسه‌ای برای فیلتر کردن وجود ندارد.
                     </p>
                   )}
                 </div>
               </div>
 
-              {/* Footer Buttons */}
               <div className="flex space-x-2 space-x-reverse mt-6 flex-shrink-0">
                 <button
-                  onClick={handleConfirmFilter} // Changed to handleConfirmFilter
+                  onClick={handleConfirmFilter}
                   className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   تایید
                 </button>
                 <button
-                  onClick={handleCancelFilter} // Changed to handleCancelFilter
+                  onClick={handleCancelFilter}
                   className="flex-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
                 >
                   لغو
@@ -318,7 +297,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
               type="text"
               value={newSessionName}
               onChange={(e) => setNewSessionName(e.target.value)}
-              onKeyDown={handleNewSessionInputKeyDown} // Added onKeyDown event listener
+              onKeyDown={handleNewSessionInputKeyDown}
               placeholder="نام جلسه جدید..."
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               autoFocus

@@ -164,7 +164,7 @@ export function EquipmentFilterModal({ isOpen, onClose, currentFilters, onApplyF
         </div>
 
         {/* Clear All button section */}
-        <div className="flex justify-start mb-6 flex-shrink-0">
+        <div className="flex justify-end mb-6 flex-shrink-0">
           <button
             onClick={handleClearAll}
             disabled={isClearAllDisabled} // Disable button when no equipment is selected

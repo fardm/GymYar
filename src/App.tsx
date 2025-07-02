@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'; // useNavigate را اضافه کنید
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
@@ -12,22 +12,18 @@ function App() {
   const [userData, setUserData] = useState<UserData>({ sessions: [] });
   const [dataVersion, setDataVersion] = useState(0);
 
-  // از useNavigate برای ناوبری برنامه‌ای استفاده می‌کنیم.
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const data = getUserData();
     setUserData(data);
 
-    // منطق بازیابی مسیر از sessionStorage و ناوبری به آن
     const redirectPath = sessionStorage.getItem('redirect');
     if (redirectPath) {
-      sessionStorage.removeItem('redirect'); // مسیر را پاک می‌کنیم تا در بارگذاری‌های بعدی تکرار نشود
-      // با replace: true، ورودی فعلی در تاریخچه مرورگر را جایگزین می‌کنیم
-      // تا کاربر با دکمه بازگشت به صفحه‌ی ریشه نرود.
-      navigate(redirectPath, { replace: true }); 
+      sessionStorage.removeItem('redirect');
+      navigate(redirectPath, { replace: true });
     }
-  }, [dataVersion, navigate]); // navigate را به dependency array اضافه کنید
+  }, [dataVersion, navigate]);
 
   const handleUpdateUserData = (newData: UserData) => {
     saveUserData(newData);
@@ -40,7 +36,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
-      <Header onDataChange={handleDataChange} />
+      <Header onDataChange={handleDataChange} userData={userData} onUpdateUserData={handleUpdateUserData} />
       
       <main className="flex-1">
         <Routes>
@@ -74,8 +70,6 @@ function App() {
   );
 }
 
-// کامپوننت App را در داخل BrowserRouter قرار می‌دهیم.
-// این کار به useNavigate اجازه می‌دهد تا به context روتر دسترسی داشته باشد.
 function RootApp() {
   return (
     <Router>
