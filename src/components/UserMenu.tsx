@@ -116,7 +116,7 @@ export function UserMenu({ onUpdateUserData, userData }: UserMenuProps) {
       {showUserMenu && (
         <div
           ref={menuRef}
-          className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10" // Changed right-0 to left-0
+          className="absolute left-0 mt-2 w-60 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10"
         >
           {/* New "My Workouts" link - First option */}
           <Link
@@ -181,7 +181,7 @@ export function UserMenu({ onUpdateUserData, userData }: UserMenuProps) {
 
       {/* Help Modal */}
       {showHelpModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"> {/* Removed backdrop-blur-sm */}
           <div
             ref={helpModalRef}
             className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4"
@@ -196,7 +196,7 @@ export function UserMenu({ onUpdateUserData, userData }: UserMenuProps) {
               برای نگهداری داده‌ها یا انتقال آن‌ها به مرورگر یا دستگاهی دیگر، لطفاً از گزینه «دانلود برنامه» استفاده کنید.
               با این کار، یک فایل JSON دریافت می‌کنید که می‌توانید آن را از طریق گزینه «وارد کردن برنامه» دوباره بارگذاری کرده و اطلاعات خود را بازیابی کنید.
             </p>
-            <div className="flex justify-center">
+            <div className="flex justify-end">
               <button
                 onClick={() => setShowHelpModal(false)}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
