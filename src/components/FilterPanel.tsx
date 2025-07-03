@@ -242,10 +242,10 @@ export function FilterPanel({ isOpen, onClose, currentFilters, onApplyFilters }:
   const isClearAllDisabled = selectedMuscleIds.length === 0 && selectedEquipmentIds.length === 0;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4"> {/* Added px-4 for mobile padding */}
       <div
         ref={modalRef}
-        className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-xl md:max-w-4xl lg:max-w-5xl w-full mx-4 max-h-[80vh] flex flex-col"
+        className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-xl md:max-w-4xl lg:max-w-5xl w-full max-h-[80vh] flex flex-col" // Removed mx-4
       >
         {/* Header */}
         <div className="flex justify-between items-center mb-4 flex-shrink-0">
@@ -305,8 +305,8 @@ export function FilterPanel({ isOpen, onClose, currentFilters, onApplyFilters }:
           </button>
         </div>
 
-        {/* Scrollable Content Area */}
-        <div className="flex-grow overflow-y-auto px-2 -mr-2">
+        {/* Scrollable Content Area - Fixed height to prevent modal resizing on tab change */}
+        <div className="flex-grow overflow-y-auto px-2 -mr-2 h-[550px]"> {/* Changed to fixed height h-[550px] */}
           {activeTab === 'muscles' && (
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-4 mb-6">
               {displayedMuscles.map(muscle => (

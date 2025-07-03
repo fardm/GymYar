@@ -9,6 +9,7 @@
 
 html {
   direction: rtl;
+  overflow-y: scroll; /* Added to reserve scrollbar space and prevent layout shifts */
 }
 
 body {
