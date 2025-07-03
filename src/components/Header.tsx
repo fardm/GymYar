@@ -3,11 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Moon, Sun, Menu, Bot, ClipboardList } from 'lucide-react'; // حذف آیکون‌های اضافی
 import { useTheme } from '../hooks/useTheme';
 import { UserData } from '../types';
-// حذف ایمپورت‌های مربوط به مودال‌ها و توابع ذخیره‌سازی که دیگر در اینجا استفاده نمی‌شوند
-// import { exportUserData, clearUserData, saveUserData } from '../utils/storage';
-// import { ImportProgramModal } from './ImportProgramModal';
-// import { ExportProgramModal } from './ExportProgramModal';
-// import { AIGenWorkoutModal } from './AIGenWorkoutModal';
+
 
 interface HeaderProps {
   onDataChange: () => void;
@@ -16,21 +12,9 @@ interface HeaderProps {
 export function Header({ onDataChange }: HeaderProps) {
   const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
-  const [showMobileMenu, setShowMobileMenu] = useState(false); // وضعیت نمایش منوی موبایل
-  const mobileMenuRef = useRef<HTMLDivElement>(null); // رفرنس برای منوی موبایل
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
-  // حذف وضعیت‌های مودال‌ها و Toast که به MyWorkoutsPage منتقل شده‌اند
-  // const [showClearConfirm, setShowClearConfirm] = useState(false);
-  // const [showHelpModal, setShowHelpModal] = useState(false);
-  // const [showExportProgramModal, setShowExportProgramModal] = useState(false);
-  // const [showImportProgramModal, setShowImportProgramModal] = useState(false);
-  // const [showAIGenWorkoutModal, setShowAIGenWorkoutModal] = useState(false);
-  // const [toastMessage, setToastMessage] = useState<string | null>(null);
-  // const [toastType, setToastType] = useState<'success' | 'delete' | null>(null);
-
-  // حذف رفرنس‌های مودال‌ها
-  // const clearModalRef = useRef<HTMLDivElement>(null);
-  // const helpModalRef = useRef<HTMLDivElement>(null);
 
   // دریافت userData از localStorage (این بخش برای نمایش Toast در صورت نیاز یا منطق آینده حفظ می‌شود)
   const [userData, setUserData] = useState<UserData>(() => {
@@ -77,13 +61,6 @@ export function Header({ onDataChange }: HeaderProps) {
       document.removeEventListener('keydown', handleEscape);
     };
   }, [showMobileMenu]);
-
-  // حذف توابع Toast و مدیریت مودال‌ها از Header
-  // const showToast = (message: string, type: 'success' | 'delete') => { ... };
-  // const handleClearData = () => { ... };
-  // const handleOpenImportProgramModal = () => { ... };
-  // const handleOpenExportProgramModal = () => { ... };
-  // const handleOpenHelpModal = () => { ... };
 
   // تابعی برای تعیین کلاس‌های حالت فعال لینک‌های ناوبری
   const getNavLinkClass = (path: string) => {
@@ -173,22 +150,6 @@ export function Header({ onDataChange }: HeaderProps) {
           </div>
         </div>
       </div>
-
-      {/* Toast Notification و مودال‌ها از اینجا حذف می‌شوند */}
-      {/* Toast Notification */}
-      {/* {toastMessage && ( ... )} */}
-
-      {/* Help Modal */}
-      {/* {showHelpModal && ( ... )} */}
-
-      {/* Clear Confirmation Modal */}
-      {/* {showClearConfirm && ( ... )} */}
-
-      {/* Import Program Modal */}
-      {/* <ImportProgramModal ... /> */}
-
-      {/* Export Program Modal */}
-      {/* <ExportProgramModal ... /> */}
     </header>
   );
 }
