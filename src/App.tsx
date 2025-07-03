@@ -1,3 +1,4 @@
+// src/App.tsx
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { Header } from './components/Header';
@@ -37,7 +38,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
-      <Header onDataChange={handleDataChange} userData={userData} onUpdateUserData={handleUpdateUserData} />
+      {/* userData و onUpdateUserData دیگر به Header ارسال نمی‌شوند */}
+      <Header onDataChange={handleDataChange} />
       
       <main className="flex-1">
         <Routes>

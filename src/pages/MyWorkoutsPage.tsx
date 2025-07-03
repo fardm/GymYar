@@ -1,11 +1,14 @@
+// src/pages/MyWorkoutsPage.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Plus, Filter, X, Check, Eraser } from 'lucide-react';
+import { Plus, Check, PanelRightOpen, PanelRightClose, Download, Upload, Trash2, HelpCircle, X } from 'lucide-react';
 import { SessionCard } from '../components/SessionCard';
 import { exercisesData } from '../data/exercises';
 import { UserData, WorkoutSession } from '../types';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { UserMenu } from '../components/UserMenu'; // Import the new UserMenu component
+import { NewSessionModal } from '../components/NewSessionModal'; // ایمپورت مودال جدید
+import { ImportProgramModal } from '../components/ImportProgramModal'; // ایمپورت مودال‌های موجود
+import { ExportProgramModal } from '../components/ExportProgramModal';
 
 interface MyWorkoutsPageProps {
   userData: UserData;
@@ -13,85 +16,100 @@ interface MyWorkoutsPageProps {
 }
 
 export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPageProps) {
-  const [activeSessionFilterIds, setActiveSessionFilterIds] = useLocalStorage<string[]>('workout-session-filter', []);
-  const [newSessionName, setNewSessionName] = useState('');
-  const [showNewSessionForm, setShowNewSessionForm] = useState(false);
+  const [activeTab, setActiveTab] = useLocalStorage<string>('workout-active-tab', 'all');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // وضعیت سایدبار برای موبایل
+  const sidebarRef = useRef<HTMLDivElement>(null); // رفرنس برای سایدبار
 
-  const [showFilterModal, setShowFilterModal] = useState(false);
-  const [tempSelectedSessionIds, setTempSelectedSessionIds] = useState<string[]>([]);
-  const filterModalRef = useRef<HTMLDivElement>(null);
+  // وضعیت‌های مودال‌ها که قبلاً در UserMenu بودند
+  const [showNewSessionModal, setShowNewSessionModal] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showExportProgramModal, setShowExportProgramModal] = useState(false);
+  const [showImportProgramModal, setShowImportProgramModal] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastType, setToastType] = useState<'success' | 'delete' | null>(null);
 
+  const clearModalRef = useRef<HTMLDivElement>(null);
+  const helpModalRef = useRef<HTMLDivElement>(null);
+
+
+  // Effect to handle initial filtering from URL search params (اگر هنوز لازم باشد)
   const [searchParams, setSearchParams] = useSearchParams();
-
-  // Effect to handle initial filtering from URL search params
   useEffect(() => {
     const filterSessionIdFromUrl = searchParams.get('sessionId');
     if (filterSessionIdFromUrl) {
-      if (!activeSessionFilterIds.includes(filterSessionIdFromUrl) || activeSessionFilterIds.length !== 1) {
-        setActiveSessionFilterIds([filterSessionIdFromUrl]);
+      // اگر sessionId در URL بود و با تب فعال فعلی فرق داشت، آن را فعال کن
+      if (activeTab !== filterSessionIdFromUrl) {
+        setActiveTab(filterSessionIdFromUrl);
       }
-      setSearchParams({}, { replace: true });
+      setSearchParams({}, { replace: true }); // پاک کردن پارامتر از URL
     }
-  }, [searchParams]);
+  }, [searchParams, activeTab, setActiveTab, setSearchParams]);
 
-  // Initialize tempSelectedSessionIds when the modal opens
+  // مدیریت بستن سایدبار با کلیک بیرون یا کلید Escape
   useEffect(() => {
-    if (showFilterModal) {
-      setTempSelectedSessionIds(activeSessionFilterIds);
-    }
-  }, [showFilterModal, activeSessionFilterIds]);
-
-  // Handle click outside to close the filter modal
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (filterModalRef.current && !filterModalRef.current.contains(event.target as Node)) {
-        setShowFilterModal(false);
-      }
-    };
-
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setShowFilterModal(false);
+        setIsSidebarOpen(false);
+        // بستن مودال‌ها نیز
+        setShowNewSessionModal(false);
+        setShowClearConfirm(false);
+        setShowHelpModal(false);
+        setShowExportProgramModal(false);
+        setShowImportProgramModal(false);
       }
     };
 
-    if (showFilterModal) {
-      document.body.style.overflow = 'hidden'; // Disable background scrolling
-      document.addEventListener('mousedown', handleClickOutside);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        setIsSidebarOpen(false);
+      }
+      // مدیریت کلیک بیرون برای مودال‌ها
+      if (clearModalRef.current && !clearModalRef.current.contains(event.target as Node)) {
+        setShowClearConfirm(false);
+      }
+      if (helpModalRef.current && !helpModalRef.current.contains(event.target as Node)) {
+        setShowHelpModal(false);
+      }
+    };
+
+    if (isSidebarOpen || showNewSessionModal || showClearConfirm || showHelpModal || showExportProgramModal || showImportProgramModal) {
+      document.body.style.overflow = 'hidden'; // جلوگیری از اسکرول پس‌زمینه
       document.addEventListener('keydown', handleEscape);
+      document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
-      document.body.style.overflow = ''; // Re-enable scrolling on cleanup
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.body.style.overflow = ''; // فعال کردن مجدد اسکرول پس‌زمینه
       document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showFilterModal]);
+  }, [isSidebarOpen, showNewSessionModal, showClearConfirm, showHelpModal, showExportProgramModal, showImportProgramModal]);
 
-  // Filter sessions based on activeSessionFilterIds
+
+  // فیلتر کردن جلسات بر اساس تب فعال
   const filteredSessions = userData.sessions.filter(session => {
-    if (activeSessionFilterIds.length === 0) {
-      return true;
+    if (activeTab === 'all') {
+      return true; // نمایش همه جلسات
     }
-    return activeSessionFilterIds.includes(session.id);
+    return session.id === activeTab; // نمایش فقط جلسه انتخاب شده
   });
 
-  const handleCreateSession = () => {
-    if (newSessionName.trim()) {
-      const newSession: WorkoutSession = {
-        id: Date.now().toString(),
-        name: newSessionName.trim(),
-        exercises: [],
-        createdAt: new Date()
-      };
+  // تابع ایجاد جلسه جدید (برای مودال)
+  const handleCreateSession = (sessionName: string) => {
+    const newSession: WorkoutSession = {
+      id: Date.now().toString(),
+      name: sessionName,
+      exercises: [],
+      createdAt: new Date()
+    };
 
-      onUpdateUserData({
-        sessions: [...userData.sessions, newSession]
-      });
-
-      setNewSessionName('');
-      setShowNewSessionForm(false);
-    }
+    onUpdateUserData({
+      sessions: [...userData.sessions, newSession]
+    });
+    setShowNewSessionModal(false);
+    setActiveTab(newSession.id); // پس از ایجاد، به تب جلسه جدید منتقل شود
+    showToast('جلسه با موفقیت ایجاد شد', 'success');
   };
 
   const handleToggleExercise = (sessionId: string, exerciseId: string) => {
@@ -127,7 +145,11 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
   const handleDeleteSession = (sessionId: string) => {
     const updatedSessions = userData.sessions.filter(session => session.id !== sessionId);
     onUpdateUserData({ sessions: updatedSessions });
-    setActiveSessionFilterIds(prev => prev.filter(id => id !== sessionId));
+    // اگر جلسه حذف شده، تب فعال بود، به تب "همه" برگرد
+    if (activeTab === sessionId) {
+      setActiveTab('all');
+    }
+    showToast('جلسه با موفقیت حذف شد', 'delete');
   };
 
   const handleRenameSession = (sessionId: string, newName: string) => {
@@ -135,235 +157,302 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
       session.id === sessionId ? { ...session, name: newName } : session
     );
     onUpdateUserData({ sessions: updatedSessions });
+    showToast('نام جلسه با موفقیت تغییر یافت', 'success');
   };
 
-  // Filter Modal Handlers
-  const handleTempSessionToggle = (sessionId: string) => {
-    setTempSelectedSessionIds(prev =>
-      prev.includes(sessionId)
-        ? prev.filter(id => id !== sessionId)
-        : [...prev, sessionId]
-    );
+  // توابع مربوط به Toast Notification
+  const showToast = (message: string, type: 'success' | 'delete') => {
+    setToastMessage(message);
+    setToastType(type);
   };
 
-  const handleConfirmFilter = () => {
-    setActiveSessionFilterIds(tempSelectedSessionIds);
-    setShowFilterModal(false); // Close the modal
-  };
-
-  const handleClearAllSessionsFilter = () => {
-    setActiveSessionFilterIds([]); // Clear filters
-    setTempSelectedSessionIds([]); // Also clear temp selections to reset the modal state visually
-    // Do NOT close the modal here, as per user request.
-  };
-
-  const handleCancelFilter = () => {
-    setShowFilterModal(false);
-  };
-
-  const handleNewSessionInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      handleCreateSession();
+  useEffect(() => {
+    if (toastMessage) {
+      const timer = setTimeout(() => {
+        setToastMessage(null);
+        setToastType(null);
+      }, 3000);
+      return () => clearTimeout(timer);
     }
+  }, [toastMessage]);
+
+  // توابع مدیریت مودال‌ها
+  const handleClearData = () => {
+    clearUserData();
+    onUpdateUserData({ sessions: [] });
+    setShowClearConfirm(false);
+    showToast('تمام داده‌ها پاک شدند', 'delete');
   };
 
-  const isClearAllSessionsDisabled = tempSelectedSessionIds.length === 0;
+  const handleOpenImportProgramModal = () => {
+    setShowImportProgramModal(true);
+    setIsSidebarOpen(false); // بستن سایدبار بعد از کلیک
+  };
+
+  const handleOpenExportProgramModal = () => {
+    setShowExportProgramModal(true);
+    setIsSidebarOpen(false); // بستن سایدبار بعد از کلیک
+  };
+
+  const handleOpenHelpModal = () => {
+    setShowHelpModal(true);
+    setIsSidebarOpen(false); // بستن سایدبار بعد از کلیک
+  };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          برنامه من
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          {userData.sessions.length} جلسه تمرینی
-        </p>
-      </div>
-
-      {/* Controls */}
-      <div className="mb-8 flex flex-col sm:flex-row sm:items-center gap-4">
-        {/* User Menu is now in the Header component, so it's removed from here */}
-
-        {/* Filter Button */}
+    <div className="relative min-h-screen flex flex-col md:flex-row">
+      {/* دکمه شناور برای باز کردن سایدبار در موبایل */}
+      {!isSidebarOpen && (
         <button
-          onClick={() => setShowFilterModal(true)}
-          className={`flex items-center justify-center space-x-2 space-x-reverse px-6 py-2 rounded-lg transition-colors w-full sm:w-auto
-            ${activeSessionFilterIds.length > 0
-              ? 'bg-blue-50 text-blue-800 hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-200 dark:hover:bg-blue-900/60 border border-blue-300 dark:border-blue-600'
-              : 'bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
-            }`}
+          onClick={() => setIsSidebarOpen(true)}
+          className="md:hidden fixed bottom-4 right-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 p-3 rounded-full shadow-lg z-40 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          aria-label="باز کردن منو"
         >
-          <Filter className="h-4 w-4" />
-          <span>فیلتر جلسات</span>
-          {activeSessionFilterIds.length > 0 && (
-            <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full ml-2">
-              {activeSessionFilterIds.length}
-            </span>
-          )}
+          <PanelRightOpen className="h-6 w-6" />
         </button>
+      )}
 
-        {/* Filter Modal */}
-        {showFilterModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div
-              ref={filterModalRef}
-              className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-xl md:max-w-2xl lg:max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto flex flex-col"
-            >
-              <div className="flex justify-between items-center mb-4 flex-shrink-0">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  فیلتر جلسات
-                </h3>
-              </div>
-
-              {/* Removed the top-right "پاک کردن همه" button */}
-              {/* <div className="flex justify-end mb-6 flex-shrink-0">
-                <button
-                  onClick={handleClearAllSessionsFilter}
-                  disabled={isClearAllSessionsDisabled}
-                  className={`flex items-center px-4 py-2 rounded-lg transition-colors text-sm font-medium
-                    ${isClearAllSessionsDisabled
-                      ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                      : 'text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20'
-                    }`}
-                >
-                  <Eraser className="h-4 w-4 ml-2" />
-                  پاک کردن همه
-                </button>
-              </div> */}
-
-              <div className="flex-grow overflow-y-auto px-2 -mr-2">
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-                  {userData.sessions.length > 0 ? (
-                    userData.sessions.map(session => (
-                      <div
-                        key={session.id}
-                        className={`relative flex flex-col p-4 border rounded-lg cursor-pointer transition-all duration-200 min-h-[80px] justify-center
-                          ${tempSelectedSessionIds.includes(session.id)
-                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/40'
-                            : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
-                          }`}
-                        onClick={() => handleTempSessionToggle(session.id)}
-                      >
-                        <div className="flex-1 text-center">
-                          <div className="font-medium text-gray-900 dark:text-white">
-                            {session.name}
-                          </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            {session.exercises.length} تمرین
-                          </div>
-                        </div>
-                        {tempSelectedSessionIds.includes(session.id) && (
-                          <div className="absolute top-2 right-2 bg-blue-600 rounded-full p-0.5">
-                            <Check className="h-3 w-3 text-white" />
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-gray-500 dark:text-gray-400 text-center col-span-full">
-                      هیچ جلسه‌ای برای فیلتر کردن وجود ندارد.
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Updated Footer Buttons */}
-              <div className="flex justify-center mt-6 flex-shrink-0">
-                <div className="flex space-x-2 space-x-reverse w-auto">
-                  <button
-                    onClick={handleConfirmFilter}
-                    className="w-40 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    تایید
-                  </button>
-                  <button
-                    onClick={handleClearAllSessionsFilter}
-                    disabled={isClearAllSessionsDisabled}
-                    className={`w-40 px-4 py-2 rounded-lg transition-colors
-                      ${isClearAllSessionsDisabled
-                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400'
-                        : 'bg-red-500 text-white hover:bg-red-600'
-                      }`}
-                  >
-                    پاک کردن همه
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* New Session Button */}
-        {!showNewSessionForm ? (
+      {/* سایدبار */}
+      <div
+        ref={sidebarRef}
+        className={`fixed inset-y-0 right-0 w-64 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 z-50 p-4 flex flex-col transition-transform duration-300 ease-in-out
+          ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}
+          md:relative md:translate-x-0 md:flex-shrink-0 md:w-64 md:border-r-0 md:border-l`}
+      >
+        <div className="flex justify-between items-center mb-6 md:hidden">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">گزینه‌ها</h2>
           <button
-            onClick={() => setShowNewSessionForm(true)}
-            className="flex items-center justify-center space-x-2 space-x-reverse bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto"
+            onClick={() => setIsSidebarOpen(false)}
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
           >
-            <Plus className="h-4 w-4" />
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+
+        <nav className="flex flex-col space-y-2">
+          <button
+            onClick={() => { setShowNewSessionModal(true); setIsSidebarOpen(false); }}
+            className="w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+          >
+            <Plus className="h-5 w-5" />
             <span>جلسه جدید</span>
           </button>
-        ) : (
-          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 sm:space-x-reverse w-full sm:w-auto">
-            <input
-              type="text"
-              value={newSessionName}
-              onChange={(e) => setNewSessionName(e.target.value)}
-              onKeyDown={handleNewSessionInputKeyDown}
-              placeholder="نام جلسه جدید..."
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              autoFocus
-            />
-            <div className="flex space-x-2 space-x-reverse">
+          <button
+            onClick={handleOpenImportProgramModal}
+            className="w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+          >
+            <Upload className="h-5 w-5" />
+            <span>وارد کردن برنامه</span>
+          </button>
+          <button
+            onClick={handleOpenExportProgramModal}
+            className="w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+          >
+            <Download className="h-5 w-5" />
+            <span>دانلود برنامه</span>
+          </button>
+          <button
+            onClick={() => { setShowClearConfirm(true); setIsSidebarOpen(false); }}
+            className="w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+          >
+            <Trash2 className="h-5 w-5" />
+            <span>حذف برنامه</span>
+          </button>
+          <button
+            onClick={handleOpenHelpModal}
+            className="w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+          >
+            <HelpCircle className="h-5 w-5" />
+            <span>راهنما</span>
+          </button>
+        </nav>
+      </div>
+
+      {/* محتوای اصلی صفحه */}
+      <div className="flex-1 overflow-auto">
+        {/* max-w-7xl و ml-auto برای هم‌ترازی با هدر در دسکتاپ، px-4 برای حاشیه در موبایل */}
+        <div className="max-w-7xl ml-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              برنامه من
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              {userData.sessions.length} جلسه تمرینی
+            </p>
+          </div>
+
+          {/* Tab Navigation for Desktop */}
+          <div className="hidden md:flex border-b border-gray-200 dark:border-gray-700 mb-6 overflow-x-auto whitespace-nowrap">
+            <button
+              onClick={() => setActiveTab('all')}
+              className={`flex-shrink-0 px-4 py-2 text-center text-sm font-medium rounded-t-lg transition-colors
+                ${activeTab === 'all'
+                  ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                }`}
+            >
+              همه
+            </button>
+            {userData.sessions.map(session => (
               <button
-                onClick={handleCreateSession}
-                disabled={!newSessionName.trim()}
-                className="w-full sm:w-auto bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                key={session.id}
+                onClick={() => setActiveTab(session.id)}
+                className={`flex-shrink-0 px-4 py-2 text-center text-sm font-medium rounded-t-lg transition-colors
+                  ${activeTab === session.id
+                    ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                  }`}
               >
-                ایجاد
+                {session.name}
+              </button>
+            ))}
+          </div>
+
+          {/* Dropdown for Mobile */}
+          <div className="md:hidden mb-6">
+            <label htmlFor="session-select" className="sr-only">انتخاب جلسه</label>
+            <select
+              id="session-select"
+              value={activeTab}
+              onChange={(e) => setActiveTab(e.target.value)}
+              className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="all">همه جلسات</option>
+              {userData.sessions.map(session => (
+                <option key={session.id} value={session.id}>
+                  {session.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Sessions Grid */}
+          {filteredSessions.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {filteredSessions.map((session) => (
+                <SessionCard
+                  key={session.id}
+                  session={session}
+                  exercises={exercisesData}
+                  onToggleExercise={handleToggleExercise}
+                  onRemoveExercise={handleRemoveExercise}
+                  onDeleteSession={handleDeleteSession}
+                  onRenameSession={handleRenameSession}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 dark:text-gray-400 text-lg mb-4">
+                {activeTab === 'all'
+                  ? 'هنوز جلسه‌ای ایجاد نشده!'
+                  : 'هیچ تمرینی در این جلسه یافت نشد.'
+                }
+              </p>
+              {activeTab === 'all' && (
+                <p className="text-gray-400 dark:text-gray-500">
+                  برای شروع، یک جلسه جدید ایجاد کنید و سپس از صفحه اصلی تمرینات را اضافه کنید
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* مودال ایجاد جلسه جدید */}
+      <NewSessionModal
+        isOpen={showNewSessionModal}
+        onClose={() => setShowNewSessionModal(false)}
+        onCreateSession={handleCreateSession}
+      />
+
+      {/* مودال وارد کردن برنامه */}
+      <ImportProgramModal
+        isOpen={showImportProgramModal}
+        onClose={() => setShowImportProgramModal(false)}
+        onUpdateUserData={onUpdateUserData}
+        showToast={showToast}
+      />
+
+      {/* مودال دانلود برنامه */}
+      <ExportProgramModal
+        isOpen={showExportProgramModal}
+        onClose={() => setShowExportProgramModal(false)}
+        userData={userData}
+        showToast={showToast}
+      />
+
+      {/* مودال تایید حذف برنامه */}
+      {showClearConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div
+            ref={clearModalRef}
+            className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4"
+          >
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              حذف برنامه
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              با حذف برنامه تمامی جلسات و تمرینات شما حذف خواهد شد. این عمل قابل بازگشت نیست.
+            </p>
+            <div className="flex space-x-3 space-x-reverse">
+              <button
+                onClick={handleClearData}
+                className="flex-1 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
+              >
+                حذف
               </button>
               <button
-                onClick={() => {
-                  setShowNewSessionForm(false);
-                  setNewSessionName('');
-                }}
-                className="w-full sm:w-auto bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
+                onClick={() => setShowClearConfirm(false)}
+                className="flex-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
               >
                 لغو
               </button>
             </div>
           </div>
-        )}
-      </div>
-
-      {/* Sessions Grid */}
-      {filteredSessions.length > 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredSessions.map((session) => (
-            <SessionCard
-              key={session.id}
-              session={session}
-              exercises={exercisesData}
-              onToggleExercise={handleToggleExercise}
-              onRemoveExercise={handleRemoveExercise}
-              onDeleteSession={handleDeleteSession}
-              onRenameSession={handleRenameSession}
-            />
-          ))}
         </div>
-      ) : (
-        <div className="text-center py-12">
-          <p className="text-gray-500 dark:text-gray-400 text-lg mb-4">
-            {activeSessionFilterIds.length === 0
-              ? 'هنوز جلسه‌ای ایجاد نشده!'
-              : 'هیچ جلسه‌ای با فیلترهای انتخاب شده یافت نشد'
-            }
-          </p>
-          {activeSessionFilterIds.length === 0 && (
-            <p className="text-gray-400 dark:text-gray-500">
-              برای شروع، یک جلسه جدید ایجاد کنید و سپس از صفحه اصلی تمرینات را اضافه کنید
+      )}
+
+      {/* مودال راهنما */}
+      {showHelpModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div
+            ref={helpModalRef}
+            className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4"
+          >
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              راهنما
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6 text-right">
+              این سایت یک سایت استاتیک است و امکان ثبت‌نام یا ذخیره‌سازی دائمی اطلاعات شما را ندارد.
+              تمام داده‌های شما فقط در مرورگر شما ذخیره می‌شوند و با پاک‌کردن تاریخچه (History) یا کش (Cache)، این اطلاعات نیز از بین می‌روند.
+              <br /><br />
+              برای نگهداری داده‌ها یا انتقال آن‌ها به مرورگر یا دستگاهی دیگر، لطفاً از گزینه «دانلود برنامه» استفاده کنید.
+              با این کار، یک فایل JSON دریافت می‌کنید که می‌توانید آن را از طریق گزینه «وارد کردن برنامه» دوباره بارگذاری کرده و اطلاعات خود را بازیابی کنید.
             </p>
-          )}
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowHelpModal(false)}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                بستن
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div
+          className={`fixed top-6 right-6 z-50 px-4 py-2 rounded-md shadow-lg animate-fade-in-out ${
+            toastType === 'success'
+              ? 'bg-green-200 dark:bg-green-300 text-gray-800 dark:text-gray-900'
+              : 'bg-red-200 dark:bg-red-300 text-gray-800 dark:text-gray-900'
+          }`}
+        >
+          {toastMessage}
         </div>
       )}
     </div>
