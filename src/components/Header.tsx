@@ -1,4 +1,3 @@
-// src/components/Header.tsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Moon, Sun, Menu, Bot, ClipboardList } from 'lucide-react'; // حذف آیکون‌های اضافی
@@ -119,9 +118,9 @@ export function Header({ onDataChange }: HeaderProps) {
             <Link to="/my-workouts" className={getNavLinkClass('/my-workouts')}>
               برنامه‌من
             </Link>
-            <Link to="/ai-workout-generator" className={getNavLinkClass('/ai-workout-generator')}>
+            {/* <Link to="/ai-workout-generator" className={getNavLinkClass('/ai-workout-generator')}>
               ایجاد برنامه با AI
-            </Link>
+            </Link> */}
           </nav>
 
           {/* دکمه‌های کنترلی و منوی کاربر (تغییر یافته) */}
@@ -159,14 +158,14 @@ export function Header({ onDataChange }: HeaderProps) {
                   <ClipboardList className="h-5 w-5" />
                   <span>برنامه‌من</span>
                 </Link>
-                <Link
+                {/* <Link
                   to="/ai-workout-generator"
                   onClick={() => setShowMobileMenu(false)}
                   className={`${getMenuItemClass('/ai-workout-generator')}`}
                 >
                   <Bot className="h-5 w-5" />
                   <span>ایجاد برنامه با AI</span>
-                </Link>
+                </Link> */}
 
                 {/* دکمه‌های عملیاتی حذف شدند */}
               </div>

@@ -61,7 +61,7 @@ export function AIGenWorkoutPage() {
       <div className="mb-8 flex items-center space-x-3 space-x-reverse">
         <Bot className="h-7 w-7 text-gray-700 dark:text-gray-300" />
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          ایجاد برنامه با AI
+          ساخت برنامه با AI
         </h1>
       </div>
 

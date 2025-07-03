@@ -1,7 +1,6 @@
-// src/pages/MyWorkoutsPage.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Plus, Check, PanelRightOpen, PanelRightClose, Download, Upload, Trash2, HelpCircle, X } from 'lucide-react';
+import { useSearchParams, Link } from 'react-router-dom'; // Import Link
+import { Plus, Check, PanelRightOpen, PanelRightClose, Download, Upload, Trash2, HelpCircle, X, Bot } from 'lucide-react'; // Import Bot
 import { SessionCard } from '../components/SessionCard';
 import { exercisesData } from '../data/exercises';
 import { UserData, WorkoutSession } from '../types';
@@ -55,7 +54,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
 
   // مدیریت بستن سایدبار با کلیک بیرون یا کلید Escape
   useEffect(() => {
-    const handleEscape = (event: Keyboard) => {
+    const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsSidebarOpen(false);
         // بستن مودال‌ها نیز
@@ -68,7 +67,9 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
     };
 
     const handleClickOutside = (event: MouseEvent) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+      // Only close sidebar on outside click for mobile viewports (md breakpoint)
+      // For desktop, sidebar remains open unless explicitly closed by button
+      if (window.matchMedia('(max-width: 767px)').matches && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
         setIsSidebarOpen(false);
       }
       // مدیریت کلیک بیرون برای مودال‌ها
@@ -212,7 +213,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
       {!isSidebarOpen && (
         <button
           onClick={() => setIsSidebarOpen(true)}
-          className="md:hidden fixed bottom-4 right-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 p-3 rounded-full shadow-lg z-40 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          className="md:hidden fixed bottom-[2.5rem] right-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 p-3 rounded-full shadow-lg z-40 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
           aria-label="باز کردن منو"
         >
           <PanelRightOpen className="h-6 w-6" />
@@ -263,7 +264,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
         <nav className="flex flex-col space-y-2">
           <button
             onClick={() => { setShowNewSessionModal(true); setIsSidebarOpen(false); }}
-            className="w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+            className="w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
           >
             <Plus className="h-5 w-5" />
             <span>جلسه جدید</span>
@@ -289,6 +290,17 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
             <Trash2 className="h-5 w-5" />
             <span>حذف برنامه</span>
           </button>
+          <br/>
+          <hr/>
+          {/* New AI workout generator link */}
+          <Link
+            to="/ai-workout-generator"
+            onClick={() => setIsSidebarOpen(false)} // Close sidebar when navigating
+            className="mt-8 w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+          >
+            <Bot className="h-5 w-5" />
+            <span>ساخت برنامه با AI</span>
+          </Link>
           <button
             onClick={handleOpenHelpModal}
             className="w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
