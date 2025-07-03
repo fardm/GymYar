@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Menu, Download, Upload, Trash2, HelpCircle, Bot, ClipboardList } from 'lucide-react';
 import { exportUserData, clearUserData, saveUserData } from '../utils/storage';
 import { UserData } from '../types';
-import { AIGenWorkoutModal } from './AIGenWorkoutModal';
+// import { AIGenWorkoutModal } from './AIGenWorkoutModal'; // حذف ایمپورت مودال
 import { ImportProgramModal } from './ImportProgramModal';
 import { ExportProgramModal } from './ExportProgramModal';
 
@@ -18,7 +18,7 @@ export function UserMenu({ onUpdateUserData, userData }: UserMenuProps) {
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showExportProgramModal, setShowExportProgramModal] = useState(false);
   const [showImportProgramModal, setShowImportProgramModal] = useState(false);
-  const [showAIGenWorkoutModal, setShowAIGenWorkoutModal] = useState(false);
+  // const [showAIGenWorkoutModal, setShowAIGenWorkoutModal] = useState(false); // حذف استیت مودال AI
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<'success' | 'delete' | null>(null);
 
@@ -45,13 +45,13 @@ export function UserMenu({ onUpdateUserData, userData }: UserMenuProps) {
         setShowUserMenu(false);
         setShowHelpModal(false);
         setShowClearConfirm(false);
-        setShowAIGenWorkoutModal(false);
+        // setShowAIGenWorkoutModal(false); // حذف استیت مودال AI
         setShowImportProgramModal(false);
         setShowExportProgramModal(false);
       }
     };
 
-    if (showUserMenu || showHelpModal || showExportProgramModal || showImportProgramModal || showClearConfirm || showAIGenWorkoutModal) {
+    if (showUserMenu || showHelpModal || showExportProgramModal || showImportProgramModal || showClearConfirm /* || showAIGenWorkoutModal */) {
       document.body.style.overflow = 'hidden'; // Disable background scrolling
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('keydown', handleEscape);
@@ -62,7 +62,7 @@ export function UserMenu({ onUpdateUserData, userData }: UserMenuProps) {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [showUserMenu, showHelpModal, showExportProgramModal, showImportProgramModal, showClearConfirm, showAIGenWorkoutModal]);
+  }, [showUserMenu, showHelpModal, showExportProgramModal, showImportProgramModal, showClearConfirm /* , showAIGenWorkoutModal */]);
 
   // Toast message effect
   useEffect(() => {
@@ -88,10 +88,11 @@ export function UserMenu({ onUpdateUserData, userData }: UserMenuProps) {
     showToast('تمام داده‌ها پاک شدند', 'delete');
   };
 
-  const handleOpenAIGenWorkoutModal = () => {
-    setShowAIGenWorkoutModal(true);
-    setShowUserMenu(false);
-  };
+  // حذف تابع handleOpenAIGenWorkoutModal و جایگزینی با Link
+  // const handleOpenAIGenWorkoutModal = () => {
+  //   setShowAIGenWorkoutModal(true);
+  //   setShowUserMenu(false);
+  // };
 
   const handleOpenImportProgramModal = () => {
     setShowImportProgramModal(true);
@@ -142,13 +143,15 @@ export function UserMenu({ onUpdateUserData, userData }: UserMenuProps) {
             <Upload className="h-5 w-5" />
             <span>وارد کردن برنامه</span>
           </button>
-          <button
-            onClick={handleOpenAIGenWorkoutModal}
-            className="w-full px-4 py-2 text-right text-base font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 space-x-reverse border-b border-gray-200 dark:border-gray-700" // Lighter text color
+          {/* تغییر از دکمه به لینک برای صفحه AI */}
+          <Link
+            to="/ai-workout-generator"
+            onClick={() => setShowUserMenu(false)}
+            className="w-full px-4 py-2 text-right text-base font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 space-x-reverse border-b border-gray-200 dark:border-gray-700"
           >
             <Bot className="h-5 w-5" />
             <span>ایجاد برنامه با AI</span>
-          </button>
+          </Link>
           <button
             onClick={() => { setShowClearConfirm(true); setShowUserMenu(false); }}
             className="w-full px-4 py-2 text-right text-base font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center space-x-3 space-x-reverse border-b border-gray-200 dark:border-gray-700" // Lighter text color for red option
@@ -238,12 +241,6 @@ export function UserMenu({ onUpdateUserData, userData }: UserMenuProps) {
           </div>
         </div>
       )}
-
-      {/* AI Generated Workout Modal */}
-      <AIGenWorkoutModal
-        isOpen={showAIGenWorkoutModal}
-        onClose={() => setShowAIGenWorkoutModal(false)}
-      />
 
       {/* Import Program Modal */}
       <ImportProgramModal

@@ -5,6 +5,7 @@ import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
 import { ExerciseDetailPage } from './pages/ExerciseDetailPage';
 import { MyWorkoutsPage } from './pages/MyWorkoutsPage';
+import { AIGenWorkoutPage } from './pages/AIGenWorkoutPage'; // مسیر جدید برای صفحه AI
 import { getUserData, saveUserData } from './utils/storage';
 import { UserData } from './types';
 
@@ -61,6 +62,11 @@ function App() {
                 onUpdateUserData={handleUpdateUserData} 
               />
             } 
+          />
+          {/* مسیر جدید برای صفحه AI */}
+          <Route 
+            path="/ai-workout-generator" 
+            element={<AIGenWorkoutPage />} 
           />
         </Routes>
       </main>
