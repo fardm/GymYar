@@ -38,6 +38,9 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
   const clearModalRef = useRef<HTMLDivElement>(null);
   const helpModalRef = useRef<HTMLDivElement>(null);
 
+  // Helper function to check if it's a mobile viewport
+  const isMobile = () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
+
 
   // Effect to handle initial filtering from URL search params (اگر هنوز لازم باشد)
   const [searchParams, setSearchParams] = useSearchParams();
@@ -69,7 +72,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
     const handleClickOutside = (event: MouseEvent) => {
       // Only close sidebar on outside click for mobile viewports (md breakpoint)
       // For desktop, sidebar remains open unless explicitly closed by button
-      if (window.matchMedia('(max-width: 767px)').matches && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+      if (isMobile() && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
         setIsSidebarOpen(false);
       }
       // مدیریت کلیک بیرون برای مودال‌ها
@@ -194,17 +197,17 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
 
   const handleOpenImportProgramModal = () => {
     setShowImportProgramModal(true);
-    setIsSidebarOpen(false); // بستن سایدبار بعد از کلیک
+    if (isMobile()) setIsSidebarOpen(false); // Close sidebar only on mobile
   };
 
   const handleOpenExportProgramModal = () => {
     setShowExportProgramModal(true);
-    setIsSidebarOpen(false); // بستن سایدبار بعد از کلیک
+    if (isMobile()) setIsSidebarOpen(false); // Close sidebar only on mobile
   };
 
   const handleOpenHelpModal = () => {
     setShowHelpModal(true);
-    setIsSidebarOpen(false); // بستن سایدبار بعد از کلیک
+    if (isMobile()) setIsSidebarOpen(false); // Close sidebar only on mobile
   };
 
   return (
@@ -263,7 +266,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
 
         <nav className="flex flex-col space-y-2">
           <button
-            onClick={() => { setShowNewSessionModal(true); setIsSidebarOpen(false); }}
+            onClick={() => { setShowNewSessionModal(true); if (isMobile()) setIsSidebarOpen(false); }} // Conditional close
             className="w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
           >
             <Plus className="h-5 w-5" />
@@ -284,7 +287,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
             <span>دانلود برنامه</span>
           </button>
           <button
-            onClick={() => { setShowClearConfirm(true); setIsSidebarOpen(false); }}
+            onClick={() => { setShowClearConfirm(true); if (isMobile()) setIsSidebarOpen(false); }} // Conditional close
             className="w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
           >
             <Trash2 className="h-5 w-5" />
@@ -295,7 +298,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
           {/* New AI workout generator link */}
           <Link
             to="/ai-workout-generator"
-            onClick={() => setIsSidebarOpen(false)} // Close sidebar when navigating
+            onClick={() => { if (isMobile()) setIsSidebarOpen(false); }} // Conditional close
             className="mt-8 w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
           >
             <Bot className="h-5 w-5" />

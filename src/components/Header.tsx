@@ -1,3 +1,4 @@
+// src/components/Header.tsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Moon, Sun, Menu, Bot, ClipboardList } from 'lucide-react'; // حذف آیکون‌های اضافی
@@ -62,7 +63,7 @@ export function Header({ onDataChange }: HeaderProps) {
     };
   }, [showMobileMenu]);
 
-  // تابعی برای تعیین کلاس‌های حالت فعال لینک‌های ناوبری
+  // تابعی برای تعیین کلاس‌های حالت فعال لینک‌های ناوبری (دیگر برای "برنامه‌من" استفاده نمی‌شود)
   const getNavLinkClass = (path: string) => {
     return `relative px-3 py-2 rounded-md text-sm font-medium transition-colors
             ${location.pathname === path
@@ -90,19 +91,20 @@ export function Header({ onDataChange }: HeaderProps) {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">تمرین‌ساز</h1>
           </Link>
 
-          {/* آیتم‌های ناوبری اصلی (فقط در دسکتاپ) */}
-          <nav className="hidden md:flex items-center space-x-4 space-x-reverse">
-            <Link to="/my-workouts" className={getNavLinkClass('/my-workouts')}>
-              برنامه‌من
+          {/* آیتم‌های ناوبری اصلی و دکمه‌ها (فقط در دسکتاپ) */}
+          <nav className="hidden md:flex items-center space-x-3 space-x-reverse"> {/* Changed space-x to space-x-3 for more spacing */}
+            {/* دکمه "برنامه‌من" */}
+            <Link to="/my-workouts"> {/* Still a Link for navigation */}
+              <button
+                className="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center space-x-2 space-x-reverse"
+                aria-label="برنامه من"
+              >
+                <ClipboardList className="h-5 w-5" />
+                <span>برنامه‌من</span>
+              </button>
             </Link>
-            {/* <Link to="/ai-workout-generator" className={getNavLinkClass('/ai-workout-generator')}>
-              ایجاد برنامه با AI
-            </Link> */}
-          </nav>
 
-          {/* دکمه‌های کنترلی و منوی کاربر (تغییر یافته) */}
-          <div className="flex items-center space-x-3 space-x-reverse">
-            {/* دکمه تغییر حالت روشن/تیره (همیشه نمایش داده می‌شود) */}
+            {/* دکمه تغییر حالت روشن/تیره */}
             <button
               onClick={toggleTheme}
               className="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -110,44 +112,55 @@ export function Header({ onDataChange }: HeaderProps) {
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
+          </nav>
 
-            {/* دکمه منوی موبایل (فقط در موبایل) */}
+          {/* دکمه منوی موبایل (فقط در موبایل) */}
+          <div className="flex items-center space-x-3 space-x-reverse md:hidden"> {/* Added md:hidden */}
+            {/* دکمه تغییر حالت روشن/تیره در موبایل (همیشه نمایش داده می‌شود) */}
+            <button
+              onClick={toggleTheme}
+              className="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700"
+              aria-label={isDark ? 'حالت روشن' : 'حالت تیره'}
+            >
+              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
             <button
               onClick={() => setShowMobileMenu(!showMobileMenu)}
-              className="md:hidden bg-gray-100 dark:bg-gray-700 p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
+              className="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
               aria-label="منوی کاربر"
             >
               <Menu className="h-5 w-5" />
             </button>
-
-            {/* منوی کشویی موبایل */}
-            {showMobileMenu && (
-              <div
-                ref={mobileMenuRef}
-                className="absolute left-0 mt-2 w-60 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10 top-full"
-              >
-                {/* لینک‌های ناوبری در منوی موبایل */}
-                <Link
-                  to="/my-workouts"
-                  onClick={() => setShowMobileMenu(false)}
-                  className={`${getMenuItemClass('/my-workouts')} border-b border-gray-200 dark:border-gray-700`}
-                >
-                  <ClipboardList className="h-5 w-5" />
-                  <span>برنامه‌من</span>
-                </Link>
-                {/* <Link
-                  to="/ai-workout-generator"
-                  onClick={() => setShowMobileMenu(false)}
-                  className={`${getMenuItemClass('/ai-workout-generator')}`}
-                >
-                  <Bot className="h-5 w-5" />
-                  <span>ایجاد برنامه با AI</span>
-                </Link> */}
-
-                {/* دکمه‌های عملیاتی حذف شدند */}
-              </div>
-            )}
           </div>
+          
+
+          {/* منوی کشویی موبایل */}
+          {showMobileMenu && (
+            <div
+              ref={mobileMenuRef}
+              className="absolute left-0 mt-2 w-60 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10 top-full"
+            >
+              {/* لینک‌های ناوبری در منوی موبایل */}
+              <Link
+                to="/my-workouts"
+                onClick={() => setShowMobileMenu(false)}
+                className={`${getMenuItemClass('/my-workouts')} border-b border-gray-200 dark:border-gray-700`}
+              >
+                <ClipboardList className="h-5 w-5" /> {/* Added ClipboardList icon */}
+                <span>برنامه‌من</span>
+              </Link>
+              {/* <Link
+                to="/ai-workout-generator"
+                onClick={() => setShowMobileMenu(false)}
+                className={`${getMenuItemClass('/ai-workout-generator')}`}
+              >
+                <Bot className="h-5 w-5" />
+                <span>ایجاد برنامه با AI</span>
+              </Link> */}
+
+              {/* دکمه‌های عملیاتی حذف شدند */}
+            </div>
+          )}
         </div>
       </div>
     </header>

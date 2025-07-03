@@ -378,7 +378,7 @@ export function FilterPanel({ isOpen, onClose, currentFilters, onApplyFilters }:
 
         {/* Footer Buttons */}
         <div className="flex justify-center mt-6 flex-shrink-0">
-          <div className="flex space-x-2 space-x-reverse w-auto">
+          <div className="flex space-x-2 space-x-reverse w-full max-w-sm mx-auto"> {/* Modified this line */}
             <button
               onClick={handleApplyFilters}
               className="w-40 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"

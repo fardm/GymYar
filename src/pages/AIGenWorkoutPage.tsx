@@ -71,10 +71,12 @@ export function AIGenWorkoutPage() {
           برای ساخت برنامه می‌توانید از هوش مصنوعی کمک بگیرید. با دستور زیر یک کد JSON دریافت می‌کنید که از بخش "وارد کردن برنامه" می‌توانید آن را به سایت اضافه کنید.
         </p>
         <p className="text-gray-600 dark:text-gray-400 mb-4 text-right leading-relaxed">
-          1. ابتدا فایل <a href="https://github.com/fardm/tamrinsaz/blob/main/src/data/exercises.ts" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300" target="_blank" rel="noopener noreferrer"> exercises.ts </a> را دانلود کرده و در محیط چت آپلود کنید.
+          1. یکی از سرویس‌های هوش مصنوعی را باز کنید. مدل‌هایی مثل ChatGPT و Gemini در این زمینه عملکرد خوبی دارند.</p>
+        <p className="text-gray-600 dark:text-gray-400 mb-4 text-right leading-relaxed">
+          2. فایل <a href="https://github.com/fardm/tamrinsaz/blob/main/src/data/exercises.ts" className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300" target="_blank" rel="noopener noreferrer"> exercises.ts </a> را دانلود کرده و در محیط چت آپلود کنید.
         </p>
         <p className="text-gray-600 dark:text-gray-400 mb-4 text-right leading-relaxed">
-          2. سپس از پرامپت زیر استفاده کنید:
+          3. سپس از پرامپت زیر استفاده کنید:
         </p>
 
         {/* کادر پرامپت با قابلیت اسکرول و دکمه کپی */}

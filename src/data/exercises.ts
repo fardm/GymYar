@@ -8,7 +8,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '1.webp',
     otherNames: 'Inverted Row',
-    description: '<a href="https://musclewiki.com/bodyweight/male/traps-middle/inverted-row/" target="_blank" rel="noopener noreferrer">musclewiki</a>'
+    description: '<a href="https://musclewiki.com/bodyweight/male/traps-middle/inverted-row/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>'
   },
   {
     id: '2',
@@ -17,7 +17,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '2.webp',
     otherNames: '',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/machine/male/biceps/neutral-pulldown/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '3',
@@ -26,7 +26,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '3.webp',
     otherNames: 'Dumbbell Lying Triceps Extension',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '4',
@@ -35,7 +35,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '4.webp',
     otherNames: 'Cable Wide Pulldown',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/machine/male/lats/machine-pulldown/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '5',
@@ -44,7 +44,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '5.webp',
     otherNames: 'Machine Leg Press',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '6',
@@ -53,7 +53,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '6.webp',
     otherNames: 'Dumbbell Front Raise',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '7',
@@ -62,7 +62,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'صفحه وزنه',
     image: '7.webp',
     otherNames: 'Plate Front Raise',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/plate/male/shoulders/plate-front-raise/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   // {
   //   id: '8',
@@ -77,7 +77,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '9.webp',
     otherNames: 'Cable Straight Back Seated Row',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '10',
@@ -86,7 +86,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '10.webp',
     otherNames: '',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '11',
@@ -95,7 +95,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '11.webp',
     otherNames: 'H machine row',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/machine/male/rear-shoulders/machine-overhand-row/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '12',
@@ -104,7 +104,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '12.webp',
     otherNames: '',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '13',
@@ -113,7 +113,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '13.webp',
     otherNames: 'Dumbbell Bent Over Row',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '14',
@@ -122,7 +122,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '14.webp',
     otherNames: 'pull over',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '15',
@@ -131,7 +131,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '15.webp',
     otherNames: 'Dumbbell Cross Body Hammer Curl',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '16',
@@ -140,7 +140,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '16.webp',
     otherNames: 'Lever Seated Reverse Fly',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/machine/male/rear-shoulders/machine-reverse-fly/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '17',
@@ -149,7 +149,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'هالتر',
     image: '17.webp',
     otherNames: 'Ez Barbell Curl',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '18',
@@ -158,7 +158,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '18.webp',
     otherNames: 'Cable Close Grip Curl',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '19',
@@ -167,7 +167,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '19.webp',
     otherNames: '',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '20',
@@ -176,7 +176,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '20.webp',
     otherNames: 'Cable Pushdown',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '21',
@@ -185,7 +185,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '21.webp',
     otherNames: 'Face Pull',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/cables/male/shoulders/machine-face-pulls/" target="_blank" rel="noopener noreferrer">MuscleWiki</a><br/><a href="https://youtu.be/eIq5CB9JfKE?si=FgK6gCCFdsBeXQmN" target="_blank" rel="noopener noreferrer">Stop Doing Face Pulls Like This</a>',
   },
   {
     id: '22',
@@ -194,7 +194,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '22.webp',
     otherNames: 'Dumbbell Concentration Curl',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '23',
@@ -203,7 +203,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '23.webp',
     otherNames: 'Side Split Squat',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '24',
@@ -212,7 +212,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '24.webp',
     otherNames: 'Dumbbell Seated Shoulder Press',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '25',
@@ -221,7 +221,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '25.webp',
     otherNames: 'Jump Rope',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '26',
@@ -230,16 +230,16 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '26.webp',
     otherNames: 'Semi Squat Jump',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '27',
-    name: 'اسکات با دیوار',
+    name: 'اسکوات با دیوار',
     targetMuscles: ['پا', 'چهارسر ران'],
     equipment: 'وزن بدن',
     image: '27.webp',
     otherNames: '',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '28',
@@ -248,7 +248,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '28.webp',
     otherNames: 'Sumo Squat Floor Touch',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '29',
@@ -257,14 +257,18 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '29.webp',
     otherNames: 'Dumbbell Seated Lateral Raise',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
-  // {
-  //   id: '30',
-  //   name: 'کول هالتر',
-  //   targetMuscles: ['سرشانه', 'کول'],
-  //   equipment: 'هالتر'
-  // },
+  {
+    id: '30',
+    name: 'کول هالتر',
+    targetMuscles: ['سرشانه', 'کول'],
+    equipment: 'هالتر',
+    image: '30.webp',
+    otherNames: 'Barbell Upright Row',
+    description: '<a href="https://musclewiki.com/barbell/male/shoulders/barbell-upright-row/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
+
+  },
   {
     id: '31',
     name: 'فلای سیمکش خوابیده',
@@ -280,7 +284,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '32.webp',
     otherNames: 'Lever Lying Leg Curl',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '33',
@@ -289,7 +293,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '33.webp',
     otherNames: 'Bodyweight Standing Calf Raise',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '34',
@@ -298,7 +302,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '34.webp',
     otherNames: '',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   // {
   //   id: '35',
@@ -313,14 +317,17 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '36.webp',
     otherNames: 'Lever Seated Leg Curl',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
-  // {
-  //   id: '37',
-  //   name: 'سرشانه سیمکش چرخش داخلی',
-  //   targetMuscles: ['سرشانه'],
-  //   equipment: 'دستگاه'
-  // },
+  {
+    id: '37',
+    name: 'شنا دست جمع زانو زمین',
+    targetMuscles: ['پشت بازو'],
+    equipment: 'وزن بدن',
+    image: '37.webp',
+    otherNames: 'Lever Seated Leg Curl',
+    description: '<a href="https://musclewiki.com/bodyweight/male/triceps/bodyweight-diamond-knee-push-ups/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
+  },
   {
     id: '38',
     name: 'لانگ بلغاری',
@@ -341,7 +348,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '40.webp',
     otherNames: 'Cable High Overhead Tricep',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '41',
@@ -350,7 +357,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '41.webp',
     otherNames: 'Lever Seated Hip Adduction',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '42',
@@ -366,7 +373,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '43.webp',
     otherNames: 'Hack Squat',
-    description: '<a href="https://musclewiki.com/machine/male/glutes/machine-hack-squat" target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/machine/male/glutes/machine-hack-squat" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '44',
@@ -375,15 +382,17 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '44.webp',
     otherNames: 'Cable One Arm Lateral Raise',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
-  // {
-  //   id: '45',
-  //   name: 'دد باگ',
-  //   targetMuscles: ['شکم'],
-  //   equipment: 'وزن بدن',
-  //   otherNames: 'Dead Bug'
-  // },
+  {
+    id: '45',
+    name: 'دد باگ',
+    targetMuscles: ['شکم'],
+    equipment: 'وزن بدن',
+    image: '45.webp',
+    otherNames: 'Dead Bug',
+    description: '<a href="https://musclewiki.com/bodyweight/male/abdominals/dead-bug" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
+  },
   {
     id: '46',
     name: 'پرس سینه هالتر',
@@ -391,7 +400,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'هالتر',
     image: '46.webp',
     otherNames: 'Barbell Bench Press',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/barbell/male/chest/barbell-bench-press/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '47',
@@ -400,20 +409,26 @@ export const exercisesData: Exercise[] = [
     equipment: 'هالتر',
     image: '47.webp',
     otherNames: '',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
-  // {
-  //   id: '48',
-  //   name: 'پول‌اور دستگاه',
-  //   targetMuscles: ['لت'],
-  //   equipment: 'دستگاه'
-  // },
-  // {
-  //   id: '49',
-  //   name: 'نشر خم دمبل خوابیده',
-  //   targetMuscles: ['سرشانه'],
-  //   equipment: 'دمبل'
-  // },
+  {
+    id: '48',
+    name: 'فلای سیمکش ایستاده',
+    targetMuscles: ['سینه'],
+    equipment: 'سیمکش',
+    image: '48.webp',
+    otherNames: 'Cable Middle Fly',
+    description: '<a href="https://youtu.be/JUDTGZh4rhg?si=LpeRi64_pU-Whu1d" target="_blank" rel="noopener noreferrer">STOP F*cking Up Cable Flys</a>',
+  },
+  {
+    id: '49',
+    name: 'فلای سیمکش نشسته',
+    targetMuscles: ['سینه'],
+    equipment: 'سیمکش',
+    image: '49.webp',
+    otherNames: 'Cable Seated Chest Fly',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
+  },
   {
     id: '50',
     name: 'فلای سیمکش شیبدار',
@@ -421,7 +436,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '50.webp',
     otherNames: 'Cable Incline Fly',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '51',
@@ -430,7 +445,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '51.webp',
     otherNames: '',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '52',
@@ -439,7 +454,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '52.webp',
     otherNames: '',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '53',
@@ -448,7 +463,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '53.webp',
     otherNames: 'Triceps Dip',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '54',
@@ -457,7 +472,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '54.webp',
     otherNames: 'Pull Up',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://youtu.be/FIylE7BcS_A?si=Jr1YCSVd7jozhUTE" dir="ltr" target="_blank" rel="noopener noreferrer">4 Pull-Up Mistakes Seen on Social Media</a>',
   },
   {
     id: '55',
@@ -466,7 +481,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '55.webp',
     otherNames: 'Cable Overhead Curl',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '56',
@@ -475,7 +490,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '56.webp',
     otherNames: '',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/machine/male/quads/machine-leg-extension/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   // {
   //   id: '57',
@@ -490,7 +505,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '58.webp',
     otherNames: 'Dumbbell Lateral to Front Raise',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '59',
@@ -499,7 +514,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '59.webp',
     otherNames: 'Alternate Heel Touchers',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '60',
@@ -508,7 +523,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '60.webp',
     otherNames: 'Diamond Push Ups',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/bodyweight/male/triceps/diamond-push-ups/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '61',
@@ -517,7 +532,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'هالتر',
     image: '61.webp',
     otherNames: 'Barbell Incline Press',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/barbell/male/anterior-deltoid/barbell-incline-bench-press/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '62',
@@ -526,7 +541,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '62.webp',
     otherNames: '',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/dumbbells/male/anterior-deltoid/dumbbell-incline-bench-press/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '63',
@@ -535,7 +550,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '63.webp',
     otherNames: 'Leg Raise',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '64',
@@ -544,7 +559,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '64.webp',
     otherNames: 'Smith Sumo Squat',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '65',
@@ -553,7 +568,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '65.webp',
     otherNames: 'Dumbbell Bench Press',
-    description: '<a href="https://musclewiki.com/dumbbells/male/triceps/dumbbell-bench-press/" target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/dumbbells/male/triceps/dumbbell-bench-press/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
 
   },
   {
@@ -563,7 +578,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '66.webp',
     otherNames: 'Bodyweight Plank Up Down',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/bodyweight/male/abdominals/forearm-plank/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '67',
@@ -572,7 +587,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '67.webp',
     otherNames: 'Long Arm Crunch',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '68',
@@ -597,7 +612,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '70.webp',
     otherNames: 'Dumbbell Bulgarian Split Squat',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '71',
@@ -606,7 +621,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '71.webp',
     otherNames: 'Lever Seated Fly',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '72',
@@ -615,7 +630,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'نیمکت',
     image: '72.webp',
     otherNames: 'Seated Leg Raise',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '73',
@@ -624,7 +639,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '73.webp',
     otherNames: '',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://youtu.be/EsXgqAxVKbA?si=5QSPgpJm1lW-ZKv-" target="_blank" rel="noopener noreferrer">How To Do The Cable Crossover</a>',
   },
   {
     id: '74',
@@ -633,7 +648,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '74.webp',
     otherNames: '',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '75',
@@ -642,7 +657,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '75.webp',
     otherNames: 'Dumbbell Forward Lunge',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/dumbbells/male/glutes/dumbbell-forward-lunge" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '76',
@@ -651,7 +666,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '76.webp',
     otherNames: 'Bicycle Crunch',
-    description: '<a href="https://musclewiki.com/bodyweight/male/abdominals/bicycle-crunch/" target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/bodyweight/male/abdominals/bicycle-crunch/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '77',
@@ -660,7 +675,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '77.webp',
     otherNames: 'Dumbbell Close Grip Press',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '78',
@@ -669,7 +684,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '78.webp',
     otherNames: 'Push Up',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/bodyweight/male/chest/push-up/" target="_blank" rel="noopener noreferrer">MuscleWiki</a><br/><a href="https://youtu.be/IODxDxX7oi4?si=1Df8OoY8eHbwvTNx" target="_blank" rel="noopener noreferrer">The Perfect Push Up </a>',
   },
   {
     id: '79',
@@ -678,7 +693,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'نیمکت',
     image: '79.webp',
     otherNames: 'Bench Dip on Floor',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/bodyweight/male/triceps/bench-dips" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   // {
   //   id: '80',
@@ -693,7 +708,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '81.webp',
     otherNames: 'Mountain Climber',
-    description: '<a href="https://musclewiki.com/bodyweight/male/abdominals/slow-tempo-mountain-climber" target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/bodyweight/male/abdominals/slow-tempo-mountain-climber" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '82',
@@ -702,7 +717,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '82.webp',
     otherNames: 'Dumbbell Biceps Curl',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   // {
   //   id: '83',
@@ -717,7 +732,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دمبل',
     image: '84.webp',
     otherNames: 'Dumbbell Fly',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   // {
   //   id: '85',
@@ -732,7 +747,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '86.webp',
     otherNames: 'Plank',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
   {
     id: '87',
@@ -741,7 +756,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '87.webp',
     otherNames: 'Bird dog',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    description: '<a href="https://musclewiki.com/recovery/male/abdominals/core-stability-1-crosslateral-limb-raise-4pt-position/" target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
 
   },
   {
@@ -751,7 +766,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '88.webp',
     otherNames: 'Cable Shoulder Internal Rotation',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },  
   {
     id: '89',
@@ -760,7 +775,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'سیمکش',
     image: '89.webp',
     otherNames: 'Cable Standing Shoulder External Rotation',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },  
   {
     id: '90',
@@ -769,7 +784,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '90.webp',
     otherNames: 'Lever Seated Shoulder Press',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },  
   {
     id: '91',
@@ -778,7 +793,7 @@ export const exercisesData: Exercise[] = [
     equipment: 'وزن بدن',
     image: '91.webp',
     otherNames: 'Butterfly Yoga Pose',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },  
   {
     id: '92',
@@ -787,6 +802,6 @@ export const exercisesData: Exercise[] = [
     equipment: 'دستگاه',
     image: '92.webp',
     otherNames: 'Chest Dip',
-    // description: '<a href=" " target="_blank" rel="noopener noreferrer">musclewiki</a>',
+    // description: '<a href=" " target="_blank" rel="noopener noreferrer">MuscleWiki</a>',
   },
 ];

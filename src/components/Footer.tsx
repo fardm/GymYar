@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github } from 'lucide-react';
+import { Github, Send } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -9,15 +9,26 @@ export function Footer() {
           <p className="text-sm text-gray-600 dark:text-gray-400">
             © 2025 tamrinsaz.
           </p>
-          <a
-            href="https://github.com/fardm"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center space-x-2 space-x-reverse text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-          >
-            <Github className="h-5 w-5" />
-            <span></span>
-          </a>
+          <div className="flex space-x-3">
+            <a
+              href="https://github.com/fardm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-2 space-x-reverse text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            >
+              <Github className="h-5 w-5" />
+              <span></span>
+            </a>
+            <a
+              href="https://t.me/ifard_ir/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-2 space-x-reverse text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            >
+              <Send className="h-5 w-5" />
+              <span></span>
+            </a>
+          </div>
         </div>
       </div>
     </footer>
