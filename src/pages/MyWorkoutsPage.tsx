@@ -18,7 +18,13 @@ interface MyWorkoutsPageProps {
 
 export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPageProps) {
   const [activeTab, setActiveTab] = useLocalStorage<string>('workout-active-tab', 'all');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // وضعیت سایدبار برای موبایل
+  // Initialize isSidebarOpen based on screen width for desktop default open, mobile default closed
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.matchMedia('(min-width: 768px)').matches; // Desktop (md breakpoint) defaults to open
+    }
+    return false; // Default to closed otherwise (mobile or SSR)
+  });
   const sidebarRef = useRef<HTMLDivElement>(null); // رفرنس برای سایدبار
 
   // وضعیت‌های مودال‌ها که قبلاً در UserMenu بودند
@@ -49,7 +55,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
 
   // مدیریت بستن سایدبار با کلیک بیرون یا کلید Escape
   useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
+    const handleEscape = (event: Keyboard) => {
       if (event.key === 'Escape') {
         setIsSidebarOpen(false);
         // بستن مودال‌ها نیز
@@ -213,22 +219,44 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
         </button>
       )}
 
+      {/* دکمه شناور برای باز کردن سایدبار در دسکتاپ */}
+      {!isSidebarOpen && (
+        <button
+          onClick={() => setIsSidebarOpen(true)}
+          className="hidden md:block fixed top-1/2 -translate-y-1/2 right-4 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 p-3 rounded-full shadow-lg z-40 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          aria-label="باز کردن پنل"
+        >
+          <PanelRightOpen className="h-6 w-6" />
+        </button>
+      )}
+
       {/* سایدبار */}
       <div
         ref={sidebarRef}
         // Fixed positioning, top-16 to start below header, calculated height to prevent overall page scroll
         // right-0 for placement, w-64 for width, z-40 to be below the header
+        // Conditional translate-x for both mobile and desktop based on isSidebarOpen
         className={`fixed top-16 h-[calc(100vh-4rem)] right-0 w-64 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 z-40 p-4 flex flex-col transition-transform duration-300 ease-in-out
           ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}
-          md:translate-x-0 md:w-64 overflow-y-auto`}
+          md:${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'} md:w-64 overflow-y-auto`}
       >
-        <div className="flex justify-between items-center mb-6 md:hidden">
+        <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">گزینه‌ها</h2>
+          {/* Mobile close button (hidden on desktop) */}
           <button
             onClick={() => setIsSidebarOpen(false)}
-            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            className="md:hidden text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            aria-label="بستن پنل"
           >
-            <X className="h-6 w-6" />
+            <PanelRightClose className="h-6 w-6" /> {/* Changed X to PanelRightClose */}
+          </button>
+          {/* Desktop close button (hidden on mobile) */}
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="hidden md:block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            aria-label="بستن پنل"
+          >
+            <PanelRightClose className="h-6 w-6" />
           </button>
         </div>
 
