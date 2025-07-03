@@ -9,6 +9,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { NewSessionModal } from '../components/NewSessionModal'; // ایمپورت مودال جدید
 import { ImportProgramModal } from '../components/ImportProgramModal'; // ایمپورت مودال‌های موجود
 import { ExportProgramModal } from '../components/ExportProgramModal';
+import { clearUserData } from '../utils/storage'; // Import clearUserData
 
 interface MyWorkoutsPageProps {
   userData: UserData;
@@ -215,9 +216,11 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
       {/* سایدبار */}
       <div
         ref={sidebarRef}
-        className={`fixed inset-y-0 right-0 w-64 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 z-50 p-4 flex flex-col transition-transform duration-300 ease-in-out
+        // Fixed positioning, top-16 to start below header, calculated height to prevent overall page scroll
+        // right-0 for placement, w-64 for width, z-40 to be below the header
+        className={`fixed top-16 h-[calc(100vh-4rem)] right-0 w-64 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 z-40 p-4 flex flex-col transition-transform duration-300 ease-in-out
           ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}
-          md:relative md:translate-x-0 md:flex-shrink-0 md:w-64 md:border-r-0 md:border-l`}
+          md:translate-x-0 md:w-64 overflow-y-auto`}
       >
         <div className="flex justify-between items-center mb-6 md:hidden">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">گزینه‌ها</h2>
@@ -269,9 +272,10 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
       </div>
 
       {/* محتوای اصلی صفحه */}
+      {/* Removed md:pr-64 as sidebar is now a floating box not affecting flow */}
       <div className="flex-1 overflow-auto">
-        {/* max-w-7xl و ml-auto برای هم‌ترازی با هدر در دسکتاپ، px-4 برای حاشیه در موبایل */}
-        <div className="max-w-7xl ml-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* max-w-7xl and mx-auto to center content like the homepage */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -419,7 +423,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div
             ref={helpModalRef}
-            className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4"
+            className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4"
           >
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               راهنما
