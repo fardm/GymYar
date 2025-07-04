@@ -154,7 +154,7 @@ export function ImportProgramModal({ isOpen, onClose, onUpdateUserData, showToas
               onChange={() => setSelectedImportMethod('json')}
               className="ml-2 h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
             />
-            ورود مستقیم کد JSON:
+            کد JSON:
           </label>
           <div className="relative h-40"> {/* Fixed height for textarea */}
             <textarea

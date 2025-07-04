@@ -237,15 +237,12 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
       {/* سایدبار */}
       <div
         ref={sidebarRef}
-        // Fixed positioning, top-16 to start below header, calculated height to prevent overall page scroll
-        // right-0 for placement, w-64 for width, z-40 to be below the header
-        // Conditional translate-x for both mobile and desktop based on isSidebarOpen
         className={`fixed top-16 h-[calc(100vh-4rem)] right-0 w-64 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 z-40 p-4 flex flex-col transition-transform duration-300 ease-in-out
           ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}
           md:${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'} md:w-64 overflow-y-auto`}
       >
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">گزینه‌ها</h2>
+        <div className="flex justify-end items-center mb-6">
+          {/* <h2 className="text-xl font-bold text-gray-900 dark:text-white">گزینه‌ها</h2> */}
           {/* Mobile close button (hidden on desktop) */}
           <button
             onClick={() => setIsSidebarOpen(false)}

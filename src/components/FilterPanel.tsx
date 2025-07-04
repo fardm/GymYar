@@ -32,7 +32,7 @@ export const muscleOptions: MuscleOption[] = [
   { id: 'lats', displayName: 'لت', filterNames: ['لت'], imageName: 'lats.webp', type: 'advanced' },
   { id: 'traps', displayName: 'ذوزنقه‌ای', filterNames: ['ذوزنقه‌ای'], imageName: 'traps.webp', type: 'advanced' },
   { id: 'upper_traps', displayName: 'کول', filterNames: ['کول'], imageName: 'upper_traps.webp', type: 'advanced' },
-  { id: 'lower_back', displayName: 'فیله', filterNames: ['فیله'], imageName: 'lower_back.webp', type: 'advanced' },
+  { id: 'lower_back', displayName: 'فیله کمر', filterNames: ['فیله کمر'], imageName: 'lower_back.webp', type: 'advanced' },
   { id: 'quadriceps', displayName: 'چهارسر ران', filterNames: ['چهارسر ران'], imageName: 'thigh.webp', type: 'advanced' },
   { id: 'inner_thigh', displayName: 'داخل ران', filterNames: ['داخل ران'], imageName: 'inner_thigh.webp', type: 'advanced' },
   { id: 'outer_thigh', displayName: 'خارج ران', filterNames: ['خارج ران'], imageName: 'outer_thigh.webp', type: 'advanced' },
@@ -64,7 +64,7 @@ export const equipmentOptionsList: EquipmentOption[] = [
   { id: 'machine', displayName: 'دستگاه', filterName: 'دستگاه', imageName: 'machine.webp' },
   { id: 'cable', displayName: 'سیمکش', filterName: 'سیمکش', imageName: 'cable.webp' },
   { id: 'bench', displayName: 'نیمکت', filterName: 'نیمکت', imageName: 'bench.webp' },
-  { id: 'bodyweight', displayName: 'وزن بدن', filterName: 'وزن بدن', imageName: 'bodyweight.webp' },
+  { id: 'bodyweight', displayName: 'بدون وسیله', filterName: 'بدون وسیله', imageName: 'bodyweight.webp' },
 ];
 
 
