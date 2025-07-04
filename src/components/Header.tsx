@@ -1,7 +1,7 @@
 // src/components/Header.tsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Moon, Sun, Menu, Bot, ClipboardList, X } from 'lucide-react'; // Added X for close icon
+import { Moon, Sun, Menu, Bot, ClipboardList, X, Banknote, Github, Send } from 'lucide-react'; // Added X, Banknote, Github, Send for icons
 import { useTheme } from '../hooks/useTheme';
 import { UserData } from '../types';
 
@@ -132,7 +132,7 @@ export function Header({ onDataChange }: HeaderProps) {
               <Menu className="h-5 w-5" />
             </button>
           </div>
-          
+
 
           {/* Mobile menu backdrop */}
           {showMobileMenu && (
@@ -158,34 +158,75 @@ export function Header({ onDataChange }: HeaderProps) {
               </button>
             </div>
 
-            <nav className="flex flex-col space-y-1 px-4 overflow-y-auto flex-1">
-              <Link
-                to="/"
-                onClick={() => setShowMobileMenu(false)}
-                className={getMenuItemClass('/')}
-              >
-                <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="32" height="32" rx="8" fill="currentColor"/>
-                  <path d="M8 12h4v8H8v-8zm12 0h4v8h-4v-8zm-6-4h4v16h-4V8z" fill="white"/>
-                </svg>
-                <span>خانه</span>
-              </Link>
-              <Link
-                to="/my-workouts"
-                onClick={() => setShowMobileMenu(false)}
-                className={`${getMenuItemClass('/my-workouts')} border-b border-gray-200 dark:border-gray-700`}
-              >
-                <ClipboardList className="h-5 w-5" />
-                <span>برنامه‌من</span>
-              </Link>
-              <Link
-                to="/ai-workout-generator"
-                onClick={() => setShowMobileMenu(false)}
-                className={getMenuItemClass('/ai-workout-generator')}
-              >
-                <Bot className="h-5 w-5" />
-                <span>ساخت برنامه با AI</span>
-              </Link>
+            <nav className="flex justify-between flex-col space-y-1 px-4 overflow-y-auto flex-1">
+              {/* صفحات سایت */}
+              <div>
+                <Link
+                  to="/"
+                  onClick={() => setShowMobileMenu(false)}
+                  className={getMenuItemClass('/')}
+                >
+                  <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="8" fill="currentColor"/>
+                    <path d="M8 12h4v8H8v-8zm12 0h4v8h-4v-8zm-6-4h4v16h-4V8z" fill="white"/>
+                  </svg>
+                  <span>خانه</span>
+                </Link>
+                <Link
+                  to="/my-workouts"
+                  onClick={() => setShowMobileMenu(false)}
+                  className={`${getMenuItemClass('/my-workouts')} border-b border-gray-200 dark:border-gray-700`}
+                >
+                  <ClipboardList className="h-5 w-5" />
+                  <span>برنامه‌من</span>
+                </Link>
+                <Link
+                  to="/ai-workout-generator"
+                  onClick={() => setShowMobileMenu(false)}
+                  className={getMenuItemClass('/ai-workout-generator')}
+                >
+                  <Bot className="h-5 w-5" />
+                  <span>ساخت برنامه با AI</span>
+                </Link>
+              </div>
+
+              {/* انتهای منو */}
+              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                {/* حمایت مالی */}
+                {/* <a
+                  href="https://donate.ifard.ir"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setShowMobileMenu(false)}
+                  className="w-full px-4 py-2 text-right text-base font-medium flex items-center space-x-3 space-x-reverse transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                >
+                  <Banknote className="h-5 w-5" />
+                  <span>حمایت مالی</span>
+                </a> */}
+                {/* شبکه‌های اجتماعی */}
+                <div className="flex justify-start space-x-3 space-x-reverse mt-4 px-4 pb-4">
+                  <a
+                    href="https://github.com/fardm"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setShowMobileMenu(false)}
+                    className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                    aria-label="GitHub"
+                  >
+                    <Github className="h-5 w-5" />
+                  </a>
+                  <a
+                    href="https://t.me/ifard_ir/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setShowMobileMenu(false)}
+                    className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                    aria-label="Telegram"
+                  >
+                    <Send className="h-5 w-5" />
+                  </a>
+                </div>
+              </div>
             </nav>
           </div>
         </div>
