@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams, Link } from 'react-router-dom'; // Import Link
-import { Plus, Check, PanelRightOpen, PanelRightClose, Download, Upload, Trash2, HelpCircle, X, Bot } from 'lucide-react'; // Import Bot
+import { useSearchParams, Link } from 'react-router-dom';
+import { Plus, Check, PanelRightOpen, PanelRightClose, Download, Upload, Trash2, HelpCircle, X, Bot } from 'lucide-react';
 import { SessionCard } from '../components/SessionCard';
 import { exercisesData } from '../data/exercises';
 import { UserData, WorkoutSession } from '../types';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { NewSessionModal } from '../components/NewSessionModal'; // ایمپورت مودال جدید
-import { ImportProgramModal } from '../components/ImportProgramModal'; // ایمپورت مودال‌های موجود
+import { NewSessionModal } from '../components/NewSessionModal';
+import { ImportProgramModal } from '../components/ImportProgramModal';
 import { ExportProgramModal } from '../components/ExportProgramModal';
-import { clearUserData } from '../utils/storage'; // Import clearUserData
+import { clearUserData } from '../utils/storage';
 
 interface MyWorkoutsPageProps {
   userData: UserData;
@@ -17,16 +17,16 @@ interface MyWorkoutsPageProps {
 
 export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPageProps) {
   const [activeTab, setActiveTab] = useLocalStorage<string>('workout-active-tab', 'all');
-  // Initialize isSidebarOpen based on screen width for desktop default open, mobile default closed
+  // وضعیت سایدبار: در دسکتاپ به صورت پیش‌فرض باز، در موبایل بسته
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     if (typeof window !== 'undefined') {
-      return window.matchMedia('(min-width: 768px)').matches; // Desktop (md breakpoint) defaults to open
+      return window.matchMedia('(min-width: 768px)').matches; // دسکتاپ (md breakpoint) به صورت پیش‌فرض باز
     }
-    return false; // Default to closed otherwise (mobile or SSR)
+    return false; // پیش‌فرض بسته (موبایل یا SSR)
   });
   const sidebarRef = useRef<HTMLDivElement>(null); // رفرنس برای سایدبار
 
-  // وضعیت‌های مودال‌ها که قبلاً در UserMenu بودند
+  // وضعیت‌های مودال‌ها
   const [showNewSessionModal, setShowNewSessionModal] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
@@ -38,16 +38,14 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
   const clearModalRef = useRef<HTMLDivElement>(null);
   const helpModalRef = useRef<HTMLDivElement>(null);
 
-  // Helper function to check if it's a mobile viewport
+  // تابع کمکی برای تشخیص حالت موبایل
   const isMobile = () => typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches;
 
-
-  // Effect to handle initial filtering from URL search params (اگر هنوز لازم باشد)
+  // Effect برای مدیریت فیلتر اولیه از URL search params
   const [searchParams, setSearchParams] = useSearchParams();
   useEffect(() => {
     const filterSessionIdFromUrl = searchParams.get('sessionId');
     if (filterSessionIdFromUrl) {
-      // اگر sessionId در URL بود و با تب فعال فعلی فرق داشت، آن را فعال کن
       if (activeTab !== filterSessionIdFromUrl) {
         setActiveTab(filterSessionIdFromUrl);
       }
@@ -55,12 +53,11 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
     }
   }, [searchParams, activeTab, setActiveTab, setSearchParams]);
 
-  // مدیریت بستن سایدبار با کلیک بیرون یا کلید Escape
+  // مدیریت بستن سایدبار و مودال‌ها با کلیک بیرون یا کلید Escape
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsSidebarOpen(false);
-        // بستن مودال‌ها نیز
         setShowNewSessionModal(false);
         setShowClearConfirm(false);
         setShowHelpModal(false);
@@ -70,8 +67,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
     };
 
     const handleClickOutside = (event: MouseEvent) => {
-      // Only close sidebar on outside click for mobile viewports (md breakpoint)
-      // For desktop, sidebar remains open unless explicitly closed by button
+      // بستن سایدبار فقط در حالت موبایل با کلیک بیرون
       if (isMobile() && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
         setIsSidebarOpen(false);
       }
@@ -197,17 +193,17 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
 
   const handleOpenImportProgramModal = () => {
     setShowImportProgramModal(true);
-    if (isMobile()) setIsSidebarOpen(false); // Close sidebar only on mobile
+    if (isMobile()) setIsSidebarOpen(false); // بستن سایدبار فقط در موبایل
   };
 
   const handleOpenExportProgramModal = () => {
     setShowExportProgramModal(true);
-    if (isMobile()) setIsSidebarOpen(false); // Close sidebar only on mobile
+    if (isMobile()) setIsSidebarOpen(false); // بستن سایدبار فقط در موبایل
   };
 
   const handleOpenHelpModal = () => {
     setShowHelpModal(true);
-    if (isMobile()) setIsSidebarOpen(false); // Close sidebar only on mobile
+    if (isMobile()) setIsSidebarOpen(false); // بستن سایدبار فقط در موبایل
   };
 
   return (
@@ -234,24 +230,33 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
         </button>
       )}
 
+      {/* بک‌دراپ موبایل (فقط در موبایل و زمانی که سایدبار باز است) */}
+      {isSidebarOpen && isMobile() && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40" // Z-index changed to 40
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+
       {/* سایدبار */}
       <div
         ref={sidebarRef}
-        className={`fixed top-16 h-[calc(100vh-4rem)] right-0 w-64 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 z-40 p-4 flex flex-col transition-transform duration-300 ease-in-out
+        // کلاس‌های پایه برای موبایل (تمام صفحه، از راست باز می‌شود، ثابت)
+        className={`fixed top-0 bottom-0 right-0 w-64 h-full bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 shadow-lg z-50 p-4 flex flex-col transition-transform duration-300 ease-in-out overflow-y-auto
           ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}
-          md:${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'} md:w-64 overflow-y-auto`}
+          // بازنویسی‌ها برای دسکتاپ (حفظ رفتار قبلی دسکتاپ: ثابت، ارتفاع محدود، از راست باز می‌شود)
+          md:top-0 md:h-full md:w-64 md:${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`} // top-0 and h-full for desktop too
       >
         <div className="flex justify-end items-center mb-6">
-          {/* <h2 className="text-xl font-bold text-gray-900 dark:text-white">گزینه‌ها</h2> */}
-          {/* Mobile close button (hidden on desktop) */}
+          {/* دکمه بستن موبایل (مخفی در دسکتاپ) */}
           <button
             onClick={() => setIsSidebarOpen(false)}
             className="md:hidden text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
             aria-label="بستن پنل"
           >
-            <PanelRightClose className="h-6 w-6" /> {/* Changed X to PanelRightClose */}
+            <PanelRightClose className="h-6 w-6" />
           </button>
-          {/* Desktop close button (hidden on mobile) */}
+          {/* دکمه بستن دسکتاپ (مخفی در موبایل) */}
           <button
             onClick={() => setIsSidebarOpen(false)}
             className="hidden md:block text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -263,7 +268,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
 
         <nav className="flex flex-col space-y-2">
           <button
-            onClick={() => { setShowNewSessionModal(true); if (isMobile()) setIsSidebarOpen(false); }} // Conditional close
+            onClick={() => { setShowNewSessionModal(true); if (isMobile()) setIsSidebarOpen(false); }}
             className="w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors"
           >
             <Plus className="h-5 w-5" />
@@ -284,7 +289,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
             <span>دانلود برنامه</span>
           </button>
           <button
-            onClick={() => { setShowClearConfirm(true); if (isMobile()) setIsSidebarOpen(false); }} // Conditional close
+            onClick={() => { setShowClearConfirm(true); if (isMobile()) setIsSidebarOpen(false); }}
             className="w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
           >
             <Trash2 className="h-5 w-5" />
@@ -292,10 +297,10 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
           </button>
           <br/>
           <hr/>
-          {/* New AI workout generator link */}
+          {/* لینک جدید برای AI workout generator */}
           <Link
             to="/ai-workout-generator"
-            onClick={() => { if (isMobile()) setIsSidebarOpen(false); }} // Conditional close
+            onClick={() => { if (isMobile()) setIsSidebarOpen(false); }}
             className="mt-8 w-full flex items-center space-x-3 space-x-reverse px-4 py-2 text-right text-base font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
           >
             <Bot className="h-5 w-5" />
@@ -312,9 +317,7 @@ export function MyWorkoutsPage({ userData, onUpdateUserData }: MyWorkoutsPagePro
       </div>
 
       {/* محتوای اصلی صفحه */}
-      {/* Removed md:pr-64 as sidebar is now a floating box not affecting flow */}
       <div className="flex-1 overflow-auto">
-        {/* max-w-7xl and mx-auto to center content like the homepage */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
           <div className="mb-8">

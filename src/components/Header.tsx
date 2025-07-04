@@ -1,7 +1,7 @@
 // src/components/Header.tsx
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Moon, Sun, Menu, Bot, ClipboardList } from 'lucide-react'; // حذف آیکون‌های اضافی
+import { Moon, Sun, Menu, Bot, ClipboardList, X } from 'lucide-react'; // Added X for close icon
 import { useTheme } from '../hooks/useTheme';
 import { UserData } from '../types';
 
@@ -92,9 +92,9 @@ export function Header({ onDataChange }: HeaderProps) {
           </Link>
 
           {/* آیتم‌های ناوبری اصلی و دکمه‌ها (فقط در دسکتاپ) */}
-          <nav className="hidden md:flex items-center space-x-3 space-x-reverse"> {/* Changed space-x to space-x-3 for more spacing */}
+          <nav className="hidden md:flex items-center space-x-3 space-x-reverse">
             {/* دکمه "برنامه‌من" */}
-            <Link to="/my-workouts"> {/* Still a Link for navigation */}
+            <Link to="/my-workouts">
               <button
                 className="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center space-x-2 space-x-reverse"
                 aria-label="برنامه من"
@@ -115,7 +115,7 @@ export function Header({ onDataChange }: HeaderProps) {
           </nav>
 
           {/* دکمه منوی موبایل (فقط در موبایل) */}
-          <div className="flex items-center space-x-3 space-x-reverse md:hidden"> {/* Added md:hidden */}
+          <div className="flex items-center space-x-3 space-x-reverse md:hidden">
             {/* دکمه تغییر حالت روشن/تیره در موبایل (همیشه نمایش داده می‌شود) */}
             <button
               onClick={toggleTheme}
@@ -134,33 +134,60 @@ export function Header({ onDataChange }: HeaderProps) {
           </div>
           
 
-          {/* منوی کشویی موبایل */}
+          {/* Mobile menu backdrop */}
           {showMobileMenu && (
             <div
-              ref={mobileMenuRef}
-              className="absolute left-0 mt-2 w-60 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10 top-full"
-            >
-              {/* لینک‌های ناوبری در منوی موبایل */}
+              className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+              onClick={() => setShowMobileMenu(false)}
+            ></div>
+          )}
+
+          {/* منوی کشویی موبایل - تبدیل شده به سایدپنل */}
+          <div
+            ref={mobileMenuRef}
+            className={`fixed top-0 bottom-0 left-0 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg py-4 z-50 flex flex-col transition-transform duration-300 ease-in-out
+              ${showMobileMenu ? 'translate-x-0' : '-translate-x-full'} md:hidden`}
+          >
+            <div className="flex justify-end items-center px-4 mb-4">
+              <button
+                onClick={() => setShowMobileMenu(false)}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                aria-label="بستن منو"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <nav className="flex flex-col space-y-1 px-4 overflow-y-auto flex-1">
+              <Link
+                to="/"
+                onClick={() => setShowMobileMenu(false)}
+                className={getMenuItemClass('/')}
+              >
+                <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="32" height="32" rx="8" fill="currentColor"/>
+                  <path d="M8 12h4v8H8v-8zm12 0h4v8h-4v-8zm-6-4h4v16h-4V8z" fill="white"/>
+                </svg>
+                <span>خانه</span>
+              </Link>
               <Link
                 to="/my-workouts"
                 onClick={() => setShowMobileMenu(false)}
                 className={`${getMenuItemClass('/my-workouts')} border-b border-gray-200 dark:border-gray-700`}
               >
-                <ClipboardList className="h-5 w-5" /> {/* Added ClipboardList icon */}
+                <ClipboardList className="h-5 w-5" />
                 <span>برنامه‌من</span>
               </Link>
-              {/* <Link
+              <Link
                 to="/ai-workout-generator"
                 onClick={() => setShowMobileMenu(false)}
-                className={`${getMenuItemClass('/ai-workout-generator')}`}
+                className={getMenuItemClass('/ai-workout-generator')}
               >
                 <Bot className="h-5 w-5" />
-                <span>ایجاد برنامه با AI</span>
-              </Link> */}
-
-              {/* دکمه‌های عملیاتی حذف شدند */}
-            </div>
-          )}
+                <span>ساخت برنامه با AI</span>
+              </Link>
+            </nav>
+          </div>
         </div>
       </div>
     </header>
